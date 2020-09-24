@@ -14,8 +14,7 @@ namespace ThirtyDayHeroTests
             ICharacter dummyCharacter = new Character(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
-                new StatMap(),
-                new EquipMap());
+                new StatMap());
 
             return requirementCalc.MeetsRequirement(dummyCharacter);
         }
@@ -35,8 +34,7 @@ namespace ThirtyDayHeroTests
                 {
                     {StatType.HP, hp},
                     {StatType.HP_Max, hpMax}
-                }),
-                new EquipMap());
+                }));
 
             return requirementCalc.MeetsRequirement(dummyCharacter);
         }
@@ -53,7 +51,7 @@ namespace ThirtyDayHeroTests
         public static bool EquippedWeaponRequirement_Tests(WeaponType requirement, WeaponType equipped)
         {
             IRequirementCalc requirementCalc = new EquippedWeaponRequirement(requirement);
-            ICharacter dummyCharacter = new Character(
+            IPlayerCharacter dummyCharacter = new PlayerCharacter(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
                 new StatMap(),
@@ -75,7 +73,7 @@ namespace ThirtyDayHeroTests
         public static bool EquippedArmorRequirement_Tests(ArmorType requirement, ArmorType equipped)
         {
             IRequirementCalc requirementCalc = new EquippedArmorRequirement(requirement);
-            ICharacter dummyCharacter = new Character(
+            IPlayerCharacter dummyCharacter = new PlayerCharacter(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
                 new StatMap(),

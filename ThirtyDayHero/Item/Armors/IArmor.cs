@@ -4,6 +4,6 @@
     {
         ArmorType ArmorType { get; }
 
-        uint GetReducedDamage(uint damageAmount, DamageType damageType);
+        float GetReducedDamage(float damageAmount, DamageType damageType);
     }
 }

@@ -12,12 +12,15 @@ namespace ThirtyDayHero
             HealingCalculation = healingCalculation;
         }
 
-        public void Apply(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> targetCharacters)
+        public void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters)
         {
-            int healing = (int) HealingCalculation(sourceCharacter);
-            foreach (ICharacter targetCharacter in targetCharacters)
+            if (sourceEntity is ICharacter sourceCharacter)
             {
-                targetCharacter.Stats.ModifyStat(StatType.HP, healing);
+                int healing = (int) HealingCalculation(sourceCharacter);
+                foreach (ICharacter targetCharacter in targetCharacters)
+                {
+                    targetCharacter.Stats.ModifyStat(StatType.HP, healing);
+                }
             }
         }
     }

@@ -5,6 +5,6 @@ namespace ThirtyDayHero
 {
     public interface ICharacterController
     {
-        void SelectAction(ICharacter activeCharacter, IReadOnlyDictionary<uint, IAction> availableActions, Action<uint> onActionSelected);
+        void SelectAction(ICombatEntity activeEntity, IReadOnlyDictionary<uint, IAction> availableActions, Action<uint> onActionSelected);
     }
 }

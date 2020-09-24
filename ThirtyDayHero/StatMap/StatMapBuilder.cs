@@ -11,15 +11,6 @@ namespace ThirtyDayHero
         private const uint STARTING_HP_PER_CON = 10;
         private const uint STARTING_STA_PER_WEIGHTED_STAT = 10;
 
-        private static readonly IReadOnlyDictionary<RankPriority, float> PRIORITY_WEIGHT = new Dictionary<RankPriority, float>()
-        {
-            {RankPriority.A, 9f},
-            {RankPriority.B, 7f},
-            {RankPriority.C, 6f},
-            {RankPriority.D, 4.5f},
-            {RankPriority.F, 3f},
-        };
-
         private readonly uint _statTotal;
         private readonly uint _statMin;
         private readonly IReadOnlyDictionary<StatType, RankPriority> _statPriorities = null;
@@ -62,7 +53,7 @@ namespace ThirtyDayHero
             double totalPriority = 0d;
             foreach (RankPriority statPriority in _statPriorities.Values)
             {
-                totalPriority += PRIORITY_WEIGHT[statPriority];
+                totalPriority += Constants.PRIORITY_WEIGHT[statPriority];
             }
 
             for (int i = 0; i < _statTotal; i++)
@@ -70,7 +61,7 @@ namespace ThirtyDayHero
                 double randVal = random.NextDouble() * totalPriority;
                 foreach (var priorityKvp in _statPriorities)
                 {
-                    randVal -= PRIORITY_WEIGHT[priorityKvp.Value];
+                    randVal -= Constants.PRIORITY_WEIGHT[priorityKvp.Value];
                     if (randVal <= 0)
                     {
                         startingStats[priorityKvp.Key] += 1;

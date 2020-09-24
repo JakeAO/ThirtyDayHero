@@ -22,12 +22,32 @@ namespace ThirtyDayHero
                 stats = characterClass.LevelUpStats.Increment(stats, RANDOM);
             }
 
-            IEquipMap equipment = new EquipMap();
-
             return new Character(
                 id, partyId,
                 name,
                 characterClass,
+                stats);
+        }
+
+        public static IPlayerCharacter CreatePlayerCharacter(
+            uint id, uint partyId,
+            string name,
+            IPlayerClass playerClass,
+            uint level = 1)
+        {
+            IStatMap stats = playerClass.StartingStats.Generate(RANDOM);
+            for (uint i = 1; i < level; i++)
+            {
+                stats.ModifyStat(StatType.LVL, 1);
+                stats = playerClass.LevelUpStats.Increment(stats, RANDOM);
+            }
+
+            IEquipMap equipment = playerClass.StartingEquipment.Generate(RANDOM);
+
+            return new PlayerCharacter(
+                id, partyId,
+                name,
+                playerClass,
                 stats,
                 equipment);
         }

@@ -8,7 +8,7 @@ namespace ThirtyDayHero
     {
         private static readonly Random RANDOM = new Random();
 
-        public void SelectAction(ICharacter activeCharacter, IReadOnlyDictionary<uint, IAction> availableActions, Action<uint> onActionSelected)
+        public void SelectAction(ICombatEntity activeEntity, IReadOnlyDictionary<uint, IAction> availableActions, Action<uint> onActionSelected)
         {
             int randIdx = RANDOM.Next(0, availableActions.Count);
             uint randActionId = availableActions.ElementAt(randIdx).Key;

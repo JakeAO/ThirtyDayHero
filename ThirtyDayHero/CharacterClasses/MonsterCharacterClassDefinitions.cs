@@ -11,10 +11,9 @@ namespace ThirtyDayHero.CharacterClasses
         public static readonly ICharacterClass OOZE = new CharacterClass(
             NextId,
             "Ooze", "It's both sticky AND dangerous. Great.",
+            new Dictionary<DamageType, float>(),
             new StatMapBuilder(RankPriority.B, RankPriority.C, RankPriority.B, RankPriority.F, RankPriority.C, RankPriority.F),
             new StatMapIncrementor(RankPriority.B, RankPriority.C, RankPriority.B, RankPriority.F, RankPriority.C, RankPriority.F),
-            WeaponType.Invalid,
-            ArmorType.Invalid,
             new Dictionary<uint, IReadOnlyCollection<IAbility>>()
             {
                 {

@@ -5,7 +5,7 @@ namespace ThirtyDayHero
 {
     public class StatMapIncrementor : IStatMapIncrementor
     {
-        private const uint DEFAULT_TOTAL = 6;
+        private const uint DEFAULT_TOTAL = 12;
         private const uint DEFAULT_MIN = 0;
 
         private const uint HP_INCREASE_PER_CON = 10;

@@ -14,13 +14,16 @@ namespace ThirtyDayHero
             DamageCalculation = damageCalculation;
         }
 
-        public void Apply(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> targetCharacters)
+        public void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters)
         {
-            uint damage = DamageCalculation(sourceCharacter);
-            foreach (ICharacter targetCharacter in targetCharacters)
+            if (sourceEntity is ICharacter sourceCharacter)
             {
-                uint modifiedDamage = targetCharacter.Equipment.Armor?.GetReducedDamage(damage, DamageType) ?? damage;
-                targetCharacter.Stats.ModifyStat(StatType.HP, (int) -modifiedDamage);
+                uint damage = DamageCalculation(sourceCharacter);
+                foreach (ICharacter targetCharacter in targetCharacters)
+                {
+                    float modifiedDamage = targetCharacter.GetReducedDamage(damage, DamageType);
+                    targetCharacter.Stats.ModifyStat(StatType.HP, (int) -Math.Round(modifiedDamage));
+                }
             }
         }
     }

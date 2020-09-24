@@ -46,7 +46,7 @@ namespace ThirtyDayHero
             return actions;
         }
 
-        public uint GetReducedDamage(uint damageAmount, DamageType damageType)
+        public float GetReducedDamage(float damageAmount, DamageType damageType)
         {
             if (_damageModifiers != null && _damageModifiers.Count > 0)
             {
@@ -68,7 +68,7 @@ namespace ThirtyDayHero
                     }
                 }
 
-                return (uint) Math.Round(damage);
+                return damage;
             }
             else
             {

@@ -4,12 +4,12 @@
     {
         public static readonly NoCost Instance = new NoCost();
         
-        public bool CanAfford(ICharacter character)
+        public bool CanAfford(ICombatEntity entity)
         {
             return true;
         }
 
-        public void Pay(ICharacter character)
+        public void Pay(ICombatEntity entity)
         {
             // Intentionally left blank
         }

@@ -84,15 +84,5 @@ namespace ThirtyDayHero
 
             _stats[statType] = currentValue;
         }
-
-        public void AddStatus(IStatusEffect statusEffect)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void RemoveStatus(IStatusEffect statusEffect)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

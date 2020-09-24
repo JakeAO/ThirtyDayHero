@@ -12,12 +12,15 @@ namespace ThirtyDayHero
             StaminaCalculation = staminaCalculation;
         }
 
-        public void Apply(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> targetCharacters)
+        public void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters)
         {
-            int stamina = StaminaCalculation(sourceCharacter);
-            foreach (ICharacter targetCharacter in targetCharacters)
+            if (sourceEntity is ICharacter sourceCharacter)
             {
-                targetCharacter.Stats.ModifyStat(StatType.STA, stamina);
+                int stamina = StaminaCalculation(sourceCharacter);
+                foreach (ICharacter targetCharacter in targetCharacters)
+                {
+                    targetCharacter.Stats.ModifyStat(StatType.STA, stamina);
+                }
             }
         }
     }

@@ -12,12 +12,15 @@ namespace ThirtyDayHero
             DamageCalculation = damageCalculation;
         }
 
-        public void Apply(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> targetCharacters)
+        public void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters)
         {
-            int damage = (int) -DamageCalculation(sourceCharacter);
-            foreach (ICharacter targetCharacter in targetCharacters)
+            if (sourceEntity is ICharacter sourceCharacter)
             {
-                targetCharacter.Stats.ModifyStat(StatType.HP, damage);
+                int damage = (int) -DamageCalculation(sourceCharacter);
+                foreach (ICharacter targetCharacter in targetCharacters)
+                {
+                    targetCharacter.Stats.ModifyStat(StatType.HP, damage);
+                }
             }
         }
     }

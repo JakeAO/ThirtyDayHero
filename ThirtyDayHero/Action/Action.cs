@@ -7,14 +7,14 @@ namespace ThirtyDayHero
         public uint Id { get; }
         public bool Available { get; }
         public IAbility Ability { get; }
-        public ICharacter Source { get; }
+        public ICombatEntity Source { get; }
         public IReadOnlyCollection<ICharacter> Targets { get; }
 
         public Action(
             uint id,
             bool available,
             IAbility ability,
-            ICharacter source,
+            ICombatEntity source,
             IReadOnlyCollection<ICharacter> targets)
         {
             Id = id;

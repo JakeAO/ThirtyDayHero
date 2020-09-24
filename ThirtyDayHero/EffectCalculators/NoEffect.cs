@@ -6,7 +6,7 @@ namespace ThirtyDayHero
     {
         public static readonly NoEffect Instance = new NoEffect();
         
-        public void Apply(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> targetCharacters)
+        public void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters)
         {
             // Intentionally left blank
         }

@@ -1,16 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace ThirtyDayHero
+﻿namespace ThirtyDayHero
 {
-    public interface ICharacter
+    public interface ICharacter : ICombatEntity
     {
-        uint Id { get; }
-        uint Party { get; }
-        string Name { get; }
         ICharacterClass Class { get; }
         IStatMap Stats { get; }
-        IEquipMap Equipment { get; }
-
-        IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacter> allCharacters);
+        
+        float GetReducedDamage(float damageAmount, DamageType damageType);
     }
 }

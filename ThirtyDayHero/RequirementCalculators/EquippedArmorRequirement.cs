@@ -11,8 +11,13 @@
 
         public bool MeetsRequirement(ICharacter character)
         {
-            ArmorType equippedType = character.Equipment.Armor?.ArmorType ?? ArmorType.Invalid;
-            return (equippedType & _armorType) == equippedType;
+            if (character is IPlayerCharacter playerCharacter)
+            {
+                ArmorType equippedType = playerCharacter.Equipment.Armor?.ArmorType ?? ArmorType.Invalid;
+                return (equippedType & _armorType) == equippedType;
+            }
+
+            return false;
         }
     }
 }

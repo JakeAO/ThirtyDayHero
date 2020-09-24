@@ -11,8 +11,13 @@
 
         public bool MeetsRequirement(ICharacter character)
         {
-            WeaponType equippedType = character.Equipment.Weapon?.WeaponType ?? WeaponType.Invalid;
-            return (equippedType & _weaponType) == equippedType;
+            if (character is IPlayerCharacter playerCharacter)
+            {
+                WeaponType equippedType = playerCharacter.Equipment.Weapon?.WeaponType ?? WeaponType.Invalid;
+                return (equippedType & _weaponType) == equippedType;
+            }
+
+            return false;
         }
     }
 }

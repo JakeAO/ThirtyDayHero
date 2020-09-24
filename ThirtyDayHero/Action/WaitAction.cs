@@ -21,13 +21,13 @@ namespace ThirtyDayHero
         public uint Id { get; } = ActionUtil.NextId;
         public bool Available => true;
         public IAbility Ability => WaitAbility.Instance;
-        public ICharacter Source { get; }
+        public ICombatEntity Source { get; }
         public IReadOnlyCollection<ICharacter> Targets { get; }
 
         public WaitAction(ICharacter sourceCharacter)
         {
             Source = sourceCharacter;
-            Targets = new[] {Source};
+            Targets = new[] {sourceCharacter};
         }
     }
 }

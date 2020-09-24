@@ -7,20 +7,18 @@ namespace ThirtyDayHero.CharacterClasses
         public uint Id { get; }
         public string Name { get; }
         public string Desc { get; }
+        public IReadOnlyDictionary<DamageType, float> IntrinsicDamageModification { get; }
         public IStatMapBuilder StartingStats { get; }
         public IStatMapIncrementor LevelUpStats { get; }
-        public WeaponType WeaponProficiency { get; }
-        public ArmorType ArmorProficiency { get; }
         public IReadOnlyDictionary<uint, IReadOnlyCollection<IAbility>> AbilitiesPerLevel { get; }
 
         public CharacterClass(
             uint id,
             string name,
             string desc,
+            IReadOnlyDictionary<DamageType, float> intrinsicDamageModification,
             IStatMapBuilder startingStats,
             IStatMapIncrementor levelUpStats,
-            WeaponType weaponProficiency,
-            ArmorType armorProficiency,
             IReadOnlyDictionary<uint, IReadOnlyCollection<IAbility>> abilitiesPerLevel)
         {
             Id = id;
@@ -28,9 +26,8 @@ namespace ThirtyDayHero.CharacterClasses
             Desc = desc;
             StartingStats = startingStats;
             LevelUpStats = levelUpStats;
-            WeaponProficiency = weaponProficiency;
-            ArmorProficiency = armorProficiency;
             AbilitiesPerLevel = abilitiesPerLevel;
+            IntrinsicDamageModification = new Dictionary<DamageType, float>(intrinsicDamageModification);
         }
 
         public IReadOnlyCollection<IAbility> GetAllAbilities(uint level)
