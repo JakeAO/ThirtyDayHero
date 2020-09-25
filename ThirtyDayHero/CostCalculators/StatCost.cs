@@ -11,14 +11,14 @@
             Amount = amount;
         }
 
-        public bool CanAfford(ICombatEntity entity)
+        public bool CanAfford(IInitiativeActor entity)
         {
-            return entity is ICharacter character && character.Stats.GetStat(Type) >= Amount;
+            return entity is ICharacterActor character && character.Stats.GetStat(Type) >= Amount;
         }
 
-        public void Pay(ICombatEntity entity)
+        public void Pay(IInitiativeActor entity)
         {
-            if (entity is ICharacter character)
+            if (entity is ICharacterActor character)
                 character.Stats.ModifyStat(Type, (int) -Amount);
         }
     }

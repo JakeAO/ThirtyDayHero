@@ -11,7 +11,7 @@
             WeaponType.Sword,
             new Ability(AbilityUtil.NextId,
                 "Attack", "Attack with your weapon.",
-                30,
+                100,
                 NoRequirements.Instance,
                 NoCost.Instance,
                 SingleEnemyTargetCalculator.Instance,

@@ -9,7 +9,7 @@ namespace ThirtyDayHero
         string Desc { get; }
         ItemType ItemType { get; }
 
-        IReadOnlyCollection<IAction> GetAllActions(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> allCharacters, bool isEquipped);
+        IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ICharacterActor> allCharacters, bool isEquipped);
 
         // TODO Stat Bonus
     }

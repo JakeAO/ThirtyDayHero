@@ -2,7 +2,7 @@
 {
     public interface ICostCalc
     {
-        bool CanAfford(ICombatEntity entity);
-        void Pay(ICombatEntity entity);
+        bool CanAfford(IInitiativeActor entity);
+        void Pay(IInitiativeActor entity);
     }
 }

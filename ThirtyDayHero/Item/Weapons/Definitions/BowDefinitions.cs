@@ -13,7 +13,7 @@ namespace ThirtyDayHero.Item.Weapons.Definitions
             WeaponType.Bow,
             new Ability(AbilityUtil.NextId,
                 "Attack", "Attack with your weapon.",
-                30,
+                100,
                 NoRequirements.Instance,
                 NoCost.Instance,
                 SingleEnemyTargetCalculator.Instance,

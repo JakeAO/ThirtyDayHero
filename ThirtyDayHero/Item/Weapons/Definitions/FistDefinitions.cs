@@ -13,7 +13,7 @@ namespace ThirtyDayHero.Item.Weapons.Definitions
             WeaponType.Fist,
             new Ability(AbilityUtil.NextId,
                 "Attack", "Pummel the enemy.",
-                15,
+                100,
                 NoRequirements.Instance,
                 NoCost.Instance,
                 SingleEnemyTargetCalculator.Instance,

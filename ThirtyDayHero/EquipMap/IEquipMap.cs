@@ -9,6 +9,6 @@ namespace ThirtyDayHero
         IItem ItemA { get; }
         IItem ItemB { get; }
 
-        IReadOnlyCollection<IAction> GetAllActions(ICharacter activeChar, IReadOnlyCollection<ICharacter> allChar);
+        IReadOnlyCollection<IAction> GetAllActions(ICharacterActor activeChar, IReadOnlyCollection<ICharacterActor> allChar);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace ThirtyDayHero
 {
-    public class Character : ICharacter
+    public class Character : ICharacterActor
     {
         public uint Id { get; }
         public uint Party { get; }
@@ -12,7 +12,7 @@ namespace ThirtyDayHero
         public IStatMap Stats { get; }
 
         public bool Alive => Stats.GetStat(StatType.HP) > 0u;
-        public float Initiative => 1f + 19f / Stats.GetStat(StatType.DEX) / Stats.GetStat(StatType.LVL);
+        public float Initiative => Stats.GetStat(StatType.DEX) / (float) Stats.GetStat(StatType.LVL);
 
         public Character(
             uint id,
@@ -56,7 +56,7 @@ namespace ThirtyDayHero
             return damageAmount;
         }
 
-        public virtual IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacter> allCharacters)
+        public virtual IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacterActor> allCharacters)
         {
             List<IAction> actions = new List<IAction>(10);
 

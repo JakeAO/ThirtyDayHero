@@ -8,12 +8,12 @@ namespace ThirtyDayHero
     {
         private static readonly Random RANDOM = new Random();
 
-        public void SelectAction(ICombatEntity activeEntity, IReadOnlyDictionary<uint, IAction> availableActions, Action<uint> onActionSelected)
+        public void SelectAction(IInitiativeActor activeEntity, IReadOnlyDictionary<uint, IAction> availableActions, Action<uint> selectAction)
         {
             int randIdx = RANDOM.Next(0, availableActions.Count);
             uint randActionId = availableActions.ElementAt(randIdx).Key;
 
-            onActionSelected(randActionId);
+            selectAction(randActionId);
         }
     }
 }

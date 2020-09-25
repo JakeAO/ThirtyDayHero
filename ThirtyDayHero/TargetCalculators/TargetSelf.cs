@@ -11,12 +11,12 @@ namespace ThirtyDayHero
 
         }
 
-        public bool CanTarget(ICharacter sourceCharacter, ICharacter targetCharacter)
+        public bool CanTarget(ICharacterActor sourceCharacter, ICharacterActor targetCharacter)
         {
             return sourceCharacter.Id == targetCharacter.Id;
         }
 
-        public IReadOnlyCollection<IReadOnlyCollection<ICharacter>> GetTargetOptions(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> allCharacters)
+        public IReadOnlyCollection<IReadOnlyCollection<ICharacterActor>> GetTargetOptions(ICharacterActor sourceCharacter, IReadOnlyCollection<ICharacterActor> allCharacters)
         {
             return new[] {new[] {sourceCharacter}};
         }

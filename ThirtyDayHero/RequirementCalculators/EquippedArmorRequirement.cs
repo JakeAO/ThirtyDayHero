@@ -9,9 +9,9 @@
             _armorType = armorType;
         }
 
-        public bool MeetsRequirement(ICharacter character)
+        public bool MeetsRequirement(ICharacterActor character)
         {
-            if (character is IPlayerCharacter playerCharacter)
+            if (character is IPlayerCharacterActor playerCharacter)
             {
                 ArmorType equippedType = playerCharacter.Equipment.Armor?.ArmorType ?? ArmorType.Invalid;
                 return (equippedType & _armorType) == equippedType;

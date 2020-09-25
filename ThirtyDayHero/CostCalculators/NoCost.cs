@@ -4,12 +4,12 @@
     {
         public static readonly NoCost Instance = new NoCost();
         
-        public bool CanAfford(ICombatEntity entity)
+        public bool CanAfford(IInitiativeActor entity)
         {
             return true;
         }
 
-        public void Pay(ICombatEntity entity)
+        public void Pay(IInitiativeActor entity)
         {
             // Intentionally left blank
         }

@@ -21,7 +21,7 @@ namespace ThirtyDayHero
             ItemB = itemB;
         }
 
-        public IReadOnlyCollection<IAction> GetAllActions(ICharacter activeChar, IReadOnlyCollection<ICharacter> allChar)
+        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor activeChar, IReadOnlyCollection<ICharacterActor> allChar)
         {
             List<IAction> allActions = new List<IAction>(10);
             if (Weapon != null)

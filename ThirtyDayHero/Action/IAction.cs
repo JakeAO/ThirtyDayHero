@@ -7,7 +7,7 @@ namespace ThirtyDayHero
         uint Id { get; }
         bool Available { get; }
         IAbility Ability { get; }
-        ICombatEntity Source { get; }
-        IReadOnlyCollection<ICharacter> Targets { get; }
+        IInitiativeActor Source { get; }
+        IReadOnlyCollection<ICharacterActor> Targets { get; }
     }
 }

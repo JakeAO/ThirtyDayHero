@@ -6,14 +6,14 @@ namespace ThirtyDayHero.Party
     {
         public uint Id { get; }
         public ICharacterController Controller { get; }
-        public IReadOnlyCollection<ICharacter> Characters => _characters;
+        public IReadOnlyCollection<ICharacterActor> Characters => _characters;
 
-        private readonly List<ICharacter> _characters = new List<ICharacter>(4);
+        private readonly List<ICharacterActor> _characters = new List<ICharacterActor>(4);
 
         public Party(
             uint id,
             ICharacterController controller,
-            IReadOnlyCollection<ICharacter> characters)
+            IReadOnlyCollection<ICharacterActor> characters)
         {
             Id = id;
             Controller = controller;

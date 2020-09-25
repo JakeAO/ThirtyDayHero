@@ -5,19 +5,19 @@ namespace ThirtyDayHero
 {
     public class StaminaEffect : IEffectCalc
     {
-        public Func<ICharacter, int> StaminaCalculation { get; }
+        public Func<ICharacterActor, int> StaminaCalculation { get; }
 
-        public StaminaEffect(Func<ICharacter, int> staminaCalculation)
+        public StaminaEffect(Func<ICharacterActor, int> staminaCalculation)
         {
             StaminaCalculation = staminaCalculation;
         }
 
-        public void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters)
+        public void Apply(IInitiativeActor sourceEntity, IReadOnlyCollection<ICharacterActor> targetCharacters)
         {
-            if (sourceEntity is ICharacter sourceCharacter)
+            if (sourceEntity is ICharacterActor sourceCharacter)
             {
                 int stamina = StaminaCalculation(sourceCharacter);
-                foreach (ICharacter targetCharacter in targetCharacters)
+                foreach (ICharacterActor targetCharacter in targetCharacters)
                 {
                     targetCharacter.Stats.ModifyStat(StatType.STA, stamina);
                 }

@@ -1,6 +1,6 @@
 ﻿namespace ThirtyDayHero
 {
-    public interface ICharacter : ICombatEntity
+    public interface ICharacterActor : IInitiativeActor
     {
         ICharacterClass Class { get; }
         IStatMap Stats { get; }

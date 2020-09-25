@@ -21,10 +21,10 @@ namespace ThirtyDayHero
         public uint Id { get; } = ActionUtil.NextId;
         public bool Available => true;
         public IAbility Ability => WaitAbility.Instance;
-        public ICombatEntity Source { get; }
-        public IReadOnlyCollection<ICharacter> Targets { get; }
+        public IInitiativeActor Source { get; }
+        public IReadOnlyCollection<ICharacterActor> Targets { get; }
 
-        public WaitAction(ICharacter sourceCharacter)
+        public WaitAction(ICharacterActor sourceCharacter)
         {
             Source = sourceCharacter;
             Targets = new[] {sourceCharacter};

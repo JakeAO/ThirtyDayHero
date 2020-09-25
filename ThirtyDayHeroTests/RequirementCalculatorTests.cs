@@ -11,7 +11,7 @@ namespace ThirtyDayHeroTests
         public static bool NoRequirement_Tests()
         {
             IRequirementCalc requirementCalc = NoRequirements.Instance;
-            ICharacter dummyCharacter = new Character(
+            ICharacterActor dummyCharacter = new Character(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
                 new StatMap());
@@ -27,7 +27,7 @@ namespace ThirtyDayHeroTests
         public static bool CriticalHealthRequirement_Tests(uint hp, uint hpMax)
         {
             IRequirementCalc requirementCalc = CriticalHealthRequirement.Instance;
-            ICharacter dummyCharacter = new Character(
+            ICharacterActor dummyCharacter = new Character(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
                 new StatMap(new Dictionary<StatType, uint>()
@@ -51,7 +51,7 @@ namespace ThirtyDayHeroTests
         public static bool EquippedWeaponRequirement_Tests(WeaponType requirement, WeaponType equipped)
         {
             IRequirementCalc requirementCalc = new EquippedWeaponRequirement(requirement);
-            IPlayerCharacter dummyCharacter = new PlayerCharacter(
+            IPlayerCharacterActor dummyCharacter = new PlayerCharacter(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
                 new StatMap(),
@@ -73,7 +73,7 @@ namespace ThirtyDayHeroTests
         public static bool EquippedArmorRequirement_Tests(ArmorType requirement, ArmorType equipped)
         {
             IRequirementCalc requirementCalc = new EquippedArmorRequirement(requirement);
-            IPlayerCharacter dummyCharacter = new PlayerCharacter(
+            IPlayerCharacterActor dummyCharacter = new PlayerCharacter(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
                 new StatMap(),

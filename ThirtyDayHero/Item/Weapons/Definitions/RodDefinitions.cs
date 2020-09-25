@@ -13,7 +13,7 @@ namespace ThirtyDayHero.Item.Weapons.Definitions
             WeaponType.Rod,
             new Ability(AbilityUtil.NextId,
                 "Ember", "Launch a small fireball at an enemy.",
-                30,
+                100,
                 NoRequirements.Instance,
                 new StatCost(StatType.STA, 5),
                 SingleEnemyTargetCalculator.Instance,

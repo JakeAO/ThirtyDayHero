@@ -5,8 +5,9 @@ namespace ThirtyDayHero
 {
     public class StatMapBuilder : IStatMapBuilder
     {
-        private const uint DEFAULT_TOTAL = 60;
-        private const uint DEFAULT_MIN = 3;
+        public const uint DEFAULT_TOTAL = 60;
+        public const uint DEFAULT_TOTAL_MONSTER = 30;
+        public const uint DEFAULT_MIN = 3;
 
         private const uint STARTING_HP_PER_CON = 10;
         private const uint STARTING_STA_PER_WEIGHTED_STAT = 10;

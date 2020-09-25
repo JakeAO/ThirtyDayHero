@@ -6,39 +6,45 @@ namespace ThirtyDayHero
 {
     public class CombatManager
     {
-        public class InitiativePair
-        {
-            public readonly ICombatEntity Entity;
-            public float Initiative;
-
-            public InitiativePair(ICombatEntity entity, float init)
-            {
-                Entity = entity;
-                Initiative = init;
-            }
-        }
-
         private static readonly Random RANDOM = new Random();
 
         private readonly List<IParty> _parties = new List<IParty>(2);
-        private readonly List<ICombatEntity> _entities = new List<ICombatEntity>(10);
-        private readonly List<ICharacter> _characters = new List<ICharacter>(10);
+        private readonly List<IInitiativeActor> _entities = new List<IInitiativeActor>(10);
+        private readonly List<ICharacterActor> _characters = new List<ICharacterActor>(10);
         private readonly List<InitiativePair> _characterInitiativeList = new List<InitiativePair>(10);
 
         private readonly IReadOnlyDictionary<uint, ICharacterController> _controllerByPartyId;
 
-        private readonly Action<uint> _onCombatComplete = null;
-
-        private ICombatEntity _activeEntity = null;
+        public event Action<IAction> ActionTaken; 
+        public event Action<IGameState> GameStateUpdate;
+        public event Action<uint> CombatComplete;
+        
+        private IInitiativeActor _activeEntity = null;
         private IReadOnlyDictionary<uint, IAction> _currentActionMap = null;
 
-        private static uint GetWinningPartyId(IReadOnlyCollection<ICombatEntity> allCharacters) =>
-            allCharacters
-                .Select(x => x as ICharacter)
-                .Where(x => x?.Stats.GetStat(StatType.HP) > 0u)
-                .Select(x => x.Party)
-                .Distinct()
-                .SingleOrDefault();
+        private bool GetWinningPartyId(out uint winningParty)
+        {
+            winningParty = 0u;
+
+            foreach (ICharacterActor character in _characters)
+            {
+                if (character == null)
+                    continue;
+                if (character.Stats.GetStat(StatType.HP) <= 0u)
+                    continue;
+
+                if (winningParty == 0)
+                {
+                    winningParty = character.Party;
+                }
+                else if (winningParty != character.Party)
+                {
+                    return false;
+                }
+            }
+
+            return winningParty != 0u;
+        }
 
         private void IncrementInitiative()
         {
@@ -50,7 +56,7 @@ namespace ThirtyDayHero
             _characterInitiativeList.Sort((lhs, rhs) => rhs.Initiative.CompareTo(lhs.Initiative));
         }
 
-        private ICombatEntity GetNextEntity()
+        private IInitiativeActor GetNextEntity()
         {
             while (_characterInitiativeList[0].Initiative < 100f)
             {
@@ -64,27 +70,42 @@ namespace ThirtyDayHero
         {
             _parties.AddRange(parties);
             _entities.AddRange(parties.SelectMany(x => x.Characters));
-            _characters.AddRange(_entities.Select(x => x as ICharacter).Where(x => x != null));
+            _characters.AddRange(_entities.Select(x => x as ICharacterActor).Where(x => x != null));
             _characterInitiativeList.AddRange(_entities.Select(x => new InitiativePair(x, (float) (RANDOM.NextDouble() * x.Initiative))));
 
             _controllerByPartyId = _parties.ToDictionary(x => x.Id, x => x.Controller);
         }
 
-        public void TriggerNextState()
+        public void Start()
+        {
+            // Send Initial GameState
+            GameStateUpdate?.Invoke(GenerateGameState());
+
+            Continue();
+        }
+
+        public void Continue()
         {
             // Check End State Condition
-            uint winningPartyId = GetWinningPartyId(_entities);
-            if (winningPartyId != 0u)
+            if (GetWinningPartyId(out uint winningParty))
             {
-                _onCombatComplete(winningPartyId);
+                CombatComplete?.Invoke(winningParty);
                 return;
             }
-
+            
             // Get Next Active Character
             if (_activeEntity == null)
             {
-                _activeEntity = GetNextEntity();
+                IInitiativeActor nextActor = GetNextEntity();
+                if (!nextActor.Alive)
+                {
+                    InitiativePair nextActorInit = _characterInitiativeList.Find(x => x.Entity.Id == nextActor.Id);
+                    nextActorInit.Initiative -= 100f;
+                    Continue();
+                    return;
+                }
 
+                _activeEntity = nextActor;
                 _currentActionMap = _activeEntity
                     .GetAllActions(_characters)
                     .ToDictionary(x => x.Id);
@@ -92,24 +113,43 @@ namespace ThirtyDayHero
 
             // Notify Active Character Controller of Actions Available
             ICharacterController controller = _controllerByPartyId[_activeEntity.Party];
-            controller.SelectAction(_activeEntity, _currentActionMap, ActionSelected);
+            controller.SelectAction(_activeEntity, _currentActionMap, OnActionSelected);
         }
 
-        public void ActionSelected(uint actionId)
+        private void OnActionSelected(uint actionId)
         {
             if (_currentActionMap.TryGetValue(actionId, out IAction action))
             {
-                InitiativePair sourceInitiative = _characterInitiativeList.Find(x => x.Entity.Id == action.Source.Id);
+                if (action.Available)
+                {
+                    InitiativePair sourceInitiative = _characterInitiativeList.Find(x => x.Entity.Id == action.Source.Id);
 
-                sourceInitiative.Initiative -= action.Ability.Speed;
-                action.Ability.Cost.Pay(action.Source);
-                action.Ability.Effect.Apply(action.Source, action.Targets);
+                    sourceInitiative.Initiative -= action.Ability.Speed;
+                    action.Ability.Cost.Pay(action.Source);
+                    action.Ability.Effect.Apply(action.Source, action.Targets);
 
-                _activeEntity = null;
-                _currentActionMap = null;
+                    _activeEntity = null;
+                    _currentActionMap = null;
 
-                TriggerNextState();
+                    ActionTaken?.Invoke(action);
+                }
+
+                // Check End State Condition
+                if (GetWinningPartyId(out uint winningParty))
+                {
+                    CombatComplete?.Invoke(winningParty);
+                }
+                
+                // Send GameState
+                GameStateUpdate?.Invoke(GenerateGameState());
             }
+        }
+
+        private IGameState GenerateGameState()
+        {
+            return new GameState(
+                _characterInitiativeList,
+                _activeEntity);
         }
     }
 }

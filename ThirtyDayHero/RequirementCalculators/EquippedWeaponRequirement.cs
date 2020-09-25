@@ -9,9 +9,9 @@
             _weaponType = weaponType;
         }
 
-        public bool MeetsRequirement(ICharacter character)
+        public bool MeetsRequirement(ICharacterActor character)
         {
-            if (character is IPlayerCharacter playerCharacter)
+            if (character is IPlayerCharacterActor playerCharacter)
             {
                 WeaponType equippedType = playerCharacter.Equipment.Weapon?.WeaponType ?? WeaponType.Invalid;
                 return (equippedType & _weaponType) == equippedType;

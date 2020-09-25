@@ -5,19 +5,19 @@ namespace ThirtyDayHero
 {
     public class HealingEffect : IEffectCalc
     {
-        public Func<ICharacter, uint> HealingCalculation { get; }
+        public Func<ICharacterActor, uint> HealingCalculation { get; }
 
-        public HealingEffect(Func<ICharacter, uint> healingCalculation)
+        public HealingEffect(Func<ICharacterActor, uint> healingCalculation)
         {
             HealingCalculation = healingCalculation;
         }
 
-        public void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters)
+        public void Apply(IInitiativeActor sourceEntity, IReadOnlyCollection<ICharacterActor> targetCharacters)
         {
-            if (sourceEntity is ICharacter sourceCharacter)
+            if (sourceEntity is ICharacterActor sourceCharacter)
             {
                 int healing = (int) HealingCalculation(sourceCharacter);
-                foreach (ICharacter targetCharacter in targetCharacters)
+                foreach (ICharacterActor targetCharacter in targetCharacters)
                 {
                     targetCharacter.Stats.ModifyStat(StatType.HP, healing);
                 }

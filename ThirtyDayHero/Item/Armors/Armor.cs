@@ -31,7 +31,7 @@ namespace ThirtyDayHero
             _addedAbilities = addedAbilities;
         }
 
-        public IReadOnlyCollection<IAction> GetAllActions(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> allCharacters, bool isEquipped)
+        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ICharacterActor> allCharacters, bool isEquipped)
         {
             List<IAction> actions = new List<IAction>(10);
 

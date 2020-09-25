@@ -4,7 +4,7 @@ namespace ThirtyDayHero
 {
     public interface ITargetCalc
     {
-        bool CanTarget(ICharacter sourceCharacter, ICharacter targetCharacter);
-        IReadOnlyCollection<IReadOnlyCollection<ICharacter>> GetTargetOptions(ICharacter sourceCharacter, IReadOnlyCollection<ICharacter> allCharacters);
+        bool CanTarget(ICharacterActor sourceCharacter, ICharacterActor targetCharacter);
+        IReadOnlyCollection<IReadOnlyCollection<ICharacterActor>> GetTargetOptions(ICharacterActor sourceCharacter, IReadOnlyCollection<ICharacterActor> allCharacters);
     }
 }

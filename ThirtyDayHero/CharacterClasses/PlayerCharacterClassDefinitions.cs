@@ -23,7 +23,7 @@ namespace ThirtyDayHero.CharacterClasses
                     {
                         new Ability(AbilityUtil.NextId,
                             "Cleave", "Sweep your sword through the enemy lines, dealing moderate damage to all.",
-                            80,
+                            100,
                             new EquippedWeaponRequirement(WeaponType.Sword),
                             new StatCost(StatType.STA, 20),
                             AllEnemyTargetCalculator.Instance,
@@ -46,7 +46,7 @@ namespace ThirtyDayHero.CharacterClasses
                 {
                     {LightDefinitions.Leather, RankPriority.B}
                 },
-                null,
-                null));
+                new Dictionary<IItem, RankPriority>(), 
+                new Dictionary<IItem, RankPriority>()));
     }
 }

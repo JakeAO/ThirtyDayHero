@@ -2,7 +2,7 @@
 
 namespace ThirtyDayHero
 {
-    public interface ICombatEntity
+    public interface IInitiativeActor
     {
         uint Id { get; }
         uint Party { get; }
@@ -11,6 +11,6 @@ namespace ThirtyDayHero
         float Initiative { get; }
         bool Alive { get; }
         
-        IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacter> allCharacters);
+        IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacterActor> allCharacters);
     }
 }

@@ -5,8 +5,8 @@ namespace ThirtyDayHero
 {
     public class StatMapIncrementor : IStatMapIncrementor
     {
-        private const uint DEFAULT_TOTAL = 12;
-        private const uint DEFAULT_MIN = 0;
+        public const uint DEFAULT_TOTAL = 12;
+        public const uint DEFAULT_MIN = 0;
 
         private const uint HP_INCREASE_PER_CON = 10;
         private const uint STA_INCREASE_PER_WEIGHTED_STAT = 10;
@@ -91,6 +91,8 @@ namespace ThirtyDayHero
             foreach (var enumValue in Enum.GetValues(typeof(StatType)))
             {
                 StatType statType = (StatType) enumValue;
+                if (statType == StatType.Invalid)
+                    continue;
                 newStats[statType] = statMap.GetStat(statType);
                 if (statChanges.TryGetValue(statType, out uint statChange))
                     newStats[statType] += statChange;

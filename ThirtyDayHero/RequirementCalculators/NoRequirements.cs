@@ -4,7 +4,7 @@
     {
         public static readonly NoRequirements Instance = new NoRequirements();
         
-        public bool MeetsRequirement(ICharacter character)
+        public bool MeetsRequirement(ICharacterActor character)
         {
             return true;
         }

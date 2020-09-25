@@ -12,7 +12,7 @@ namespace ThirtyDayHero.CharacterClasses
             NextId,
             "Ooze", "It's both sticky AND dangerous. Great.",
             new Dictionary<DamageType, float>(),
-            new StatMapBuilder(RankPriority.B, RankPriority.C, RankPriority.B, RankPriority.F, RankPriority.C, RankPriority.F),
+            new StatMapBuilder(RankPriority.B, RankPriority.C, RankPriority.B, RankPriority.F, RankPriority.C, RankPriority.F, StatMapBuilder.DEFAULT_TOTAL_MONSTER),
             new StatMapIncrementor(RankPriority.B, RankPriority.C, RankPriority.B, RankPriority.F, RankPriority.C, RankPriority.F),
             new Dictionary<uint, IReadOnlyCollection<IAbility>>()
             {
@@ -21,7 +21,7 @@ namespace ThirtyDayHero.CharacterClasses
                     {
                         new Ability(AbilityUtil.NextId,
                             "Slam", string.Empty,
-                            30u,
+                            100u,
                             NoRequirements.Instance,
                             NoCost.Instance,
                             SingleEnemyTargetCalculator.Instance,
@@ -35,7 +35,7 @@ namespace ThirtyDayHero.CharacterClasses
                     {
                         new Ability(AbilityUtil.NextId,
                             "Flop", string.Empty,
-                            50u,
+                            100u,
                             NoRequirements.Instance,
                             NoCost.Instance,
                             SingleEnemyTargetCalculator.Instance,

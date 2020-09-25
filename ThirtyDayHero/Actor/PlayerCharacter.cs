@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace ThirtyDayHero
 {
-    public class PlayerCharacter : Character, IPlayerCharacter
+    public class PlayerCharacter : Character, IPlayerCharacterActor
     {
         public IEquipMap Equipment { get; }
 
@@ -31,7 +31,7 @@ namespace ThirtyDayHero
             return Equipment.Armor?.GetReducedDamage(modifiedDamage, damageType) ?? modifiedDamage;
         }
 
-        public virtual IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacter> allCharacters)
+        public virtual IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacterActor> allCharacters)
         {
             var allActions = base.GetAllActions(allCharacters).ToList();
             allActions.InsertRange(0, Equipment.GetAllActions(this, allCharacters));

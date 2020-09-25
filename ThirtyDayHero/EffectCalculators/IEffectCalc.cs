@@ -4,6 +4,6 @@ namespace ThirtyDayHero
 {
     public interface IEffectCalc
     {
-        void Apply(ICombatEntity sourceEntity, IReadOnlyCollection<ICharacter> targetCharacters);
+        void Apply(IInitiativeActor sourceEntity, IReadOnlyCollection<ICharacterActor> targetCharacters);
     }
 }

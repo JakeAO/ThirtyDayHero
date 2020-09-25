@@ -2,6 +2,6 @@
 {
     public interface IRequirementCalc
     {
-        bool MeetsRequirement(ICharacter character);
+        bool MeetsRequirement(ICharacterActor character);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ThirtyDayHero
 {
-    public interface IPlayerCharacter : ICharacter
+    public interface IPlayerCharacterActor : ICharacterActor
     {
         IEquipMap Equipment { get; }
     }
