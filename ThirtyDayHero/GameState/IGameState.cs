@@ -4,7 +4,9 @@ namespace ThirtyDayHero
 {
     public interface IGameState
     {
-        IReadOnlyList<IInitiativePair> InitiativeOrder { get; }
+        uint Id { get; }
+        CombatState State { get; }
         IInitiativeActor ActiveActor { get; }
+        IReadOnlyList<IInitiativePair> InitiativeOrder { get; }
     }
 }

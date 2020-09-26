@@ -36,10 +36,9 @@ namespace ConsoleApp
             {
                 string stringActionId = Console.ReadLine();
                 uint.TryParse(stringActionId, out actionId);
-            } while (!availableActions.TryGetValue(actionId, out IAction action));
+            } while (!availableActions.TryGetValue(actionId, out IAction _));
 
             Console.WriteLine($"====> {actionId}");
-            Console.WriteLine();
 
             // Send Action Response
             selectAction(actionId);

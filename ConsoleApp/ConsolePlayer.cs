@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using ThirtyDayHero;
 using ThirtyDayHero.CharacterClasses;
@@ -51,7 +50,7 @@ namespace ConsoleApp
         private void OnGameStateUpdate(IGameState gameState)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("[GameState ============================================]");
+            sb.AppendLine($"[GameState {gameState.Id} =========================================]");
             foreach (IInitiativePair initPair in gameState.InitiativeOrder)
             {
                 IInitiativeActor actor = initPair.Entity;
@@ -104,7 +103,6 @@ namespace ConsoleApp
                 sb.AppendLine($"    [Target] {target.Name} ({target.Id})");
             }
             sb.AppendLine("[------------------------------]");
-            sb.AppendLine();
             Console.WriteLine(sb);
         }
 

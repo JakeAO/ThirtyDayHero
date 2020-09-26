@@ -18,9 +18,19 @@ namespace ThirtyDayHero
         public event Action<IAction> ActionTaken; 
         public event Action<IGameState> GameStateUpdate;
         public event Action<uint> CombatComplete;
+
+        private GameState _currentGameState = null;
         
+        private CombatState _state = CombatState.Invalid;
         private IInitiativeActor _activeEntity = null;
         private IReadOnlyDictionary<uint, IAction> _currentActionMap = null;
+
+        public IGameState CurrentGameState => _currentGameState;
+
+        private void UpdateCurrentGameState()
+        {
+            _currentGameState = new GameState(_state, _activeEntity, _characterInitiativeList);
+        }
 
         private bool GetWinningPartyId(out uint winningParty)
         {
@@ -71,16 +81,17 @@ namespace ThirtyDayHero
             _parties.AddRange(parties);
             _entities.AddRange(parties.SelectMany(x => x.Characters));
             _characters.AddRange(_entities.Select(x => x as ICharacterActor).Where(x => x != null));
-            _characterInitiativeList.AddRange(_entities.Select(x => new InitiativePair(x, (float) (RANDOM.NextDouble() * x.Initiative))));
+            _characterInitiativeList.AddRange(_entities.Select(x =>
+                new InitiativePair(x, (float) (RANDOM.NextDouble() * x.Initiative))));
 
             _controllerByPartyId = _parties.ToDictionary(x => x.Id, x => x.Controller);
+
+            _state = CombatState.Invalid;
+            UpdateCurrentGameState();
         }
 
         public void Start()
         {
-            // Send Initial GameState
-            GameStateUpdate?.Invoke(GenerateGameState());
-
             Continue();
         }
 
@@ -89,10 +100,15 @@ namespace ThirtyDayHero
             // Check End State Condition
             if (GetWinningPartyId(out uint winningParty))
             {
+                _state = CombatState.Completed;
+                UpdateCurrentGameState();
+                GameStateUpdate?.Invoke(_currentGameState);
                 CombatComplete?.Invoke(winningParty);
                 return;
             }
-            
+
+            _state = CombatState.Active;
+
             // Get Next Active Character
             if (_activeEntity == null)
             {
@@ -110,6 +126,10 @@ namespace ThirtyDayHero
                     .GetAllActions(_characters)
                     .ToDictionary(x => x.Id);
             }
+
+            // Update and Send GameState
+            UpdateCurrentGameState();
+            GameStateUpdate?.Invoke(_currentGameState);
 
             // Notify Active Character Controller of Actions Available
             ICharacterController controller = _controllerByPartyId[_activeEntity.Party];
@@ -137,19 +157,10 @@ namespace ThirtyDayHero
                 // Check End State Condition
                 if (GetWinningPartyId(out uint winningParty))
                 {
+                    _state = CombatState.Completed;
                     CombatComplete?.Invoke(winningParty);
                 }
-                
-                // Send GameState
-                GameStateUpdate?.Invoke(GenerateGameState());
             }
-        }
-
-        private IGameState GenerateGameState()
-        {
-            return new GameState(
-                _characterInitiativeList,
-                _activeEntity);
         }
     }
 }

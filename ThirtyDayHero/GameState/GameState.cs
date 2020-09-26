@@ -4,15 +4,23 @@ namespace ThirtyDayHero
 {
     public class GameState : IGameState
     {
-        public IReadOnlyList<IInitiativePair> InitiativeOrder { get; }
+        private static uint _nextId = 150000;
+        public static uint NextId => ++_nextId;
+        
+        public uint Id { get; }
+        public CombatState State { get; }
         public IInitiativeActor ActiveActor { get; }
+        public IReadOnlyList<IInitiativePair> InitiativeOrder { get; }
 
         public GameState(
-            IReadOnlyList<IInitiativePair> initiative,
-            IInitiativeActor activeActor)
+            CombatState state,
+            IInitiativeActor activeActor,
+            IReadOnlyList<IInitiativePair> initiative)
         {
-            InitiativeOrder = new List<IInitiativePair>(initiative);
+            Id = NextId;
+            State = state;
             ActiveActor = activeActor;
+            InitiativeOrder = new List<IInitiativePair>(initiative);
         }
     }
 }
