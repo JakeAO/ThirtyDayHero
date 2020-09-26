@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>90294b82-526a-4937-ac8c-ae70c8ed2da3</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FirebaseAuthentication.net" Version="3.4.0" />
+      <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
+    </ItemGroup>
+
+</Project>
