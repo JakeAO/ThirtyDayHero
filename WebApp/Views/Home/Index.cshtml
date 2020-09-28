@@ -1,0 +1,30 @@
+﻿@page
+@model WebApp.Views.Home.Index
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    <div class="container">
+        @{
+            if (ViewBag.User == null)
+            {
+                <p>Unable to connect to Firebase.</p>
+            }
+            else
+            {
+                <p>Logged in as <em>@ViewBag.UserName</em></p>
+            }
+        }
+    </div>
+</div>
+</body>
+</html>

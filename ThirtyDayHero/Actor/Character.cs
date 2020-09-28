@@ -11,9 +11,11 @@ namespace ThirtyDayHero
         public ICharacterClass Class { get; }
         public IStatMap Stats { get; }
 
-        public bool Alive => Stats.GetStat(StatType.HP) > 0u;
-        public float Initiative => Stats.GetStat(StatType.DEX) / (float) Stats.GetStat(StatType.LVL);
+        public bool CanTarget => Alive;
 
+        public bool Alive => Stats[StatType.HP] > 0u;
+        public float Initiative => Stats[StatType.DEX] / (float) Stats[StatType.LVL];
+        
         public Character(
             uint id,
             uint party,
@@ -56,13 +58,13 @@ namespace ThirtyDayHero
             return damageAmount;
         }
 
-        public virtual IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacterActor> allCharacters)
+        public virtual IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ITargetableActor> possibleTargets)
         {
             List<IAction> actions = new List<IAction>(10);
 
-            foreach (IAbility ability in Class.GetAllAbilities(Stats.GetStat(StatType.LVL)))
+            foreach (IAbility ability in Class.GetAllAbilities(Stats[StatType.LVL]))
             {
-                actions.AddRange(ActionUtil.GetActionsForAbility(ability, this, allCharacters));
+                actions.AddRange(ActionUtil.GetActionsForAbility(ability, this, possibleTargets));
             }
 
             actions.Add(new WaitAction(this));

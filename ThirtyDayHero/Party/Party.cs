@@ -6,9 +6,7 @@ namespace ThirtyDayHero.Party
     {
         public uint Id { get; }
         public ICharacterController Controller { get; }
-        public IReadOnlyCollection<ICharacterActor> Characters => _characters;
-
-        private readonly List<ICharacterActor> _characters = new List<ICharacterActor>(4);
+        public IReadOnlyCollection<IInitiativeActor> Actors { get; }
 
         public Party(
             uint id,
@@ -17,8 +15,7 @@ namespace ThirtyDayHero.Party
         {
             Id = id;
             Controller = controller;
-
-            _characters.AddRange(characters);
+            Actors = new List<IInitiativeActor>(characters);
         }
     }
 }

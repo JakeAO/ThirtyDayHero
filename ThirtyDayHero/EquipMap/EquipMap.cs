@@ -21,27 +21,27 @@ namespace ThirtyDayHero
             ItemB = itemB;
         }
 
-        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor activeChar, IReadOnlyCollection<ICharacterActor> allChar)
+        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor activeChar, IReadOnlyCollection<ITargetableActor> possibleTargets)
         {
             List<IAction> allActions = new List<IAction>(10);
             if (Weapon != null)
             {
-                allActions.AddRange(Weapon.GetAllActions(activeChar, allChar, true));
+                allActions.AddRange(Weapon.GetAllActions(activeChar, possibleTargets, true));
             }
 
             if (Armor != null)
             {
-                allActions.AddRange(Armor.GetAllActions(activeChar, allChar, true));
+                allActions.AddRange(Armor.GetAllActions(activeChar, possibleTargets, true));
             }
 
             if (ItemA != null)
             {
-                allActions.AddRange(ItemA.GetAllActions(activeChar, allChar, false));
+                allActions.AddRange(ItemA.GetAllActions(activeChar, possibleTargets, false));
             }
 
             if (ItemB != null)
             {
-                allActions.AddRange(ItemB.GetAllActions(activeChar, allChar, false));
+                allActions.AddRange(ItemB.GetAllActions(activeChar, possibleTargets, false));
             }
 
             return allActions;

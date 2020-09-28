@@ -6,6 +6,6 @@ namespace ThirtyDayHero
     {
         uint Id { get; }
         ICharacterController Controller { get; }
-        IReadOnlyCollection<ICharacterActor> Characters { get; }
+        IReadOnlyCollection<IInitiativeActor> Actors { get; }
     }
 }

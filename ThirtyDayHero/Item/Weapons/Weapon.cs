@@ -30,20 +30,20 @@ namespace ThirtyDayHero
             _addedAbilities = addedAbilities;
         }
 
-        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ICharacterActor> allCharacters, bool isEquipped)
+        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ITargetableActor> possibleTargets, bool isEquipped)
         {
             List<IAction> actions = new List<IAction>(10);
 
             if (_attackAbility != null && isEquipped)
             {
-                actions.AddRange(ActionUtil.GetActionsForAbility(_attackAbility, sourceCharacter, allCharacters));
+                actions.AddRange(ActionUtil.GetActionsForAbility(_attackAbility, sourceCharacter, possibleTargets));
             }
 
             if (_addedAbilities != null)
             {
                 foreach (IAbility ability in _addedAbilities)
                 {
-                    actions.AddRange(ActionUtil.GetActionsForAbility(ability, sourceCharacter, allCharacters));
+                    actions.AddRange(ActionUtil.GetActionsForAbility(ability, sourceCharacter, possibleTargets));
                 }
             }
 

@@ -44,6 +44,8 @@ namespace ThirtyDayHero
             }
         }
 
+        public uint this[StatType statType] => GetStat(statType);
+
         public uint GetStat(StatType statType)
         {
             if (!_stats.TryGetValue(statType, out uint statValue))

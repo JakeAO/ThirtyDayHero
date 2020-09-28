@@ -11,6 +11,6 @@ namespace ThirtyDayHero
         float Initiative { get; }
         bool Alive { get; }
         
-        IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacterActor> allCharacters);
+        IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ITargetableActor> possibleTargets);
     }
 }

@@ -31,10 +31,10 @@ namespace ThirtyDayHero
             return Equipment.Armor?.GetReducedDamage(modifiedDamage, damageType) ?? modifiedDamage;
         }
 
-        public virtual IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ICharacterActor> allCharacters)
+        public override IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ITargetableActor> possibleTargets)
         {
-            var allActions = base.GetAllActions(allCharacters).ToList();
-            allActions.InsertRange(0, Equipment.GetAllActions(this, allCharacters));
+            var allActions = base.GetAllActions(possibleTargets).ToList();
+            allActions.InsertRange(0, Equipment.GetAllActions(this, possibleTargets));
             return allActions;
         }
     }

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using ThirtyDayHero;
-using ThirtyDayHero.CharacterClasses;
-using ThirtyDayHero.Party;
 
 namespace ConsoleApp
 {
@@ -13,34 +10,7 @@ namespace ConsoleApp
 
         public ConsolePlayer()
         {
-            IReadOnlyCollection<IPlayerCharacterActor> playerCharacters = new[]
-            {
-                ClassUtil.CreatePlayerCharacter(10, 1, "Rouche",
-                    PlayerCharacterClassDefinitions.SOLDIER,
-                    4u),
-                ClassUtil.CreatePlayerCharacter(11, 1, "Obrem",
-                    PlayerCharacterClassDefinitions.SOLDIER,
-                    4u)
-            };
-            IReadOnlyCollection<ICharacterActor> enemyCharacters = new[]
-            {
-                ClassUtil.CreateCharacter(12, 2, "Glob",
-                    MonsterCharacterClassDefinitions.OOZE,
-                    1),
-                ClassUtil.CreateCharacter(13, 2, "Blob",
-                    MonsterCharacterClassDefinitions.OOZE,
-                    1),
-                ClassUtil.CreateCharacter(14, 2, "Slob",
-                    MonsterCharacterClassDefinitions.OOZE,
-                    1),
-            };
-
-            IParty playerParty = new Party(1, new ConsoleCharacterController(), playerCharacters);
-            IParty enemyParty = new Party(2, new RandomCharacterController(), enemyCharacters);
-
-            IReadOnlyCollection<IParty> parties = new[] {playerParty, enemyParty};
-
-            _combatManager = new CombatManager(parties);
+            _combatManager = CombatManagerUtil.CreateDebugLoadedManager(new ConsoleCharacterController());
             _combatManager.GameStateUpdate += OnGameStateUpdate;
             _combatManager.ActionTaken += OnActionTaken;
             _combatManager.CombatComplete += OnCombatComplete;
@@ -50,7 +20,7 @@ namespace ConsoleApp
         private void OnGameStateUpdate(IGameState gameState)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"[GameState {gameState.Id} =========================================]");
+            sb.AppendLine($"[GameState {gameState.Id} ================================ {gameState.State}]");
             foreach (IInitiativePair initPair in gameState.InitiativeOrder)
             {
                 IInitiativeActor actor = initPair.Entity;
@@ -82,11 +52,19 @@ namespace ConsoleApp
                 }
             }
             sb.AppendLine("[======================================================]");
-            sb.AppendLine("Press any key to continue...");
-            Console.WriteLine(sb);
-            if (Console.Read() != 0)
+            
+            if (gameState.ActionPending)
             {
-                _combatManager.Continue();
+                Console.WriteLine(sb);
+            }
+            else
+            {
+                sb.AppendLine("Press any key to continue...");
+                Console.WriteLine(sb);
+                if (Console.Read() != 0)
+                {
+                    _combatManager.Continue();
+                }
             }
         }
 

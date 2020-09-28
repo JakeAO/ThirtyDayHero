@@ -16,7 +16,7 @@ namespace ThirtyDayHero
             return sourceCharacter.Id == targetCharacter.Id;
         }
 
-        public IReadOnlyCollection<IReadOnlyCollection<ICharacterActor>> GetTargetOptions(ICharacterActor sourceCharacter, IReadOnlyCollection<ICharacterActor> allCharacters)
+        public IReadOnlyCollection<IReadOnlyCollection<ICharacterActor>> GetTargetOptions(ICharacterActor sourceCharacter, IReadOnlyCollection<ITargetableActor> possibleTargets)
         {
             return new[] {new[] {sourceCharacter}};
         }

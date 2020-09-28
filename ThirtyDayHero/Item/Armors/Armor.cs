@@ -31,7 +31,7 @@ namespace ThirtyDayHero
             _addedAbilities = addedAbilities;
         }
 
-        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ICharacterActor> allCharacters, bool isEquipped)
+        public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ITargetableActor> possibleTargets, bool isEquipped)
         {
             List<IAction> actions = new List<IAction>(10);
 
@@ -39,7 +39,7 @@ namespace ThirtyDayHero
             {
                 foreach (IAbility ability in _addedAbilities)
                 {
-                    actions.AddRange(ActionUtil.GetActionsForAbility(ability, sourceCharacter, allCharacters));
+                    actions.AddRange(ActionUtil.GetActionsForAbility(ability, sourceCharacter, possibleTargets));
                 }
             }
 
