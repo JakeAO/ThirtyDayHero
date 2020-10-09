@@ -1,0 +1,97 @@
+﻿@using BlazorApp.Data
+@using Radzen;
+
+@inject StateContainer StateContainer;
+@inject NotificationService NotificationService;
+@inject NavigationManager NavigationManager;
+
+<RadzenCard Style="float: left;width: 450px">
+    <h3>Login</h3>
+    <RadzenLogin
+        UserRequired="true"
+        UserText="Email"
+        AllowRegister="false"
+        AllowResetPassword="true"
+        Login="@Login"
+        ResetPassword="@Reset"/>
+</RadzenCard>
+
+@code {
+    private FirebaseWrapper _fbWrapper = null;
+
+    protected override void OnInitialized()
+    {
+        _fbWrapper = StateContainer.Get<FirebaseWrapper>();
+    }
+
+    private async void Login(LoginArgs args)
+    {
+        var result = await _fbWrapper.TrySignIn(args.Username, args.Password);
+        if (!result.successful)
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = result.message,
+                Duration = 1000
+            });
+
+            return;
+        }
+
+        PlayerDataWrapper playerDataWrapper = await _fbWrapper.ReadData<PlayerDataWrapper>(PlayerDataWrapper.DataPath(_fbWrapper.UserInfo.Uid));
+        if (playerDataWrapper == null)
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = "Unable to load player data!",
+                Duration = 1000
+            });
+
+            await _fbWrapper.SignOut();
+
+            return;
+        }
+
+        StateContainer.Set(playerDataWrapper);
+
+        NotificationService.Notify(new NotificationMessage()
+        {
+            Severity = NotificationSeverity.Success,
+            Summary = "Success",
+            Detail = result.message,
+            Duration = 1000
+        });
+
+        NavigationManager.NavigateTo("/", true);
+    }
+
+    private async void Reset(string email)
+    {
+        var result = await _fbWrapper.TryResetPassword(email);
+        if (result.successful)
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Success",
+                Detail = result.message,
+                Duration = 1000
+            });
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = result.message,
+                Duration = 1000
+            });
+        }
+    }
+
+}

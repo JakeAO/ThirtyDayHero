@@ -1,8 +1,11 @@
 ﻿@page
+@using ThirtyDayHero.CharacterClasses
 @model WebApp.Views.Home.Index
 
 @{
     Layout = "_Layout";
+
+    ICharacterActor actor = ClassUtil.CreatePlayerCharacter(1, 1, "Dobby", PlayerCharacterClassDefinitions.SOLDIER, 3);
 }
 
 <!DOCTYPE html>
@@ -25,6 +28,7 @@
             }
         }
     </div>
+    <vc:character-sheet-full actor="@actor" />
 </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ThirtyDayHero
 {
@@ -20,12 +21,12 @@ namespace ThirtyDayHero
             {StatType.LVL, 1},
             {StatType.EXP, 0},
         };
-        
-        private readonly Dictionary<StatType, uint> _stats = new Dictionary<StatType, uint>();
 
-        public StatMap() : this(DEFAULT_STATS)
+        [JsonProperty] private readonly uint[] _stats = new uint[Enum.GetValues(typeof(StatType)).Length];
+
+        public StatMap()
+            : this(DEFAULT_STATS)
         {
-            
         }
 
         public StatMap(IReadOnlyDictionary<StatType, uint> startingStats)
@@ -40,20 +41,13 @@ namespace ThirtyDayHero
                     if (!DEFAULT_STATS.TryGetValue(statType, out statValue))
                         throw new ArgumentOutOfRangeException($"StatType \"{statType}\" unsupported by StatMap!");
 
-                _stats[statType] = statValue;
+                _stats[(int) statType] = statValue;
             }
         }
 
         public uint this[StatType statType] => GetStat(statType);
 
-        public uint GetStat(StatType statType)
-        {
-            if (!_stats.TryGetValue(statType, out uint statValue))
-                if (!DEFAULT_STATS.TryGetValue(statType, out statValue))
-                    throw new ArgumentOutOfRangeException($"StatType \"{statType}\" unsupported by StatMap!");
-
-            return statValue;
-        }
+        public uint GetStat(StatType statType) => _stats[(int) statType];
 
         public void ModifyStat(StatType statType, int change)
         {
@@ -84,7 +78,7 @@ namespace ThirtyDayHero
                     break;
             }
 
-            _stats[statType] = currentValue;
+            _stats[(int) statType] = currentValue;
         }
     }
 }

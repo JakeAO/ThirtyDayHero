@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ThirtyDayHero
 {
@@ -12,6 +14,15 @@ namespace ThirtyDayHero
 
         private readonly IAbility _attackAbility;
         private readonly IReadOnlyCollection<IAbility> _addedAbilities;
+
+        public Weapon()
+            : this(0,
+                string.Empty, string.Empty,
+                WeaponType.Invalid,
+                null,
+                null)
+        {
+        }
 
         public Weapon(
             uint id,
@@ -27,7 +38,9 @@ namespace ThirtyDayHero
             WeaponType = weaponType;
 
             _attackAbility = attackAbility;
-            _addedAbilities = addedAbilities;
+            _addedAbilities = addedAbilities != null
+                ? new List<IAbility>(addedAbilities)
+                : new List<IAbility>();
         }
 
         public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ITargetableActor> possibleTargets, bool isEquipped)

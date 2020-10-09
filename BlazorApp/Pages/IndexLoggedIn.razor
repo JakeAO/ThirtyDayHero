@@ -1,0 +1,101 @@
+﻿@using BlazorApp.Data
+@using ThirtyDayHero
+@using ThirtyDayHero.CharacterClasses
+@using ThirtyDayHero.Armors.Definitions
+@using ThirtyDayHero.Item.Weapons.Definitions
+@using ThirtyDayHero.Party
+@using System.Diagnostics
+
+@inject NotificationService NotificationService;
+@inject StateContainer StateContainer;
+
+<h2>Party</h2>
+<table style="width: fit-content;height: fit-content;background-color: darkgray">
+    @if (_partyData != null)
+    {
+        foreach (var character in _partyData.Characters)
+        {
+            <tr>
+                <td><ActorDetailsView Actor="@character"/></td>
+                <td><ActorStatsView statsMap="@character.Stats"/></td>
+                <td><ActorEquipmentView equipMap="@character.Equipment"/></td>
+            </tr>
+        }
+    }
+</table>
+
+@code
+{
+    private bool _initializing = false;
+
+    private FirebaseWrapper _fbWrapper = null;
+    private PlayerDataWrapper _playerData = null;
+    private PartyDataWrapper _partyData = null;
+
+    private CombatManager _combatManager = null;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        _initializing = true;
+
+        _fbWrapper = StateContainer.Get<FirebaseWrapper>();
+        Debug.Assert(_fbWrapper != null);
+
+        _playerData = StateContainer.Get<PlayerDataWrapper>();
+        Debug.Assert(_playerData != null);
+
+        _partyData = await LoadPartyData(_fbWrapper, _playerData, StateContainer);
+        Debug.Assert(_partyData != null);
+
+        StateContainer.TryGet(out _combatManager);
+        
+        await base.OnInitializedAsync();
+
+        _initializing = false;
+    }
+
+    private static async Task<PartyDataWrapper> LoadPartyData(FirebaseWrapper fbWrapper, PlayerDataWrapper playerData, StateContainer stateContainer)
+    {
+        if (stateContainer.TryGet(out PartyDataWrapper partyData) &&
+            partyData.Id == playerData.ActiveParty)
+            return partyData;
+
+        // Create New Party
+        if (playerData.ActiveParty == Guid.Empty)
+        {
+            partyData = new PartyDataWrapper(Guid.NewGuid(),
+                new List<PlayerCharacter>()
+                {
+                    ClassUtil.CreatePlayerCharacter(1, 1, "Rouche",
+                        PlayerCharacterClassDefinitions.SOLDIER, 3),
+                    ClassUtil.CreatePlayerCharacter(2, 1, "Dane",
+                        PlayerCharacterClassDefinitions.MAGE, 3)
+                }, new List<IItem>()
+                {
+                    SwordDefinitions.ShortSword,
+                    AxeDefinitions.Hatchet,
+                    GreatAxeDefinitions.Halberd,
+                    LightDefinitions.Leather,
+                    LightDefinitions.Leather,
+                    LightDefinitions.Leather,
+                    LightDefinitions.Leather,
+                });
+            playerData.SetActiveParty(partyData.Id);
+
+            await fbWrapper.WriteData(playerData.GetDataPath(fbWrapper.UserInfo.Uid), playerData);
+            await fbWrapper.WriteData(partyData.GetDataPath(fbWrapper.UserInfo.Uid), partyData);
+
+            stateContainer.Set(partyData);
+
+            return partyData;
+        }
+
+        // Read from Firebase
+        partyData = await fbWrapper.ReadData<PartyDataWrapper>(PartyDataWrapper.DataPath(fbWrapper.UserInfo.Uid, playerData.ActiveParty));
+        if (partyData != null)
+        {
+            stateContainer.Set(partyData);
+        }
+        return partyData;
+    }
+}

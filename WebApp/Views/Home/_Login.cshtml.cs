@@ -8,5 +8,10 @@ namespace WebApp.Views.Home
         {
             
         }
+
+        private void AttemptAnonymousLogin()
+        {
+            
+        }
     }
 }

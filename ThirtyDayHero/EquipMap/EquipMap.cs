@@ -4,16 +4,21 @@ namespace ThirtyDayHero
 {
     public class EquipMap : IEquipMap
     {
-        public IWeapon Weapon { get; private set; }
-        public IArmor Armor { get; private set; }
-        public IItem ItemA { get; private set; }
-        public IItem ItemB { get; private set; }
+        public IWeapon Weapon { get; set; }
+        public IArmor Armor { get; set; }
+        public IItem ItemA { get; set; }
+        public IItem ItemB { get; set; }
+
+        public EquipMap()
+            : this(null, null, null, null)
+        {
+        }
 
         public EquipMap(
-            IWeapon weapon = null,
-            IArmor armor = null,
-            IItem itemA = null,
-            IItem itemB = null)
+            IWeapon weapon,
+            IArmor armor,
+            IItem itemA,
+            IItem itemB)
         {
             Weapon = weapon;
             Armor = armor;

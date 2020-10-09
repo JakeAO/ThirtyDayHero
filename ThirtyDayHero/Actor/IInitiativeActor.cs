@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ThirtyDayHero
 {
@@ -8,8 +9,8 @@ namespace ThirtyDayHero
         uint Party { get; }
         string Name { get; }
 
-        float Initiative { get; }
-        bool Alive { get; }
+        [JsonIgnore] float Initiative { get; }
+        [JsonIgnore] bool Alive { get; }
         
         IReadOnlyCollection<IAction> GetAllActions(IReadOnlyCollection<ITargetableActor> possibleTargets);
     }

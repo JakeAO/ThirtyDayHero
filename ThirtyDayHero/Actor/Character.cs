@@ -15,7 +15,12 @@ namespace ThirtyDayHero
 
         public bool Alive => Stats[StatType.HP] > 0u;
         public float Initiative => Stats[StatType.DEX] / (float) Stats[StatType.LVL];
-        
+
+        public Character()
+            : this(0, 0, string.Empty, NullClass.Instance, NullStatMap.Instance)
+        {
+        }
+
         public Character(
             uint id,
             uint party,

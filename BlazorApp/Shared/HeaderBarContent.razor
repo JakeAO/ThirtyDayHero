@@ -1,0 +1,51 @@
+﻿@using BlazorApp.Data
+
+@inject NavigationManager NavigationManager;
+@inject StateContainer StateContainer;
+@inject DialogService DialogService;
+
+@if (_fbWrapper.IsLoggedIn)
+{
+    <RadzenButton style="float: right"
+                  Text="Sign Out"
+                  Click="@SignOut"/>
+
+    if (_fbWrapper.IsAnonymous)
+    {
+        <RadzenButton style="float: right"
+                      Text="Create Account"
+                      Click="@PromoteAccount"/>
+    }
+
+    <h3 style="float: right">@_fbWrapper.UserName</h3>
+}
+else
+{
+    <em style="float: right">Not logged in</em>
+}
+
+@code {
+    private FirebaseWrapper _fbWrapper;
+
+    protected override void OnInitialized()
+    {
+        _fbWrapper = StateContainer.Get<FirebaseWrapper>();
+        
+        base.OnInitialized();
+    }
+
+    private async void PromoteAccount(MouseEventArgs args)
+    {
+        await DialogService.OpenAsync<PromoteTempCard>(string.Empty);
+    }
+
+    private async void SignOut(MouseEventArgs args)
+    {
+        await _fbWrapper.SignOut();
+
+        StateContainer.Clear<PlayerDataWrapper>();
+        StateContainer.Clear<PartyDataWrapper>();
+        
+        NavigationManager.NavigateTo("/", true);
+    }
+}

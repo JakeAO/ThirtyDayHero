@@ -14,7 +14,7 @@ namespace ThirtyDayHeroTests
             ICharacterActor dummyCharacter = new Character(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
-                new StatMap());
+                NullStatMap.Instance);
 
             return requirementCalc.MeetsRequirement(dummyCharacter);
         }
@@ -54,10 +54,13 @@ namespace ThirtyDayHeroTests
             IPlayerCharacterActor dummyCharacter = new PlayerCharacter(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
-                new StatMap(),
+                NullStatMap.Instance,
                 new EquipMap(
-                    new Weapon(0u, string.Empty, string.Empty, equipped, null, null)));
-
+                    new Weapon(0u, string.Empty, string.Empty, equipped, null, null),
+                    null,
+                    null,
+                    null));
+            
             return requirementCalc.MeetsRequirement(dummyCharacter);
         }
 
@@ -76,9 +79,12 @@ namespace ThirtyDayHeroTests
             IPlayerCharacterActor dummyCharacter = new PlayerCharacter(
                 0u, 0u, string.Empty,
                 NullClass.Instance,
-                new StatMap(),
+                NullStatMap.Instance,
                 new EquipMap(
-                    armor: new Armor(0u, string.Empty, string.Empty, equipped, null, null)));
+                    null,
+                    armor: new Armor(0u, string.Empty, string.Empty, equipped, null, null),
+                    null,
+                    null));
 
             return requirementCalc.MeetsRequirement(dummyCharacter);
         }

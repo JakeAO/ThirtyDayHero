@@ -6,6 +6,10 @@ namespace ThirtyDayHero
     {
         public static readonly NullClass Instance = new NullClass();
 
+        private NullClass()
+        {
+        }
+        
         public uint Id => 0u;
         public string Name => string.Empty;
         public string Desc => string.Empty;

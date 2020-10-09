@@ -1,0 +1,23 @@
+﻿@page "/"
+@using BlazorApp.Data
+
+@inject StateContainer StateContainer;
+
+@if (_fbWrapper.IsLoggedIn)
+{
+    <IndexLoggedIn/>
+}
+else
+{
+    <IndexLoggedOut/>
+}
+
+@code
+{
+    private FirebaseWrapper _fbWrapper = null;
+
+    protected override void OnInitialized()
+    {
+        _fbWrapper = StateContainer.Get<FirebaseWrapper>();
+    }
+}

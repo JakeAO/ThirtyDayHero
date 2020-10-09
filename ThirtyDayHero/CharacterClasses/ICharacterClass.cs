@@ -2,9 +2,8 @@
 
 namespace ThirtyDayHero
 {
-    public interface ICharacterClass
+    public interface ICharacterClass : IIdTracked
     {
-        uint Id { get; }
         string Name { get; }
         string Desc { get; }
         IReadOnlyDictionary<DamageType, float> IntrinsicDamageModification { get; }

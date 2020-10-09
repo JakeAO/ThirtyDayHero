@@ -1,0 +1,63 @@
+﻿@using ThirtyDayHero;
+@using Radzen;
+
+<RadzenCard Style="width: fit-content;min-width: 200px">
+    <div style="text-align: center;background-color: lightgray;width: 100%">
+        <h3>Equipment</h3>
+    </div>
+    <table style="width: 100%">
+        <tr>
+            <th style="width: 35%;text-align: right">
+                Weapon: 
+            </th>
+            <td style="width: 5%"></td>
+            <td style="width: 60%;text-align: left;white-space: nowrap">
+                <abbr Title="@equipMap.Weapon?.Desc">
+                    @(equipMap.Weapon?.Name ?? "[EMPTY]")
+                </abbr>
+                <!--<RadzenImage Path="images/radzen-nuget.png" Style="width:20px;margin-left: 10px;" />-->
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 35%;text-align: right">
+                Armor: 
+            </th>
+            <td style="width: 5%"></td>
+            <td style="width: 60%;text-align: left;white-space: nowrap">
+                <abbr Title="@equipMap.Armor?.Desc">
+                    @(equipMap.Armor?.Name ?? "[EMPTY]")
+                </abbr>
+                <!--<RadzenImage Path="images/radzen-nuget.png" Style="width:20px;margin-left: 10px;" />-->
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 35%;text-align: right">
+                Item: 
+            </th>
+            <td style="width: 5%"></td>
+            <td style="width: 60%;text-align: left;white-space: nowrap">
+                <abbr Title="@equipMap.ItemA?.Desc">
+                    @(equipMap.ItemA?.Name ?? "[EMPTY]")
+                </abbr>
+                <!--<RadzenImage Path="images/radzen-nuget.png" Style="width:20px;margin-left: 10px;" />-->
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 35%;text-align: right">
+                Item: 
+            </th>
+            <td style="width: 5%"></td>
+            <td style="width: 60%;text-align: left;white-space: nowrap">
+                <abbr Title="@equipMap.ItemB?.Desc">
+                    @(equipMap.ItemB?.Name ?? "[EMPTY]")
+                </abbr>
+                <!--<RadzenImage Path="images/radzen-nuget.png" Style="width:20px;margin-left: 10px;" />-->
+            </td>
+        </tr>
+    </table>
+</RadzenCard>
+
+@code {
+    [Parameter]
+    public IEquipMap equipMap { get; set; }
+}

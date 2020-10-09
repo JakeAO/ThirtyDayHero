@@ -2,9 +2,8 @@
 
 namespace ThirtyDayHero
 {
-    public interface IItem
+    public interface IItem : IIdTracked
     {
-        uint Id { get; }
         string Name { get; }
         string Desc { get; }
         ItemType ItemType { get; }

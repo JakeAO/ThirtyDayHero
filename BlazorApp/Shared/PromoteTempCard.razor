@@ -1,0 +1,54 @@
+﻿@using BlazorApp.Data
+@using Radzen;
+
+@inject StateContainer StateContainer;
+@inject NotificationService NotificationService;
+@inject NavigationManager NavigationManager;
+
+<RadzenCard>
+    <h3>Create Account</h3>
+    <RadzenLogin
+        UserRequired="true"
+        UserText="Email"
+        AllowRegister="false"
+        AllowResetPassword="false"
+        Login="@Register"
+        LoginText="Register"/>
+</RadzenCard>
+
+@code {
+    private FirebaseWrapper _fbWrapper = null;
+
+    protected override void OnInitialized()
+    {
+        _fbWrapper = StateContainer.Get<FirebaseWrapper>();
+    }
+
+    private async void Register(LoginArgs args)
+    {
+        var result = await _fbWrapper.TryPromoteAnonAccount(args.Username, args.Username, args.Password);
+        if (result.successful)
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Success",
+                Detail = result.message,
+                Duration = 1000
+            });
+            
+            NavigationManager.NavigateTo("/", true);
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = result.message,
+                Duration = 1000
+            });
+        }
+    }
+
+}

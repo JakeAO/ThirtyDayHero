@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security;
+using Newtonsoft.Json;
 
 namespace ThirtyDayHero
 {
@@ -14,6 +16,15 @@ namespace ThirtyDayHero
         private readonly IReadOnlyDictionary<DamageType, float> _damageModifiers;
         private readonly IReadOnlyCollection<IAbility> _addedAbilities;
 
+        public Armor()
+            : this(0,
+                string.Empty, String.Empty,
+                ArmorType.Invalid,
+                null, 
+                null)
+        {
+        }
+
         public Armor(
             uint id,
             string name, string desc,
@@ -27,8 +38,12 @@ namespace ThirtyDayHero
             ItemType = ItemType.Armor;
             ArmorType = armorType;
 
-            _damageModifiers = damageModifiers;
-            _addedAbilities = addedAbilities;
+            _damageModifiers = damageModifiers != null
+                ? new Dictionary<DamageType, float>(damageModifiers)
+                : new Dictionary<DamageType, float>();
+            _addedAbilities = addedAbilities != null
+                ? new List<IAbility>(addedAbilities)
+                : new List<IAbility>();
         }
 
         public IReadOnlyCollection<IAction> GetAllActions(ICharacterActor sourceCharacter, IReadOnlyCollection<ITargetableActor> possibleTargets, bool isEquipped)

@@ -1,7 +1,9 @@
-﻿namespace ThirtyDayHero
+﻿using Newtonsoft.Json;
+
+namespace ThirtyDayHero
 {
     public interface ITargetableActor : IInitiativeActor
     {
-        bool CanTarget { get; }
+        [JsonIgnore] bool CanTarget { get; }
     }
 }

@@ -9,7 +9,7 @@ namespace ThirtyDayHero
         private static uint _nextId = 10000;
         public static uint NextId => ++_nextId;
 
-        public static ICharacterActor CreateCharacter(
+        public static Character CreateCharacter(
             uint id, uint partyId,
             string name,
             ICharacterClass characterClass,
@@ -29,7 +29,7 @@ namespace ThirtyDayHero
                 stats);
         }
 
-        public static IPlayerCharacterActor CreatePlayerCharacter(
+        public static PlayerCharacter CreatePlayerCharacter(
             uint id, uint partyId,
             string name,
             IPlayerClass playerClass,

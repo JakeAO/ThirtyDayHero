@@ -1,0 +1,51 @@
+﻿@using BlazorApp.Data
+@using Newtonsoft.Json
+@using ThirtyDayHero
+@inherits LayoutComponentBase
+
+@inject StateContainer StateContainer;
+
+<!-- These need to be triggered here in order to enabled the Radzen services later. -->
+<RadzenDialog/>
+<RadzenNotification/>
+<RadzenContextMenu/>
+<RadzenTooltip/>
+
+<div class="main">
+    <div class="top-row" style="display: flex;justify-content: space-between">
+        <h1 style="float: left">Thirty Day Hero</h1>
+        <div>
+            <HeaderBarContent/>
+        </div>
+    </div>
+    <div class="content px-2">
+        @Body
+    </div>
+</div>
+
+@code
+{
+    private FirebaseWrapper _fbWrapper;
+
+    protected override void OnInitialized()
+    {
+        if (!StateContainer.TryGet(out _fbWrapper))
+        {
+            var serializerSettings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                ContractResolver = new NewtonsoftContractResolver(),
+                Converters = new List<JsonConverter>()
+                {
+                    new HackUtil.WeaponJsonConverter(),
+                    new HackUtil.ArmorJsonConverter(),
+                    new HackUtil.ItemJsonConverter(),
+                    new HackUtil.ClassJsonConverter()
+                }
+            };
+
+            _fbWrapper = new FirebaseWrapper(serializerSettings);
+            StateContainer.Set(_fbWrapper);
+        }
+    }
+}

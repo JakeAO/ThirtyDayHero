@@ -7,6 +7,13 @@ namespace ThirtyDayHero
     {
         public IEquipMap Equipment { get; }
 
+        public PlayerCharacter()
+            : this(0, 0, string.Empty, NullClass.Instance, NullStatMap.Instance,
+                NullEquipMap.Instance)
+        {
+
+        }
+
         public PlayerCharacter(
             uint id,
             uint party,
