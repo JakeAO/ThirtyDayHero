@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using ThirtyDayHero.CharacterClasses;
 
 namespace ThirtyDayHero
 {
     public class Character : ICharacterActor
     {
-        public uint Id { get; }
-        public uint Party { get; }
-        public string Name { get; }
-        public ICharacterClass Class { get; }
-        public IStatMap Stats { get; }
+        public uint Id { get; set; }
+        public uint Party { get; set; }
+        public string Name { get; set; }
+        public ICharacterClass Class { get; set; }
+        public IStatMap Stats { get; set; }
 
-        public bool CanTarget => Alive;
+        [JsonIgnore] public bool CanTarget => Alive;
 
-        public bool Alive => Stats[StatType.HP] > 0u;
-        public float Initiative => Stats[StatType.DEX] / (float) Stats[StatType.LVL];
+        [JsonIgnore] public bool Alive => Stats[StatType.HP] > 0u;
+        [JsonIgnore] public float Initiative => Stats[StatType.DEX] / (float) Stats[StatType.LVL];
 
         public Character()
-            : this(0, 0, string.Empty, NullClass.Instance, NullStatMap.Instance)
+            : this(0, 0, string.Empty, NullClass.Instance, new StatMap())
         {
         }
 

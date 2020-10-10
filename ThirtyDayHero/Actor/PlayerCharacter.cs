@@ -5,11 +5,11 @@ namespace ThirtyDayHero
 {
     public class PlayerCharacter : Character, IPlayerCharacterActor
     {
-        public IEquipMap Equipment { get; }
+        public IEquipMap Equipment { get; set; }
 
         public PlayerCharacter()
-            : this(0, 0, string.Empty, NullClass.Instance, NullStatMap.Instance,
-                NullEquipMap.Instance)
+            : this(0, 0, string.Empty, NullClass.Instance, new StatMap(),
+                new EquipMap())
         {
 
         }
