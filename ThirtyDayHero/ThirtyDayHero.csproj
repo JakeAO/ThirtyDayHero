@@ -2,10 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>SadPumpkin.Games.ThirtyDayHero.Core</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CombatEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Utilities\_Output\CombatEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="Context, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Utilities\_Output\Context.dll</HintPath>
+    </Reference>
+    <Reference Include="Signals, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Utilities\_Output\Signals.dll</HintPath>
+    </Reference>
+    <Reference Include="StateMachine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Utilities\_Output\StateMachine.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

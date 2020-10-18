@@ -2,7 +2,7 @@
 using RestSharp;
 using RestSharp.Serialization;
 
-namespace BlazorApp.Data
+namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
     public class NewtonWrapper : IRestSerializer
     {
@@ -13,7 +13,9 @@ namespace BlazorApp.Data
             _settings = settings;
         }
 
+#pragma warning disable 618
         public string Serialize(Parameter parameter) => Serialize(parameter.Value);
+#pragma warning restore 618
         public string Serialize(object obj) => JsonConvert.SerializeObject(obj, _settings).Replace('$', '~');
         public T Deserialize<T>(IRestResponse response) => JsonConvert.DeserializeObject<T>(response.Content.Replace('~', '$'), _settings);
 

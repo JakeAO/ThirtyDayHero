@@ -1,0 +1,72 @@
+﻿@using SadPumpkin.Util.CombatEngine.Actor
+@using SadPumpkin.Util.CombatEngine.EquipMap
+@using SadPumpkin.Util.CombatEngine.Item
+@using SadPumpkin.Util.CombatEngine.StatMap
+@using SadPumpkin.Util.CombatEngine.Abilities
+
+<RadzenCard Style="width: fit-content;min-width: 200px">
+    <div style="text-align: center;vertical-align: center;background-color: lightgray;width: 100%">
+        <h3>@Actor.Name</h3>
+    </div>
+    <div>
+        <p><b>Lvl @Actor.Stats[StatType.LVL] <abbr title="@Actor.Class.Desc">@Actor.Class.Name</abbr></b></p>
+        <p><b>Health:</b>&nbsp;&nbsp; @Actor.Stats[StatType.HP]/@Actor.Stats[StatType.HP_Max]</p>
+        <p><b>Stamina:</b>&nbsp;&nbsp; @Actor.Stats[StatType.STA]/@Actor.Stats[StatType.STA_Max]</p>
+    </div>
+    <RadzenAccordion Multiple="true">
+        <Items>
+            <RadzenAccordionItem Text="Stats">
+                <table style="text-align: center;padding: 2px">
+                    <tr>
+                        @for (StatType statType = StatType.STR; statType <= StatType.CHA; statType++)
+                        {
+                            <th>@statType.ToString()</th>
+                        }
+                    </tr>
+                    <tr>
+                        @for (StatType statType = StatType.STR; statType <= StatType.CHA; statType++)
+                        {
+                            <td>@Actor.Stats[statType]</td>
+                        }
+                    </tr>
+                </table>
+            </RadzenAccordionItem>
+            @if (Actor is IPlayerCharacterActor playerCharacter)
+            {
+                <RadzenAccordionItem Text="Equipment">
+                    <table style="padding: 2px">
+                        @for (EquipmentSlot equipSlot = EquipmentSlot.Weapon; equipSlot <= EquipmentSlot.ItemB; equipSlot++)
+                        {
+                            <tr>
+                                <th style="text-align: right">@equipSlot.ToString(): </th>
+                                <td style="text-align: left">
+                                    @if (playerCharacter.Equipment[equipSlot] is IItem equippedItem)
+                                    {
+                                        <span title="@equippedItem.Desc">@equippedItem.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </RadzenAccordionItem>
+            }
+            <RadzenAccordionItem Text="Abilities">
+                @foreach (IAbility ability in Actor.Class.GetAllAbilities(Actor.Stats[StatType.LVL]))
+                {
+                    <p title="@ability.Desc">@ability.Name</p>
+                }
+            </RadzenAccordionItem>
+        </Items>
+    </RadzenAccordion>
+</RadzenCard>
+
+@code 
+{
+    [Parameter]
+    public ICharacterActor Actor { get; set; }
+
+}

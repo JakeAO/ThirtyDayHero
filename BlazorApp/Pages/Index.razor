@@ -1,23 +1,39 @@
 ﻿@page "/"
-@using BlazorApp.Data
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Util.StateMachine.Signals
+@using SadPumpkin.Util.StateMachine.States
 
-@inject StateContainer StateContainer;
+@namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages
 
-@if (_fbWrapper.IsLoggedIn)
+@inject IContext StateContainer;
+@inject IStateMachine StateMachine;
+
+@if (StateMachine.CurrentState is BlazorState blazorState)
 {
-    <IndexLoggedIn/>
+    RenderFragment fragment = (renderBuilder) =>
+    {
+        renderBuilder.OpenComponent(0, blazorState.RenderType);
+        renderBuilder.AddAttribute(1, "BlazorState", blazorState);
+        renderBuilder.CloseComponent();
+    };
+
+    @fragment
 }
-else
-{
-    <IndexLoggedOut/>
-}
 
-@code
+@code 
 {
-    private FirebaseWrapper _fbWrapper = null;
-
     protected override void OnInitialized()
     {
-        _fbWrapper = StateContainer.Get<FirebaseWrapper>();
+        StateContainer?.Get<StateChanged>()?.Listen(OnStateChanged);
+    }
+
+    ~Index()
+    {
+        StateContainer?.Get<StateChanged>()?.Unlisten(OnStateChanged);
+    }
+
+    private void OnStateChanged(IState newState)
+    {
+        InvokeAsync(StateHasChanged);
     }
 }

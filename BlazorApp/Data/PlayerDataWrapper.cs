@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BlazorApp.Data
+namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
     public class PlayerDataWrapper
     {

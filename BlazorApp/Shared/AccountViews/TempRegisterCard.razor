@@ -1,0 +1,52 @@
+﻿@using Radzen;
+
+@inject NotificationService NotificationService;
+@inject NavigationManager NavigationManager;
+@inject FirebaseWrapper FbWrapper;
+
+<RadzenCard>
+    <h3>Temporary Account</h3>
+    <RadzenButton
+        Text="Play"
+        Click="@AnonRegister"/>
+    <em>A temporary account will allow you to play, but your progress will not be saved unless you register.</em>
+</RadzenCard>
+
+@code {
+
+    [Parameter]
+    public EventCallback<bool> LoggingInStatus { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> LoggedInSuccessfully { get; set; }
+
+    private async void AnonRegister(MouseEventArgs args)
+    {
+        await LoggingInStatus.InvokeAsync(true);
+        var result = await FbWrapper.TryCreateAnon();
+        await LoggingInStatus.InvokeAsync(false);
+        if (result.successful)
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Success",
+                Detail = result.message,
+                Duration = 3000
+            });
+
+            await LoggedInSuccessfully.InvokeAsync(true);
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = result.message,
+                Duration = 10000
+            });
+        }
+    }
+
+}

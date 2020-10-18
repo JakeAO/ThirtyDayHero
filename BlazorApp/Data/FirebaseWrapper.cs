@@ -2,14 +2,14 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Firebase.Auth;
-using Firebase.Auth.Repository;
 using Firebase.Auth.Providers;
+using Firebase.Auth.Repository;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Deserializers;
 using RestSharp.Serialization;
 
-namespace BlazorApp.Data
+namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
     public class FirebaseWrapper
     {
@@ -18,12 +18,20 @@ namespace BlazorApp.Data
         private const string DATA_URL = "https://thirty-day-hero.firebaseio.com/";
         private const string API_KEY = "AIzaSyDHcCjJupg3v6rLAkwFcPuatQyamVVuE9M";
 
-        public bool IsLoggedIn { get; private set; }
-        public bool IsAnonymous { get; private set; }
+        public bool IsLoggedIn => _user != null;
+        public bool IsAnonymous => _user?.IsAnonymous ?? false;
 
-        public UserInfo UserInfo { get; private set; }
-        public string UserName { get; private set; }
+        public UserInfo UserInfo => _user?.Info;
 
+        public string UserId => _user?.Uid;
+        public string UserName => _user == null
+            ? ""
+            : _user.IsAnonymous
+                ? $"Anon:{_user.Uid}"
+                : string.IsNullOrWhiteSpace(_user.Info.DisplayName)
+                    ? _user.Info.Email
+                    : _user.Info.DisplayName;
+        
         private User _user = null;
 
         private readonly FirebaseAuthClient _authClient;
@@ -71,24 +79,6 @@ namespace BlazorApp.Data
         private void SetUser(User user)
         {
             _user = user;
-            if (_user != null)
-            {
-                IsLoggedIn = true;
-                IsAnonymous = _user.IsAnonymous;
-                UserInfo = _user.Info;
-                UserName = _user.IsAnonymous
-                    ? $"Anon:{_user.Uid}"
-                    : string.IsNullOrWhiteSpace(_user.Info.DisplayName)
-                        ? _user.Info.Email
-                        : _user.Info.DisplayName;
-            }
-            else
-            {
-                IsLoggedIn = false;
-                IsAnonymous = false;
-                UserInfo = new UserInfo();
-                UserName = string.Empty;
-            }
         }
 
         private void SetUser(UserCredential credential)
@@ -242,7 +232,7 @@ namespace BlazorApp.Data
                 await _authClient.SignOutAsync();
                 SetUser((User) null);
             }
-            catch (FirebaseAuthException ex)
+            catch (FirebaseAuthException)
             {
                 return false;
             }

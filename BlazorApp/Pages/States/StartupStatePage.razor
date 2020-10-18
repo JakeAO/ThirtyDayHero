@@ -1,0 +1,42 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Util.CombatEngine.CharacterClasses
+
+@inject IStateMachine StateMachine;
+@inject IContext Context;
+
+<style>
+    p {text-align: center}
+</style>
+
+<div style="width: fit-content;align-content: center;text-align: center;align-self: center;float: top">
+    <p>Sages tell of an impending calamity.</p>
+    <p>They call this calamity <b>@_calamityClass.Name</b>.</p>
+    <p>You have @(30 - _partyData.Day) day@(_partyData.Day < 29 ? "s" : "") left to prepare.</p>
+
+    <RadzenButton
+        Text="Let's Go"
+        Click="@OnButtonPressed"
+        Style="align-self: center"/>
+</div>
+
+@code {
+
+    [Parameter]
+    public StartupState BlazorState { get; set; }
+
+    private PartyDataWrapper _partyData = null;
+    private ICharacterClass _calamityClass = null;
+
+    protected override void OnInitialized()
+    {
+        _partyData = Context.Get<PartyDataWrapper>();
+        _calamityClass = HackUtil.GetDefinition<ICharacterClass>(_partyData.CalamityId);
+        base.OnInitialized();
+    }
+
+    private void OnButtonPressed(MouseEventArgs args)
+    {
+        StateMachine.ChangeState<GameplayState>();
+    }
+
+}

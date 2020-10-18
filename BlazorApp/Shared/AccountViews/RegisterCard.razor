@@ -1,0 +1,55 @@
+﻿@using Radzen;
+
+@inject NotificationService NotificationService;
+@inject NavigationManager NavigationManager;
+@inject FirebaseWrapper FbWrapper;
+
+<RadzenCard>
+    <h3>Register</h3>
+    <RadzenLogin
+        UserRequired="true"
+        UserText="Email"
+        AllowRegister="false"
+        AllowResetPassword="false"
+        Login="@Register"
+        LoginText="Register"/>
+</RadzenCard>
+
+@code {
+
+    [Parameter]
+    public EventCallback<bool> LoggingInStatus { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> LoggedInSuccessfully { get; set; }
+
+    private async void Register(LoginArgs args)
+    {
+        await LoggingInStatus.InvokeAsync(true);
+        var result = await FbWrapper.TryCreateAccount(args.Username, args.Username, args.Password);
+        await LoggingInStatus.InvokeAsync(false);
+        if (result.successful)
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Success,
+                Summary = "Success",
+                Detail = result.message,
+                Duration = 3000
+            });
+
+            await LoggedInSuccessfully.InvokeAsync(true);
+        }
+        else
+        {
+            NotificationService.Notify(new NotificationMessage()
+            {
+                Severity = NotificationSeverity.Error,
+                Summary = "Error",
+                Detail = result.message,
+                Duration = 10000
+            });
+        }
+    }
+
+}

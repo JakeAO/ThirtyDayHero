@@ -1,12 +1,18 @@
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using BlazorApp.Data;
+using Newtonsoft.Json;
 using Radzen;
+using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data;
+using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States;
+using SadPumpkin.Games.ThirtyDayHero.Core;
+using SadPumpkin.Util.Context;
+using SadPumpkin.Util.StateMachine;
 
-namespace BlazorApp
+namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp
 {
     public class Startup
     {
@@ -23,8 +29,26 @@ namespace BlazorApp
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
+            Context context = new Context();
+            services.AddSingleton<IContext>(context);
+
+            JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                ContractResolver = new NewtonsoftContractResolver(),
+                Converters = new List<JsonConverter>(HackUtil.GetAllJsonConverters())
+            };
+            context.Set(jsonSettings);
+
+            FirebaseWrapper fbWrapper = new FirebaseWrapper(jsonSettings);
+            services.AddSingleton<FirebaseWrapper>(fbWrapper);
+            context.Set(fbWrapper);
             
-            services.AddSingleton<StateContainer>();
+            StateMachine stateMachine = new StateMachine(context);
+            stateMachine.ChangeState<LoginState>();
+            services.AddSingleton<IStateMachine>(stateMachine);
+            context.Set(stateMachine);
 
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();

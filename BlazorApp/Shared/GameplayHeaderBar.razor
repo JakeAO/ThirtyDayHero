@@ -1,0 +1,28 @@
+﻿
+@inject IContext Context;
+
+<div class="top-row" style="display: flex;justify-content: space-between">
+    <div style="float: left">
+        <b>Location: </b>TBD
+    </div>
+    <div style="float: left">
+        <b>Gold: </b>@_party.Gold
+    </div>
+    <div style="float: right">
+        <b>Days Remaining: </b>@(30-_party.Day)
+    </div>
+    <div style="float: right">
+        <b>Time: </b>@_party.Time.ToString()
+    </div>
+</div>
+
+@code 
+{
+    private PartyDataWrapper _party;
+
+    protected override void OnInitialized()
+    {
+        _party = Context.Get<PartyDataWrapper>();
+        base.OnInitialized();
+    }
+}

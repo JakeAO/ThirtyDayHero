@@ -1,39 +1,36 @@
-﻿@using BlazorApp.Data
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.AccountViews
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
 
 @inject NavigationManager NavigationManager;
-@inject StateContainer StateContainer;
 @inject DialogService DialogService;
+@inject FirebaseWrapper FbWrapper;
+@inject IContext StateContainer;
+@inject IStateMachine StateMachine;
 
-@if (_fbWrapper.IsLoggedIn)
+@if (FbWrapper.IsLoggedIn)
 {
-    <RadzenButton style="float: right"
-                  Text="Sign Out"
-                  Click="@SignOut"/>
+    <RadzenButton 
+        Style="float: right"
+        Text="Sign Out"
+        Click="@SignOut"/>
 
-    if (_fbWrapper.IsAnonymous)
+    if (FbWrapper.IsAnonymous)
     {
-        <RadzenButton style="float: right"
-                      Text="Create Account"
-                      Click="@PromoteAccount"/>
+        <RadzenButton 
+            Style="float: right"
+            Text="Create Account"
+            Click="@PromoteAccount"/>
     }
 
-    <h3 style="float: right">@_fbWrapper.UserName</h3>
+    <h3 Style="float: right">@FbWrapper.UserName</h3>
 }
 else
 {
-    <em style="float: right">Not logged in</em>
+    <em Style="float: right">Not logged in</em>
 }
 
-@code {
-    private FirebaseWrapper _fbWrapper;
-
-    protected override void OnInitialized()
-    {
-        _fbWrapper = StateContainer.Get<FirebaseWrapper>();
-        
-        base.OnInitialized();
-    }
-
+@code 
+{
     private async void PromoteAccount(MouseEventArgs args)
     {
         await DialogService.OpenAsync<PromoteTempCard>(string.Empty);
@@ -41,11 +38,13 @@ else
 
     private async void SignOut(MouseEventArgs args)
     {
-        await _fbWrapper.SignOut();
-
+        await FbWrapper.SignOut();
         StateContainer.Clear<PlayerDataWrapper>();
         StateContainer.Clear<PartyDataWrapper>();
+
+        StateMachine.ChangeState<LoginState>();
         
         NavigationManager.NavigateTo("/", true);
     }
+
 }

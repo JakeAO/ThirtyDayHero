@@ -1,0 +1,97 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Util.CombatEngine.Actor
+@using SadPumpkin.Util.CombatEngine.Item
+
+@inject FirebaseWrapper FbWrapper;
+@inject IContext Context;
+@inject IStateMachine StateMachine;
+
+<table style="width: 100%">
+    <tr>
+        <RadzenButton
+            Style="float: right"
+            Text="Begin Adventure"
+            Click="@OnButtonPressed"
+            Disabled="@(_activeParty.Count == 0)"/>
+    </tr>
+    <tr>
+        <h2>Active Party</h2>
+        @foreach (PlayerCharacter character in _activeParty)
+        {
+            <RadzenCard Style="flex: min-content;float: left">
+                <ActorQuickView Actor="character"/>
+                <RadzenButton
+                    Text="Deselect"
+                    Click="@(() => MoveToAvailable(character))"/>
+            </RadzenCard>
+        }
+    </tr>
+    <tr>
+        <h2>Available Heroes</h2>
+        @foreach (PlayerCharacter character in _availableHeroes)
+        {
+            <RadzenCard Style="flex: min-content;float: left">
+                <ActorQuickView Actor="character"/>
+                <RadzenButton
+                    Text="Select"
+                    Click="@(() => MoveToActive(character))"
+                    Disabled="@(_activeParty.Count == 3)"/>
+            </RadzenCard>
+        }
+    </tr>
+</table>
+
+@code 
+{
+    [Parameter]
+    public CreatePartyState BlazorState { get; set; }
+
+    private readonly List<PlayerCharacter> _activeParty = new List<PlayerCharacter>(3);
+    private readonly List<PlayerCharacter> _availableHeroes = new List<PlayerCharacter>(5);
+
+    protected override void OnInitialized()
+    {
+        _availableHeroes.AddRange(BlazorState.GeneratedCharacters);
+    }
+
+    private void MoveToActive(PlayerCharacter character)
+    {
+        if (_availableHeroes.Contains(character) &&
+            _activeParty.Count < 3)
+        {
+            _availableHeroes.Remove(character);
+            _activeParty.Add(character);
+        }
+    }
+
+    private void MoveToAvailable(PlayerCharacter character)
+    {
+        if (_activeParty.Contains(character))
+        {
+            _activeParty.Remove(character);
+            _availableHeroes.Add(character);
+        }
+    }
+
+    private async void OnButtonPressed(MouseEventArgs args)
+    {
+        PartyDataWrapper partyData = new PartyDataWrapper(
+            BlazorState.NewPartyGuid,
+            _activeParty,
+            BlazorState.GeneratedInventory,
+            HackUtil.GetRandomCalamityClass().Id);
+
+        Context.Set(partyData);
+        await FbWrapper.WriteData(partyData.GetDataPath(FbWrapper.UserId), partyData);
+
+        if (Context.TryGet(out PlayerDataWrapper playerData))
+        {
+            playerData.ActiveParty = BlazorState.NewPartyGuid;
+            await FbWrapper.WriteData(playerData.GetDataPath(FbWrapper.UserId), playerData);
+        }
+
+        StateMachine.ChangeState<StartupState>();
+    }
+
+}

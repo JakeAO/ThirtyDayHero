@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace BlazorApp
+namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp
 {
     public class Program
     {

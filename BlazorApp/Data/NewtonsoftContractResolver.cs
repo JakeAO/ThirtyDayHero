@@ -3,7 +3,7 @@ using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace BlazorApp.Data
+namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
     public class NewtonsoftContractResolver : DefaultContractResolver
     {

@@ -1,0 +1,64 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.DialogViews
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Util.CombatEngine.Actor
+
+@inject DialogService DialogService
+
+<GameplayHeaderBar/>
+
+<div style="display: flex;justify-content: space-between">
+    <div style="flex-grow: 2">
+        <RadzenButton
+            Text="Inventory"
+            Click="@OnInventoryPressed"/>
+    </div>
+    <div style="flex-grow: 5;display: flex;flex-direction: column;justify-content: stretch;">
+        <div style="text-align: center;border: 2px solid black">
+            <h2 style="float: top">TODO</h2>
+            <br/>
+            <h3 style="float: bottom">Prompt Goes Here</h3>
+        </div>
+        <hr/>
+        <div style="display: flex;flex-direction: row;justify-content: center">
+            @foreach (PlayerCharacter playerCharacter in BlazorState.Party.Characters)
+            {
+                <ActorQuickView
+                    Actor="@playerCharacter"/>
+            }
+        </div>
+        <hr/>
+        <div style="text-align: center">
+            <h2>TODO</h2>
+            <br/>
+            <h3>Actions Goes Here</h3>
+        </div>
+    </div>
+    <div style="flex-grow: 2">
+        
+    </div>
+</div>
+
+@code 
+{
+    [Parameter]
+    public GameplayState BlazorState { get; set; }
+
+    private void OnInventoryPressed(MouseEventArgs args)
+    {
+        DialogService.Open<InventoryDialogView>(
+            "Inventory",
+            new Dictionary<string, object>()
+            {
+                {"Inventory", BlazorState.Party.Inventory}
+            },
+            new DialogOptions()
+            {
+                ShowClose = true,
+                ShowTitle = true,
+                Width = "800px",
+                Height = "600px"
+            });
+    }
+}

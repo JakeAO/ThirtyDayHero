@@ -1,0 +1,86 @@
+﻿@using SadPumpkin.Util.CombatEngine.Item
+@using SadPumpkin.Util.CombatEngine.Item.Armors
+@using SadPumpkin.Util.CombatEngine.Item.Weapons
+
+<RadzenTabs>
+    <Tabs>
+        @foreach (ItemType itemType in Enum.GetValues(typeof(ItemType)))
+        {
+            @if (itemType != ItemType.Invalid)
+            {
+                <RadzenTabsItem Text="@itemType.ToString()">
+                    @switch (itemType)
+                    {
+                        case ItemType.Weapon:
+                        {
+                            <RadzenGrid AllowFiltering="true" 
+                                        AllowPaging="true" 
+                                        AllowSorting="true" 
+                                        Data="@(_inventoryByType.TryGetValue(itemType, out var itemList) ? itemList.Cast<IWeapon>() : null)" 
+                                        TItem="IWeapon">
+                                <Columns>
+                                    <RadzenGridColumn TItem="IWeapon" Property="WeaponType" Title="Type"/>
+                                    <RadzenGridColumn TItem="IWeapon" Property="Name" Title="Name"/>
+                                    <RadzenGridColumn TItem="IWeapon" Property="Desc" Title="Description"/>
+                                </Columns>
+                            </RadzenGrid>
+                            break;
+                        }
+                        case ItemType.Armor:
+                        {
+                            <RadzenGrid AllowFiltering="true" 
+                                        AllowPaging="true" 
+                                        AllowSorting="true" 
+                                        Data="@(_inventoryByType.TryGetValue(itemType, out var itemList) ? itemList.Cast<IArmor>() : null)" 
+                                        TItem="IArmor">
+                                <Columns>
+                                    <RadzenGridColumn TItem="IArmor" Property="ArmorType" Title="Type"/>
+                                    <RadzenGridColumn TItem="IArmor" Property="Name" Title="Name"/>
+                                    <RadzenGridColumn TItem="IArmor" Property="Desc" Title="Description"/>
+                                </Columns>
+                            </RadzenGrid>
+                            break;
+                        }
+                        case ItemType.Consumable:
+                        case ItemType.Trinket:
+                        case ItemType.Loot:
+                        {
+                            <RadzenGrid AllowFiltering="true" 
+                                        AllowPaging="true" 
+                                        AllowSorting="true" 
+                                        Data="@(_inventoryByType.TryGetValue(itemType, out var itemList) ? itemList : null)" 
+                                        TItem="IItem">
+                                <Columns>
+                                    <RadzenGridColumn TItem="IItem" Property="Name" Title="Name"/>
+                                    <RadzenGridColumn TItem="IItem" Property="Desc" Title="Description"/>
+                                </Columns>
+                            </RadzenGrid>
+                            break;
+                        }
+                    }
+                </RadzenTabsItem>
+            }
+        }
+    </Tabs>
+</RadzenTabs>
+
+@code 
+{
+    [Parameter]
+    public IReadOnlyCollection<IItem> Inventory { get; set; }
+
+    private IReadOnlyDictionary<ItemType, IReadOnlyList<IItem>> _inventoryByType = null;
+
+    protected override void OnInitialized()
+    {
+        _inventoryByType = Inventory
+            .Where(x => x != null)
+            .OrderBy(x => x.Id)
+            .GroupBy(x => x.ItemType)
+            .ToDictionary(
+                x => x.Key,
+                x => (IReadOnlyList<IItem>) x.ToList());
+
+        base.OnInitialized();
+    }
+}

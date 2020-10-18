@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-using ThirtyDayHero;
+using SadPumpkin.Util.CombatEngine.Actor;
+using SadPumpkin.Util.CombatEngine.Item;
 
-namespace BlazorApp.Data
+namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
     public class PartyDataWrapper
     {
@@ -12,34 +11,36 @@ namespace BlazorApp.Data
 
         public Guid Id;
         public uint Day;
-        public uint Time;
+        public TimeOfDay Time;
+        public uint Gold;
         public List<PlayerCharacter> Characters;
         public List<IItem> Inventory;
-
-        [JsonIgnore] public IEnumerable<IWeapon> Weapons => Inventory.Where(x => x is Weapon).Cast<IWeapon>();
-        [JsonIgnore] public IEnumerable<IArmor> Armors => Inventory.Where(x => x is Armor).Cast<IArmor>();
+        public uint CalamityId;
         
         public string GetDataPath(string userId) => DataPath(userId, Id);
 
         public PartyDataWrapper()
-            : this(Guid.Empty, null, null)
+            : this(Guid.Empty, null, null, 0u)
         {
         }
 
         public PartyDataWrapper(
             Guid id,
             IReadOnlyCollection<PlayerCharacter> characters,
-            IReadOnlyCollection<IItem> inventory)
+            IReadOnlyCollection<IItem> inventory,
+            uint calamityId)
         {
             Id = id;
             Day = 0;
-            Time = 0;
+            Time = TimeOfDay.Morning;
+            Gold = 100;
             Characters = characters != null
                 ? new List<PlayerCharacter>(characters)
                 : new List<PlayerCharacter>();
             Inventory = inventory != null
                 ? new List<IItem>(inventory)
                 : new List<IItem>();
+            CalamityId = calamityId;
         }
     }
 }

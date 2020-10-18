@@ -1,0 +1,156 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.AccountViews
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using System.Diagnostics
+@using SadPumpkin.Util.CombatEngine.CharacterClasses
+@using SadPumpkin.Util.CombatEngine.EquipMap
+@using SadPumpkin.Util.CombatEngine.StatMap
+
+@inject NotificationService NotificationManager;
+@inject NavigationManager NavigationManager;
+@inject IStateMachine StateMachine;
+@inject FirebaseWrapper FbWrapper;
+@inject IContext Context;
+
+@namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages
+
+<h2>Login or Create an Account to Play</h2>
+@if (_isLoggingIn)
+{
+    <h4>Logging In</h4>
+    <RadzenProgressBar
+        ShowValue="false"
+        Value="100"
+        Mode="ProgressBarMode.Indeterminate"/>
+}
+else if (_synchingPlayerData)
+{
+    <h4>Synching Player Data</h4>
+    <RadzenProgressBar
+        ShowValue="false"
+        Value="100"
+        Mode="ProgressBarMode.Indeterminate"/>
+}
+else if (_synchingPartyData)
+{
+    <h4>Synching Party Data</h4>
+    <RadzenProgressBar
+        ShowValue="false"
+        Value="100"
+        Mode="ProgressBarMode.Indeterminate"/>
+}
+else
+{
+    <!-- Login -->
+    <div Style="float: left;min-width: 450px">
+        <LoginCard 
+            LoggingInStatus="@OnLoggingInStatus"
+            LoggedInSuccessfully ="@OnLoggedInSuccessfully"/>
+    </div>
+
+    <!-- Register -->
+    <div Style="float: left;min-width: 450px">
+        <RegisterCard 
+            LoggingInStatus="@OnLoggingInStatus"
+            LoggedInSuccessfully ="@OnLoggedInSuccessfully"/>
+        <TempRegisterCard 
+            LoggingInStatus="@OnLoggingInStatus"
+            LoggedInSuccessfully ="@OnLoggedInSuccessfully"/>
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public LoginState BlazorState { get; set; }
+
+    private bool _isLoggingIn = false;
+    private bool _synchingPlayerData = false;
+    private bool _synchingPartyData = false;
+
+    protected override void OnInitialized()
+    {
+        Debug.Assert(BlazorState != null);
+
+        base.OnInitialized();
+    }
+
+    private void OnLoggingInStatus(bool isLoggingIn)
+    {
+        _isLoggingIn = isLoggingIn;
+    }
+
+    private async void OnLoggedInSuccessfully(bool newAccount)
+    {
+        _isLoggingIn = false;
+
+        // Get Player Data
+        _synchingPlayerData = true;
+        PlayerDataWrapper playerData = null;
+        if (newAccount)
+        {
+            playerData = new PlayerDataWrapper(Guid.Empty, new Guid[0]);
+            await FbWrapper.WriteData(PlayerDataWrapper.DataPath(FbWrapper.UserId), playerData);
+        }
+        else
+        {
+            playerData = await FbWrapper.ReadData<PlayerDataWrapper>(PlayerDataWrapper.DataPath(FbWrapper.UserId));
+        }
+        _synchingPlayerData = false;
+
+        if (playerData != null)
+        {
+            Context.Set(playerData);
+        }
+        else
+        {
+            NotificationManager.Notify(
+                NotificationSeverity.Error,
+                "Error",
+                "Unable to find player data for user.",
+                10000);
+            await FbWrapper.SignOut();
+            return;
+        }
+
+        // Get Party Data
+        _synchingPartyData = true;
+        PartyDataWrapper partyData = null;
+        if (playerData.ActiveParty == Guid.Empty)
+        {
+            StateMachine.ChangeState<CreatePartyState>();
+            return;
+        }
+        else
+        {
+            partyData = await FbWrapper.ReadData<PartyDataWrapper>(PartyDataWrapper.DataPath(FbWrapper.UserId, playerData.ActiveParty));
+            if (partyData.Characters.Any(x =>
+                x.Class == null || x.Class == NullClass.Instance ||
+                x.Equipment == null || x.Equipment == NullEquipMap.Instance ||
+                x.Stats == null || x.Stats == NullStatMap.Instance))
+            {
+                Console.WriteLine("Party data contained one or more uninitialized fields due to JSON parsing failure.");
+                partyData = null;
+            }
+        }
+        _synchingPartyData = false;
+
+        if (partyData != null)
+        {
+            Context.Set(partyData);
+            StateMachine.ChangeState<StartupState>();
+        }
+        else
+        {
+            NotificationManager.Notify(
+                NotificationSeverity.Error,
+                "Error",
+                "Unable to find active party data for user.",
+                10000);
+            Context.Clear<PlayerDataWrapper>();
+            await FbWrapper.SignOut();
+        }
+
+        NavigationManager.NavigateTo("/", true);
+    }
+
+}
