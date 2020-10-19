@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages.States;
 using SadPumpkin.Games.ThirtyDayHero.Core;
+using SadPumpkin.Games.ThirtyDayHero.Core.Definitions;
 using SadPumpkin.Util.CombatEngine.Actor;
 using SadPumpkin.Util.CombatEngine.CharacterClasses;
 using SadPumpkin.Util.CombatEngine.Item;
@@ -35,7 +36,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
             for (int i = 0; i < 5; i++)
             {
                 uint id = (uint) (i + 1);
-                string randomName = HackUtil.GetRandomCharacterName();
+                string randomName = NameGenerator.Player.GetName();
                 IPlayerClass randomClass = HackUtil.GetRandomPlayerClass();
                 PlayerCharacter playerCharacter = ClassUtil.CreatePlayerCharacter(id, partyId, randomName, randomClass);
                 _generatedCharacters.Add(playerCharacter);

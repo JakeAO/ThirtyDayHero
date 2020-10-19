@@ -1,0 +1,31 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+
+@inject IStateMachine StateMachine;
+
+<h3>Results</h3>
+<h4>TBD This Doesn't Get Applied</h4>
+<hr/>
+@if (BlazorState.Results.Success)
+{
+    <h2>Victory</h2>
+    <p><b>EXP Gained:</b> @BlazorState.Results.ExpReward</p>
+}
+else
+{
+    <h2>Defeat</h2>
+}
+
+<RadzenButton Text="Continue"
+              Click="OnButtonPressed"/>
+
+@code 
+{
+    [Parameter]
+    public CombatEndState BlazorState { get; set; }
+
+    private void OnButtonPressed()
+    {
+        StateMachine.ChangeState<GameplayState>();
+    }
+}

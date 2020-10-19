@@ -1,0 +1,14 @@
+﻿@using SadPumpkin.Util.CombatEngine.StateChangeEvents
+
+<div>
+    @foreach (IStateChangeEvent stateChangeEvent in Logs.Reverse())
+    {
+        <p>@stateChangeEvent.Description</p>
+    }
+</div>
+
+@code
+{
+    [Parameter]
+    public IReadOnlyList<IStateChangeEvent> Logs { get; set; }
+}

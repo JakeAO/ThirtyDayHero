@@ -7,9 +7,9 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
     public class PartyDataWrapper
     {
-        public static string DataPath(string userId, Guid partyId) => $"parties/{userId}/{partyId}.json";
+        public static string DataPath(string userId, uint partyId) => $"parties/{userId}/{partyId}.json";
 
-        public Guid Id;
+        public uint PartyId;
         public uint Day;
         public TimeOfDay Time;
         public uint Gold;
@@ -17,20 +17,20 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
         public List<IItem> Inventory;
         public uint CalamityId;
         
-        public string GetDataPath(string userId) => DataPath(userId, Id);
+        public string GetDataPath(string userId) => DataPath(userId, PartyId);
 
         public PartyDataWrapper()
-            : this(Guid.Empty, null, null, 0u)
+            : this(0u, null, null, 0u)
         {
         }
 
         public PartyDataWrapper(
-            Guid id,
+            uint partyId,
             IReadOnlyCollection<PlayerCharacter> characters,
             IReadOnlyCollection<IItem> inventory,
             uint calamityId)
         {
-            Id = id;
+            PartyId = partyId;
             Day = 0;
             Time = TimeOfDay.Morning;
             Gold = 100;

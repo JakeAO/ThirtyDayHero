@@ -1,0 +1,124 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
+@using SadPumpkin.Util.CombatEngine.Actor
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.DialogViews
+@using SadPumpkin.Util.CombatEngine.StateChangeEvents
+
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+
+<div style="display: flex;justify-content: space-between">
+    <div style="flex: max-content">
+        <RadzenButton
+            Text="@(_unreadLogsCount > 0 ? $"Logs ({_unreadLogsCount})" : "Logs")"
+            Click="@OnLogPressed"/>
+    </div>
+    <div style="flex: available;display: flex;flex-direction: column;justify-content: stretch;">
+        <div style="text-align: center;min-width: 400px;min-height: 300px;border: 2px solid black;justify-content: center">
+            <h3 style="width: 100%;background-color: dimgrey;text-align: center">Battle</h3>
+            <div style="display: flex;flex-direction: row;justify-content: center">
+                @foreach (ICharacterActor character in BlazorState.CombatSettings.Enemies)
+                {
+                    <div style="@(character.Id == BlazorState.CurrentGameState?.ActiveActor?.Id ? "border: 2px solid green" : "")">
+                        <ActorQuickView
+                            Actor="@character"/>
+                    </div>
+                }
+            </div>
+        </div>
+        <div style="display: flex;flex-direction: row;justify-content: center">
+            @foreach (IPlayerCharacterActor character in BlazorState.PlayerController.Characters)
+            {
+                <div style="@(character.Id == BlazorState.CurrentGameState?.ActiveActor?.Id ? "border: 2px solid green" : "")">
+                    <ActorQuickView Actor="@character"/>
+                    
+                    @if (BlazorState.PlayerController.ActiveCharacter != null &&
+                         character.Id == BlazorState.PlayerController.ActiveCharacter.Id)
+                    {
+                        <div style="display: flex;flex-direction: column;width: fit-content;justify-content: stretch">
+                            @foreach (var actionKvp in BlazorState.PlayerController.AvailableActions)
+                            {
+                                if (actionKvp.Value.Available)
+                                {
+                                    <RadzenButton Text="@actionKvp.Value.Ability.Name"
+                                                  Title="@($"Targeting: {string.Join(", ", actionKvp.Value.Targets.Select(x => x.Name))}")"
+                                                  Click="() => BlazorState.PlayerController.SubmitActionResponse(actionKvp.Key)"/>
+                                }
+                                else
+                                {
+                                    <RadzenButton Text="@actionKvp.Value.Ability.Name"
+                                                  Disabled="true"/>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+    <div style="flex: max-content;justify-content: right">
+        @if (BlazorState.CurrentGameState != null)
+        {
+            <div style="width: 200px;flex-direction: column">
+                @if (BlazorState.CurrentGameState.InitiativeOrder.First() is IInitiativePair firstPair)
+                {
+                    <ActorInitiativeView InitPair="@firstPair"
+                                         IsPlayer="@(firstPair.Entity.Party == BlazorState.PlayerController.PartyId)"/>
+                }
+            </div>
+            <div style="width: 175px;flex-direction: column">
+                @foreach (IInitiativePair initPair in BlazorState.CurrentGameState.InitiativeOrder.Skip(1))
+                {
+                    <ActorInitiativeView InitPair="@initPair"
+                                         IsPlayer="@(initPair.Entity.Party == BlazorState.PlayerController.PartyId)"/>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code 
+{
+    [Parameter]
+    public CombatRunState BlazorState { get; set; }
+
+    private uint _unreadLogsCount = 0u;
+
+    protected override void OnInitialized()
+    {
+        BlazorState.NeedsToRender += OnNeedsToRender;
+        BlazorState.StateChangeEvent += OnStateChangeEvent;
+    }
+
+    private void OnNeedsToRender()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void OnStateChangeEvent(IStateChangeEvent changeEvent)
+    {
+        _unreadLogsCount++;
+
+        NotificationService.Notify(
+            NotificationSeverity.Info,
+            changeEvent.Description);
+    }
+
+    private void OnLogPressed()
+    {
+        _unreadLogsCount = 0u;
+        DialogService.Open<CombatLogDialogView>(
+            "Combat Logs",
+            new Dictionary<string, object>()
+            {
+                {"Logs", BlazorState.StateChangeRecord}
+            },
+            new DialogOptions()
+            {
+                ShowClose = true,
+                ShowTitle = true,
+                Width = "800px",
+                Height = "600px"
+            });
+    }
+}

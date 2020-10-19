@@ -78,12 +78,6 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core
 
             return default;
         }
-
-        public static string GetRandomCharacterName()
-        {
-            int randomIdx = RANDOM.Next(0, CharacterNames.NAMES.Count);
-            return CharacterNames.NAMES[randomIdx];
-        }
         
         public static IPlayerClass GetRandomPlayerClass()
         {

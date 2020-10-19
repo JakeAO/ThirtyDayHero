@@ -2,11 +2,10 @@
 
 namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
-    [Flags]
     public enum TimeOfDay
     {
-        Morning = 1,
-        Evening = 2,
-        Night = 4
+        Morning = 0,
+        Evening = 1,
+        Night = 2
     }
 }

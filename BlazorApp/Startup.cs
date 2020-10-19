@@ -32,6 +32,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp
 
             Context context = new Context();
             services.AddSingleton<IContext>(context);
+            services.AddSingleton<Context>(context);
 
             JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
             {
@@ -48,7 +49,9 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp
             StateMachine stateMachine = new StateMachine(context);
             stateMachine.ChangeState<LoginState>();
             services.AddSingleton<IStateMachine>(stateMachine);
-            context.Set(stateMachine);
+            services.AddSingleton<StateMachine>(stateMachine);
+            context.Set<IStateMachine>(stateMachine);
+            context.Set<StateMachine>(stateMachine);
 
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();

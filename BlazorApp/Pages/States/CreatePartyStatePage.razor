@@ -77,7 +77,7 @@
     private async void OnButtonPressed(MouseEventArgs args)
     {
         PartyDataWrapper partyData = new PartyDataWrapper(
-            BlazorState.NewPartyGuid,
+            (uint)BlazorState.NewPartyGuid.GetHashCode(),
             _activeParty,
             BlazorState.GeneratedInventory,
             HackUtil.GetRandomCalamityClass().Id);
@@ -87,7 +87,7 @@
 
         if (Context.TryGet(out PlayerDataWrapper playerData))
         {
-            playerData.ActiveParty = BlazorState.NewPartyGuid;
+            playerData.ActivePartyId = (uint) BlazorState.NewPartyGuid.GetHashCode();
             await FbWrapper.WriteData(playerData.GetDataPath(FbWrapper.UserId), playerData);
         }
 

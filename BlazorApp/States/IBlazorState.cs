@@ -10,7 +10,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
         protected Context _context = null;
 
         public virtual Type RenderType => typeof(NotImplementedExceptionPage);
-
+        
         public virtual void PerformSetup(Context context, IState previousState)
         {
             _context = context;

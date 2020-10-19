@@ -88,7 +88,7 @@ else
         PlayerDataWrapper playerData = null;
         if (newAccount)
         {
-            playerData = new PlayerDataWrapper(Guid.Empty, new Guid[0]);
+            playerData = new PlayerDataWrapper(0u, new uint[0]);
             await FbWrapper.WriteData(PlayerDataWrapper.DataPath(FbWrapper.UserId), playerData);
         }
         else
@@ -115,14 +115,14 @@ else
         // Get Party Data
         _synchingPartyData = true;
         PartyDataWrapper partyData = null;
-        if (playerData.ActiveParty == Guid.Empty)
+        if (playerData.ActivePartyId == 0u)
         {
             StateMachine.ChangeState<CreatePartyState>();
             return;
         }
         else
         {
-            partyData = await FbWrapper.ReadData<PartyDataWrapper>(PartyDataWrapper.DataPath(FbWrapper.UserId, playerData.ActiveParty));
+            partyData = await FbWrapper.ReadData<PartyDataWrapper>(PartyDataWrapper.DataPath(FbWrapper.UserId, playerData.ActivePartyId));
             if (partyData.Characters.Any(x =>
                 x.Class == null || x.Class == NullClass.Instance ||
                 x.Equipment == null || x.Equipment == NullEquipMap.Instance ||

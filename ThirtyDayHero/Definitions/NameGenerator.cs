@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions
 {
-    public static class CharacterNames
+    public class NameGenerator
     {
-        public static readonly IReadOnlyList<string> NAMES = new string[]
+        private static readonly Random RANDOM = new Random();
+
+        private static readonly IReadOnlyCollection<string> PC_NAMES = new[]
         {
             "Syrana",
             "Resha",
@@ -205,5 +208,63 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions
             "Gentar",
             "Feston",
         };
+
+        private static readonly IReadOnlyCollection<string> MONSTER_NAMES = new[]
+        {
+            "Trik",
+            "Argent",
+            "Amada",
+            "Winter",
+            "Eoin",
+            "Highmore",
+            "Grim",
+            "Skinner",
+            "Brink",
+            "Fade",
+            "Thorne",
+            "Crane",
+            "Larc",
+            "Grimm",
+            "Jayde",
+            "Caligari",
+            "Gabriel",
+            "Mallor",
+            "Talo",
+            "Grimsbane",
+            "Kindle",
+            "Sanguine",
+            "Kellam",
+            "Delacroix",
+            "Mace",
+            "Graves",
+            "Noire",
+            "Everbleed",
+            "Umbri",
+            "Lovelace",
+            "Klyn",
+            "Hallewell",
+            "Gloom",
+            "Devonshire",
+            "Law",
+            "Finch",
+            "Whisper",
+            "Marth",
+            "Wraith",
+        };
+
+        public static readonly NameGenerator Player = new NameGenerator(PC_NAMES);
+        public static readonly NameGenerator Monster = new NameGenerator(MONSTER_NAMES);
+
+        public IReadOnlyList<string> Names { get; }
+
+        public NameGenerator(IEnumerable<string> names)
+        {
+            Names = new List<string>(names);
+        }
+
+        public string GetName()
+        {
+            return Names[RANDOM.Next(Names.Count)];
+        }
     }
 }

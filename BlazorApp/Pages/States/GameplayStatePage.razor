@@ -8,19 +8,18 @@
 
 <GameplayHeaderBar/>
 
-<div style="display: flex;justify-content: space-between">
-    <div style="flex-grow: 2">
+<div style="display: flex;justify-content: stretch">
+    <div style="flex-grow: 1">
         <RadzenButton
             Text="Inventory"
             Click="@OnInventoryPressed"/>
     </div>
     <div style="flex-grow: 5;display: flex;flex-direction: column;justify-content: stretch;">
-        <div style="text-align: center;border: 2px solid black">
-            <h2 style="float: top">TODO</h2>
-            <br/>
-            <h3 style="float: bottom">Prompt Goes Here</h3>
+        <div style="text-align: center;min-width: 400px;min-height: 300px;border: 2px solid black;justify-content: center">
+            <h3 style="width: 100%;background-color: dimgrey;text-align: center">Camp</h3>
+            <h2>TODO</h2>
+            <h2>Campsite Art</h2>
         </div>
-        <hr/>
         <div style="display: flex;flex-direction: row;justify-content: center">
             @foreach (PlayerCharacter playerCharacter in BlazorState.Party.Characters)
             {
@@ -29,14 +28,41 @@
             }
         </div>
         <hr/>
-        <div style="text-align: center">
-            <h2>TODO</h2>
-            <br/>
-            <h3>Actions Goes Here</h3>
+        <div style="display: flex;justify-content: center;flex: fit-content;flex-direction: column;padding-inline: 3px">
+            @foreach (GameplayState.IEventOption eventOption in BlazorState.EventOptions.OrderBy(x => x.Priority))
+            {
+                switch (eventOption)
+                {
+                    case GameplayState.SingleOption singleOption:
+                    {
+                        <RadzenButton Click="@singleOption.Select.Invoke"
+                                      Text="@singleOption.Text"
+                                      Title="@singleOption.Tooltip"
+                                      Style="width: 33%"/>
+                        break;
+                    }
+                    case GameplayState.MultipleOption multipleOption:
+                    {
+                        <RadzenSplitButton Click="item => multipleOption.Select.Invoke(item?.Value ?? multipleOption.DefaultValue)"
+                                           Text="@multipleOption.Text"
+                                           Title="@multipleOption.Tooltip"
+                                           Style="width: 33%">
+                            <ChildContent>
+                                @foreach (var itemTuple in multipleOption.AlternateOptions)
+                                {
+                                    <RadzenSplitButtonItem Text="@itemTuple.text"
+                                                           Title="@itemTuple.tooltip"
+                                                           Value="@itemTuple.value"/>
+                                }
+                            </ChildContent>
+                        </RadzenSplitButton>
+                        break;
+                    }
+                }
+            }
         </div>
     </div>
-    <div style="flex-grow: 2">
-        
+    <div style="flex-grow: 1">
     </div>
 </div>
 

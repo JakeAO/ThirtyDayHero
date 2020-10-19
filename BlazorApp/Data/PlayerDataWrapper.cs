@@ -7,34 +7,34 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
     {
         public static string DataPath(string userId) => $"players/{userId}.json";
 
-        public Guid ActiveParty;
-        public List<Guid> PastParties;
-        
+        public uint ActivePartyId;
+        public List<uint> PastPartyIds;
+
         public string GetDataPath(string userId) => DataPath(userId);
 
         public PlayerDataWrapper()
-            : this(Guid.Empty, null)
+            : this(0u, null)
         {
         }
 
         public PlayerDataWrapper(
-            Guid activeParty,
-            IReadOnlyCollection<Guid> pastParties)
+            uint activePartyId,
+            IReadOnlyCollection<uint> pastParties)
         {
-            ActiveParty = activeParty;
-            PastParties = pastParties != null
-                ? new List<Guid>(pastParties)
-                : new List<Guid>();
+            ActivePartyId = activePartyId;
+            PastPartyIds = pastParties != null
+                ? new List<uint>(pastParties)
+                : new List<uint>();
         }
 
-        public void SetActiveParty(Guid partyId)
+        public void SetActiveParty(uint partyId)
         {
-            if (ActiveParty != Guid.Empty)
+            if (ActivePartyId != 0u)
             {
-                PastParties.Add(ActiveParty);
+                PastPartyIds.Add(ActivePartyId);
             }
 
-            ActiveParty = partyId;
+            ActivePartyId = partyId;
         }
     }
 }

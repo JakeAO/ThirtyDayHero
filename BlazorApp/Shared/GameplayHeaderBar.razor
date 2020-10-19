@@ -1,10 +1,9 @@
-﻿
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+
+@inject IStateMachine StateMachine;
 @inject IContext Context;
 
-<div class="top-row" style="display: flex;justify-content: space-between">
-    <div style="float: left">
-        <b>Location: </b>TBD
-    </div>
+<div style="display: flex;justify-content: space-between;background-color: darkgray">
     <div style="float: left">
         <b>Gold: </b>@_party.Gold
     </div>
