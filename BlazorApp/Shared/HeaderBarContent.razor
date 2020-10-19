@@ -1,7 +1,6 @@
 ﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.AccountViews
 @using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
 
-@inject NavigationManager NavigationManager;
 @inject DialogService DialogService;
 @inject FirebaseWrapper FbWrapper;
 @inject IContext StateContainer;
@@ -43,8 +42,6 @@ else
         StateContainer.Clear<PartyDataWrapper>();
 
         StateMachine.ChangeState<LoginState>();
-        
-        NavigationManager.NavigateTo("/", true);
     }
 
 }

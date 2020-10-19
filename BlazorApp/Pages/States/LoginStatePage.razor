@@ -6,7 +6,6 @@
 @using SadPumpkin.Util.CombatEngine.StatMap
 
 @inject NotificationService NotificationManager;
-@inject NavigationManager NavigationManager;
 @inject IStateMachine StateMachine;
 @inject FirebaseWrapper FbWrapper;
 @inject IContext Context;
@@ -148,9 +147,8 @@ else
                 10000);
             Context.Clear<PlayerDataWrapper>();
             await FbWrapper.SignOut();
+            StateMachine.ChangeState<LoginState>();
         }
-
-        NavigationManager.NavigateTo("/", true);
     }
 
 }

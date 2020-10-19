@@ -1,7 +1,6 @@
 ﻿@using Radzen;
 
 @inject NotificationService NotificationService;
-@inject NavigationManager NavigationManager;
 @inject IContext StateContainer;
 
 <RadzenCard>
@@ -35,8 +34,6 @@
                 Detail = result.message,
                 Duration = 3000
             });
-            
-            NavigationManager.NavigateTo("/", true);
         }
         else
         {

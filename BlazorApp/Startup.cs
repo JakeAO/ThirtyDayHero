@@ -30,29 +30,31 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
-            Context context = new Context();
-            services.AddSingleton<IContext>(context);
-            services.AddSingleton<Context>(context);
-
-            JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
+            services.AddScoped<IContext>(provider => new Context());
+            services.AddScoped<IStateMachine>(provider =>
             {
-                TypeNameHandling = TypeNameHandling.Auto,
-                ContractResolver = new NewtonsoftContractResolver(),
-                Converters = new List<JsonConverter>(HackUtil.GetAllJsonConverters())
-            };
-            context.Set(jsonSettings);
+                IContext context = provider.GetRequiredService<IContext>();
+                IStateMachine stateMachine = new StateMachine(context as Context);
+                stateMachine.ChangeState<LoginState>();
+                context.Set<IStateMachine>(stateMachine);
+                return stateMachine;
+            });
+            services.AddScoped<FirebaseWrapper>(provider =>
+            {
+                IContext context = provider.GetRequiredService<IContext>();
 
-            FirebaseWrapper fbWrapper = new FirebaseWrapper(jsonSettings);
-            services.AddSingleton<FirebaseWrapper>(fbWrapper);
-            context.Set(fbWrapper);
-            
-            StateMachine stateMachine = new StateMachine(context);
-            stateMachine.ChangeState<LoginState>();
-            services.AddSingleton<IStateMachine>(stateMachine);
-            services.AddSingleton<StateMachine>(stateMachine);
-            context.Set<IStateMachine>(stateMachine);
-            context.Set<StateMachine>(stateMachine);
+                JsonSerializerSettings jsonSettings = new JsonSerializerSettings()
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    ContractResolver = new NewtonsoftContractResolver(),
+                    Converters = new List<JsonConverter>(HackUtil.GetAllJsonConverters())
+                };
+                FirebaseWrapper fbWrapper = new FirebaseWrapper(jsonSettings);
 
+                context.Set(jsonSettings);
+                context.Set(fbWrapper);
+                return fbWrapper;
+            });
             services.AddScoped<DialogService>();
             services.AddScoped<NotificationService>();
             services.AddScoped<TooltipService>();
