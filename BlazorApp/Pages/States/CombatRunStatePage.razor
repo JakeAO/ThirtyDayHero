@@ -56,17 +56,17 @@
             }
         </div>
     </div>
-    <div style="flex: max-content;justify-content: right">
+    <div style="display: flex;flex: max-content;flex-direction: column;justify-content: right">
         @if (BlazorState.CurrentGameState != null)
         {
-            <div style="width: 200px;flex-direction: column">
+            <div style="width: 200px">
                 @if (BlazorState.CurrentGameState.InitiativeOrder.First() is IInitiativePair firstPair)
                 {
                     <ActorInitiativeView InitPair="@firstPair"
                                          IsPlayer="@(firstPair.Entity.Party == BlazorState.PlayerController.PartyId)"/>
                 }
             </div>
-            <div style="width: 175px;flex-direction: column">
+            <div style="width: 175px">
                 @foreach (IInitiativePair initPair in BlazorState.CurrentGameState.InitiativeOrder.Skip(1))
                 {
                     <ActorInitiativeView InitPair="@initPair"

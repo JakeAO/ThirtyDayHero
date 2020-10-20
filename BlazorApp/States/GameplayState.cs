@@ -4,6 +4,7 @@ using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages.States;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat;
 using SadPumpkin.Games.ThirtyDayHero.Core;
+using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Util.CombatEngine.Actor;
 using SadPumpkin.Util.CombatEngine.CharacterClasses;
 using SadPumpkin.Util.CombatEngine.StatMap;
@@ -154,7 +155,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
         {
             _context.Set(
                 CombatSettings.CreateFromEnemies(
-                    new[] {HackUtil.GetDefinition<ICharacterClass>(Party.CalamityId)},
+                    new[] {HackUtil.GetDefinition<EnemyDefinition>(Party.CalamityId)},
                     CombatDifficulty.Normal,
                     Party));
             _stateMachine.ChangeState<CombatRunState>();

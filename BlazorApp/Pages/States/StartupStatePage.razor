@@ -1,4 +1,5 @@
 ﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Games.ThirtyDayHero.Core.Decorators
 @using SadPumpkin.Util.CombatEngine.CharacterClasses
 
 @inject IStateMachine StateMachine;
@@ -30,7 +31,7 @@
     protected override void OnInitialized()
     {
         _partyData = Context.Get<PartyDataWrapper>();
-        _calamityClass = HackUtil.GetDefinition<ICharacterClass>(_partyData.CalamityId);
+        _calamityClass = HackUtil.GetDefinition<EnemyDefinition>(_partyData.CalamityId).CharacterClass;
         base.OnInitialized();
     }
 

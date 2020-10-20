@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Armors;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses;
@@ -85,16 +86,16 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core
             return GetDefinition<IPlayerClass>(randId);
         }
 
-        public static ICharacterClass GetRandomCalamityClass()
+        public static EnemyDefinition GetRandomCalamityClass()
         {
             uint randId = (uint) RANDOM.Next((int) CalamityDefinitions.IdTracker.Min, (int) CalamityDefinitions.IdTracker.Current);
-            return GetDefinition<ICharacterClass>(randId);
+            return GetDefinition<EnemyDefinition>(randId);
         }
 
-        public static ICharacterClass GetRandomMonsterClass()
+        public static EnemyDefinition GetRandomMonsterClass()
         {
             uint randId = (uint) RANDOM.Next((int) MonsterDefinitions.IdTracker.Min, (int) MonsterDefinitions.IdTracker.Current);
-            return GetDefinition<ICharacterClass>(randId);
+            return GetDefinition<EnemyDefinition>(randId);
         }
 
         public static IWeapon GetRandomWeapon()

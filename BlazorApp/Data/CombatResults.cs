@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using SadPumpkin.Games.ThirtyDayHero.Core;
 using SadPumpkin.Util.CombatEngine.Actor;
+using SadPumpkin.Util.CombatEngine.Item;
 using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
@@ -9,6 +11,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
     {
         public bool Success { get; private set; }
         public uint ExpReward { get; private set; }
+        public uint GoldReward { get; private set; }
+        public IReadOnlyCollection<IItem> ItemReward { get; private set; } = new IItem[0];
 
         public static CombatResults CreateSuccess(IReadOnlyCollection<ICharacterActor> enemies, PartyDataWrapper party)
         {
@@ -30,13 +34,26 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
             uint playerStatTotal = GetStatTotal(party.Characters);
             float modifier = enemyStatTotal / (float) playerStatTotal;
 
-            float baseExp = enemies.Count * 100f;
+            float baseExp = enemies.Count * 150f;
             float expReward = baseExp * modifier;
+
+            float goldReward = 250f * modifier;
+
+            Random random = new Random();
+            List<IItem> itemReward = new List<IItem>(1);
+            while (random.Next(10) < 5)
+            {
+                IItem item = HackUtil.GetRandomItem();
+                if (item != null)
+                    itemReward.Add(item);
+            }
 
             return new CombatResults()
             {
                 Success = true,
-                ExpReward = (uint) Math.Ceiling(expReward)
+                ExpReward = (uint) Math.Ceiling(expReward),
+                GoldReward = (uint) Math.Ceiling(goldReward),
+                ItemReward = itemReward
             };
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using SadPumpkin.Games.ThirtyDayHero.Core;
+using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions;
 using SadPumpkin.Util.CombatEngine.Actor;
 using SadPumpkin.Util.CombatEngine.CharacterClasses;
@@ -24,7 +25,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
         public ICharacterController AI { get; private set; }
         public uint PartyId { get; private set; }
 
-        public static CombatSettings CreateFromEnemies(IReadOnlyCollection<ICharacterClass> enemyTypes, CombatDifficulty difficulty, PartyDataWrapper playerParty)
+        public static CombatSettings CreateFromEnemies(IReadOnlyCollection<EnemyDefinition> enemyTypes, CombatDifficulty difficulty, PartyDataWrapper playerParty)
         {
             uint GetStatTotal(IReadOnlyCollection<ICharacterActor> actors)
             {
@@ -58,14 +59,14 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 
             // Generate Enemies
             List<Character> enemies = new List<Character>(enemyTypes.Count);
-            foreach (ICharacterClass enemyClass in enemyTypes)
+            foreach (EnemyDefinition enemyDefinition in enemyTypes)
             {
                 enemies.Add(
                     ClassUtil.CreateCharacter(
                         ClassUtil.NextId,
                         partyId,
-                        NameGenerator.Monster.GetName(),
-                        enemyClass));
+                        enemyDefinition.NameGenerator.GetName(),
+                        enemyDefinition.CharacterClass));
             }
 
             // Scale Enemies for Difficulty
@@ -106,7 +107,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
                     break;
             }
 
-            List<ICharacterClass> enemyTypes = new List<ICharacterClass>(enemyCount);
+            List<EnemyDefinition> enemyTypes = new List<EnemyDefinition>(enemyCount);
             for (int i = 0; i < enemyCount; i++)
             {
                 enemyTypes.Add(HackUtil.GetRandomMonsterClass());

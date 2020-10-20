@@ -4,7 +4,7 @@
 @using SadPumpkin.Util.CombatEngine.StatMap
 @using SadPumpkin.Util.CombatEngine.Abilities
 
-<RadzenCard Style="width: fit-content;min-width: 200px">
+<RadzenCard Style=@(Actor.IsAlive() ? "width: fit-content;min-width: 200px" : "width: fit-content;min-width: 200px;background-color: lightcoral")>
     <div style="text-align: center;vertical-align: center;background-color: lightgray;width: 100%">
         <h3>@Actor.Name</h3>
     </div>

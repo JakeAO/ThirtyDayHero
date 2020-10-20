@@ -10,7 +10,7 @@
     <PackageReference Include="FirebaseDatabase.net" Version="4.0.4" />
     <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="Radzen.Blazor" Version="2.15.7" />
+    <PackageReference Include="Radzen.Blazor" Version="2.15.15" />
     <PackageReference Include="RestSharp" Version="106.11.7" />
   </ItemGroup>
 
