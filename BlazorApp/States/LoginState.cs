@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages;
 

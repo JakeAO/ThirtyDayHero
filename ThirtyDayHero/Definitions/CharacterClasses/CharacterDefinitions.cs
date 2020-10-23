@@ -17,7 +17,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
     {
         public static readonly TrackableIdGenerator IdTracker = new TrackableIdGenerator(ConstantIds.CLASS_PLAYER);
 
-        public static readonly IPlayerClass Soldier = new PlayerClass(
+        public static readonly PlayerClass Soldier = new PlayerClass(
             IdTracker.Next,
             "Soldier", "A former military recruit trained in basic martial weaponry.",
             new Dictionary<DamageType, float>(),
@@ -44,7 +44,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                 new Dictionary<IItem, RankPriority>(),
                 new Dictionary<IItem, RankPriority>()));
 
-        public static readonly IPlayerClass Mage = new PlayerClass(
+        public static readonly PlayerClass Mage = new PlayerClass(
             IdTracker.Next,
             "Mage", "An apprentice mage from the royal academy.",
             new Dictionary<DamageType, float>(),
@@ -69,7 +69,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                 new Dictionary<IItem, RankPriority>(),
                 new Dictionary<IItem, RankPriority>()));
 
-        public static readonly IPlayerClass Ranger = new PlayerClass(
+        public static readonly PlayerClass Ranger = new PlayerClass(
             IdTracker.Next,
             "Ranger", "A survivalist from the wilds.",
             new Dictionary<DamageType, float>(),

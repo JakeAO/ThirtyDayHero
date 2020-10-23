@@ -43,7 +43,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
 
                 Party.Gold += Results.GoldReward;
                 Party.Inventory.AddRange(Results.ItemReward);
-
+                Party.CalamityDefeated = Party.Day >= 30;
+                
                 fbWrapper.WriteData(Party.GetDataPath(fbWrapper.UserId), Party);
 
                 // Update Stats
@@ -85,8 +86,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
             else
             {
                 PlayerDataWrapper playerData = _context.Get<PlayerDataWrapper>();
-                playerData.PastPartyIds.Add(Party.PartyId);
-                playerData.ActivePartyId = 0u;
+                playerData.SetActiveParty(0u);
 
                 fbWrapper.WriteData(Party.GetDataPath(fbWrapper.UserId), Party);
                 fbWrapper.WriteData(playerData.GetDataPath(fbWrapper.UserId), playerData);
@@ -98,7 +98,11 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
         public void Continue()
         {
             IStateMachine stateMachine = _context.Get<IStateMachine>();
-            if (Results.Success)
+            if (Party.CalamityDefeated)
+            {
+                stateMachine.ChangeState<CalamityDefeatedState>();
+            }
+            else if (Results.Success)
             {
                 stateMachine.ChangeState<GameplayState>();
             }

@@ -37,4 +37,8 @@
     <Folder Include="States\Town" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\assets\gold.png" />
+  </ItemGroup>
+
 </Project>

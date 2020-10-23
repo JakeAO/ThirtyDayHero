@@ -1,6 +1,4 @@
 ﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
-@using SadPumpkin.Games.ThirtyDayHero.Core.Decorators
-@using SadPumpkin.Util.CombatEngine.CharacterClasses
 
 @inject IStateMachine StateMachine;
 @inject IContext Context;
@@ -10,10 +8,17 @@
 </style>
 
 <div style="width: fit-content;align-content: center;text-align: center;align-self: center;float: top">
-    <p>Sages tell of an impending calamity.</p>
-    <p>They call this calamity <b>@_calamityClass.Name</b>.</p>
-    <p>You have @(30 - _partyData.Day) day@(_partyData.Day < 29 ? "s" : "") left to prepare.</p>
-
+    <p>Sages warn of the portents of the death of our kingdom.</p>
+    <p>A great calamity rises, a dark force bent on the destruction of all we hold dear.</p>
+    <p>They call this calamity <b>@_partyData.Calamity.Name</b>.</p>
+    <p>We know little of this entity's nature, aside from this:</p>
+    <div style="background-color: lightgrey">
+        <b>@_partyData.Calamity.Class.Name</b>
+        <p>@_partyData.Calamity.Class.Desc</p>
+    </div>
+    <p>You may be our best hope at survival.</p>
+    <p>There are @(30 - _partyData.Day) day@(_partyData.Day < 29 ? "s" : "") left to prepare.</p>
+    
     <RadzenButton
         Text="Let's Go"
         Click="@OnButtonPressed"
@@ -26,12 +31,10 @@
     public StartupState BlazorState { get; set; }
 
     private PartyDataWrapper _partyData = null;
-    private ICharacterClass _calamityClass = null;
 
     protected override void OnInitialized()
     {
         _partyData = Context.Get<PartyDataWrapper>();
-        _calamityClass = HackUtil.GetDefinition<EnemyDefinition>(_partyData.CalamityId).CharacterClass;
         base.OnInitialized();
     }
 

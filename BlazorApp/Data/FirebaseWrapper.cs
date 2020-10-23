@@ -18,6 +18,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
         private const string DATA_URL = "https://thirty-day-hero.firebaseio.com/";
         private const string API_KEY = "AIzaSyDHcCjJupg3v6rLAkwFcPuatQyamVVuE9M";
 
+        public event EventHandler Updated;
+        
         public bool IsLoggedIn => _user != null;
         public bool IsAnonymous => _user?.IsAnonymous ?? false;
 
@@ -79,6 +81,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
         private void SetUser(User user)
         {
             _user = user;
+            Updated?.Invoke(this, EventArgs.Empty);
         }
 
         private void SetUser(UserCredential credential)

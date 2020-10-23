@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages.States;
 using SadPumpkin.Games.ThirtyDayHero.Core;
+using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions;
 using SadPumpkin.Util.CombatEngine.Actor;
 using SadPumpkin.Util.CombatEngine.CharacterClasses;
@@ -21,9 +21,11 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
         public readonly Guid NewPartyGuid = Guid.NewGuid();
         public IReadOnlyCollection<PlayerCharacter> GeneratedCharacters => _generatedCharacters;
         public IReadOnlyCollection<IItem> GeneratedInventory => _generatedInventory;
+        public Character Calamity => _calamity;
 
         private readonly List<PlayerCharacter> _generatedCharacters = new List<PlayerCharacter>(5);
         private readonly List<IItem> _generatedInventory = new List<IItem>(10);
+        private Character _calamity = null;
         
         public override Type RenderType => typeof(CreatePartyStatePage);
 
@@ -31,6 +33,15 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
         {
             base.PerformSetup(context, previousState);
 
+            // Generate Calamity
+            EnemyDefinition calamityType = HackUtil.GetRandomCalamityClass();
+            _calamity = ClassUtil.CreateCharacter(
+                calamityType.Id,
+                (uint) Guid.NewGuid().GetHashCode(),
+                calamityType.NameGenerator.GetName(),
+                calamityType.CharacterClass,
+                30u);
+            
             // Generate Potential Party Members
             uint partyId = (uint) NewPartyGuid.GetHashCode();
             for (int i = 0; i < 5; i++)

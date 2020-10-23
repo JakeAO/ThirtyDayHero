@@ -23,7 +23,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             new StatCost(StatType.STA, 15),
             SingleAllyTargetCalculator.Instance,
             new HealingEffect(
-                source => source.Stats[StatType.INT]));
+                source => source.Stats[StatType.INT],
+                "[INT] HP Restore"));
 
         public static readonly IAbility Skill_Cleave = new Ability(
             IdTracker.Next,
@@ -35,7 +36,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             new DamageEffect(
                 DamageType.Normal,
                 source => (uint) Math.Ceiling(source.Stats[StatType.STR] * 0.50f),
-                source => (uint) Math.Ceiling(source.Stats[StatType.STR] * 0.75f)));
+                source => (uint) Math.Ceiling(source.Stats[StatType.STR] * 0.75f),
+                "[0.5x STR]-[0.75x STR] Normal Damage"));
         
     }
 }

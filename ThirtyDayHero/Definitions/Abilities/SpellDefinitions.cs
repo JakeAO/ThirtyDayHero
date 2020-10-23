@@ -24,7 +24,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Fire,
-                source => source.Stats[StatType.MAG]));
+                source => source.Stats[StatType.MAG],
+                "[MAG] Fire Damage"));
 
         public static readonly IAbility Spell_Snowball = new Ability(
             IdTracker.Next,
@@ -36,7 +37,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Water,
-                source => source.Stats[StatType.MAG]));
+                source => source.Stats[StatType.MAG],
+                "[MAG] Water Damage"));
 
         public static readonly IAbility Spell_Spike = new Ability(
             IdTracker.Next,
@@ -48,7 +50,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Stone,
-                source => source.Stats[StatType.MAG]));
+                source => source.Stats[StatType.MAG],
+                "[MAG] Stone Damage"));
 
         public static readonly IAbility Spell_Gale = new Ability(
             IdTracker.Next,
@@ -60,7 +63,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Wind,
-                source => source.Stats[StatType.MAG]));
+                source => source.Stats[StatType.MAG],
+                "[MAG] Wind Damage"));
 
         public static readonly IAbility Spell_Flare = new Ability(
             IdTracker.Next,
@@ -72,7 +76,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Fire,
-                source => (uint) Math.Ceiling(source.Stats.GetStat(StatType.MAG) * 1.25f)));
+                source => (uint) Math.Ceiling(source.Stats.GetStat(StatType.MAG) * 1.25f),
+                "[1.25x MAG] Fire Damage"));
 
 
         public static readonly IAbility Spell_Nova = new Ability(
@@ -85,7 +90,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Fire,
-                source => (uint) Math.Ceiling(source.Stats.GetStat(StatType.MAG) * 3f)));
+                source => (uint) Math.Ceiling(source.Stats.GetStat(StatType.MAG) * 3f),
+                "[3x MAG] Fire Damage"));
 
     }
 }

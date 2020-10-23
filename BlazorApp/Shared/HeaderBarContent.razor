@@ -30,6 +30,16 @@ else
 
 @code 
 {
+    protected override void OnInitialized()
+    {
+        FbWrapper.Updated += FbWrapperOnUpdated;
+    }
+
+    private void FbWrapperOnUpdated(object sender, EventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
     private async void PromoteAccount(MouseEventArgs args)
     {
         await DialogService.OpenAsync<PromoteTempCard>(string.Empty);
@@ -43,5 +53,4 @@ else
 
         StateMachine.ChangeState<LoginState>();
     }
-
 }

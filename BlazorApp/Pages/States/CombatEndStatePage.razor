@@ -16,7 +16,7 @@
                 <hr/>
                 <h2>Results</h2>
                 <p><b>EXP: </b>@BlazorState.Results.ExpReward</p>
-                <p><b>Gold: </b>@BlazorState.Results.GoldReward</p>
+                <p><img src="assets/gold.png" alt="Gold" style="max-height: 64px"/>: @BlazorState.Results.GoldReward</p>
                 @foreach (IItem gainedItem in BlazorState.Results.ItemReward)
                 {
                     <p title="@gainedItem.Desc"><b>Item: </b>@gainedItem.Name</p>
@@ -34,19 +34,19 @@
                         <h3>@character.Name</h3>
                         <table style="text-align: center;padding: 2px;border: 1px solid grey">
                             <tr>
-                                @foreach (StatType statType in _allStatTypes)
+                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
                                 {
                                     <th>@statType.ToString()</th>
                                 }
                             </tr>
                             <tr>
-                                @foreach (StatType statType in _allStatTypes)
+                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
                                 {
                                     <td>@oldStatMap[statType]</td>
                                 }
                             </tr>
                             <tr>
-                                @foreach (StatType statType in _allStatTypes)
+                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
                                 {
                                     @if (statChanges[(int) statType] > 0)
                                     {
@@ -59,7 +59,7 @@
                                 }
                             </tr>
                             <tr>
-                                @foreach (StatType statType in _allStatTypes)
+                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
                                 {
                                     <td>@character.Stats[statType]</td>
                                 }
@@ -104,7 +104,17 @@
     [Parameter]
     public CombatEndState BlazorState { get; set; }
 
-    private readonly StatType[] _allStatTypes =
+    private StatType[] StatTypesToShow(bool didLevelUp)
+    {
+        return didLevelUp ? _levelUpStatTypes : _noLevelStatTypes;
+    }
+
+    private readonly StatType[] _noLevelStatTypes =
+    {
+        StatType.LVL,
+        StatType.EXP
+    };
+    private readonly StatType[] _levelUpStatTypes =
     {
         StatType.LVL,
         StatType.EXP,

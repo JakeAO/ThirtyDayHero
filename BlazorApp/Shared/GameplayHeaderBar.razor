@@ -5,7 +5,7 @@
 
 <div style="display: flex;justify-content: space-between;background-color: darkgray">
     <div style="float: left">
-        <b>Gold: </b>@_party.Gold
+        <img src="assets/gold.png" alt="Gold" style="max-width: 32px;max-height: 32px"/>@_party.Gold
     </div>
     <div style="float: right">
         <b>Days Remaining: </b>@(30-_party.Day)
@@ -22,6 +22,11 @@
     protected override void OnInitialized()
     {
         _party = Context.Get<PartyDataWrapper>();
-        base.OnInitialized();
+        _party.Updated += PartyOnUpdated;
+    }
+
+    private void PartyOnUpdated(object sender, EventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
     }
 }

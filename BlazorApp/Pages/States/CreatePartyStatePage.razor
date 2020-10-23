@@ -1,7 +1,6 @@
-﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
-@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
 @using SadPumpkin.Util.CombatEngine.Actor
-@using SadPumpkin.Util.CombatEngine.Item
 
 @inject FirebaseWrapper FbWrapper;
 @inject IContext Context;
@@ -9,6 +8,7 @@
 
 <table style="width: 100%">
     <tr>
+        <h2 style="float: left" title="@($"{_calamity.Class.Name}: {_calamity.Class.Desc}")">Calamity: @_calamity.Name</h2>
         <RadzenButton
             Style="float: right"
             Text="Begin Adventure"
@@ -20,7 +20,7 @@
         @foreach (PlayerCharacter character in _activeParty)
         {
             <RadzenCard Style="flex: min-content;float: left">
-                <ActorQuickView Actor="character"/>
+                <ActorQuickView Actor="@character"/>
                 <RadzenButton
                     Text="Deselect"
                     Click="@(() => MoveToAvailable(character))"/>
@@ -32,7 +32,7 @@
         @foreach (PlayerCharacter character in _availableHeroes)
         {
             <RadzenCard Style="flex: min-content;float: left">
-                <ActorQuickView Actor="character"/>
+                <ActorQuickView Actor="@character"/>
                 <RadzenButton
                     Text="Select"
                     Click="@(() => MoveToActive(character))"
@@ -47,11 +47,13 @@
     [Parameter]
     public CreatePartyState BlazorState { get; set; }
 
+    private Character _calamity = null;
     private readonly List<PlayerCharacter> _activeParty = new List<PlayerCharacter>(3);
     private readonly List<PlayerCharacter> _availableHeroes = new List<PlayerCharacter>(5);
 
     protected override void OnInitialized()
     {
+        _calamity = BlazorState.Calamity;
         _availableHeroes.AddRange(BlazorState.GeneratedCharacters);
     }
 
@@ -77,17 +79,17 @@
     private async void OnButtonPressed(MouseEventArgs args)
     {
         PartyDataWrapper partyData = new PartyDataWrapper(
-            (uint)BlazorState.NewPartyGuid.GetHashCode(),
+            (uint) BlazorState.NewPartyGuid.GetHashCode(),
             _activeParty,
             BlazorState.GeneratedInventory,
-            HackUtil.GetRandomCalamityClass().Id);
+            _calamity);
 
         Context.Set(partyData);
         await FbWrapper.WriteData(partyData.GetDataPath(FbWrapper.UserId), partyData);
 
         if (Context.TryGet(out PlayerDataWrapper playerData))
         {
-            playerData.ActivePartyId = (uint) BlazorState.NewPartyGuid.GetHashCode();
+            playerData.SetActiveParty((uint) BlazorState.NewPartyGuid.GetHashCode());
             await FbWrapper.WriteData(playerData.GetDataPath(FbWrapper.UserId), playerData);
         }
 

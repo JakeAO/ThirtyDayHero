@@ -2,10 +2,14 @@
 @using SadPumpkin.Util.CombatEngine.Actor
 @using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
 @using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.DialogViews
+@using SadPumpkin.Util.CombatEngine.Abilities
+@using SadPumpkin.Util.CombatEngine.Action
 @using SadPumpkin.Util.CombatEngine.StateChangeEvents
+@using System.Text
 
 @inject DialogService DialogService
 @inject NotificationService NotificationService
+@inject ContextMenuService ContextMenuService
 
 <div style="display: flex;justify-content: space-between">
     <div style="flex: max-content">
@@ -20,8 +24,8 @@
                 @foreach (ICharacterActor character in BlazorState.CombatSettings.Enemies)
                 {
                     <div style="@(character.Id == BlazorState.CurrentGameState?.ActiveActor?.Id ? "border: 2px solid green" : "")">
-                        <ActorQuickView
-                            Actor="@character"/>
+                        <EnemyView Actor="@character"
+                                   Definition="@BlazorState.EnemyDefinitionsById[character.Id]"/>
                     </div>
                 }
             </div>
@@ -29,29 +33,55 @@
         <div style="display: flex;flex-direction: row;justify-content: center">
             @foreach (IPlayerCharacterActor character in BlazorState.PlayerController.Characters)
             {
-                <div style="@(character.Id == BlazorState.CurrentGameState?.ActiveActor?.Id ? "border: 2px solid green" : "")">
+                <div style="@(character.Id == BlazorState.CurrentGameState?.ActiveActor?.Id ? "border: 3px solid green" : "")">
                     <ActorQuickView Actor="@character"/>
-                    
-                    @if (BlazorState.PlayerController.ActiveCharacter != null &&
-                         character.Id == BlazorState.PlayerController.ActiveCharacter.Id)
-                    {
-                        <div style="display: flex;flex-direction: column;width: fit-content;justify-content: stretch">
-                            @foreach (var actionKvp in BlazorState.PlayerController.AvailableActions)
-                            {
-                                if (actionKvp.Value.Available)
+
+                    <div style="display: flex;flex-direction: row;justify-content: stretch">
+                        @if (BlazorState.PlayerController.ActiveCharacter != null &&
+                             character.Id == BlazorState.PlayerController.ActiveCharacter.Id)
+                        {
+                            <div style="display: flex;flex-direction: column;width: content-box;justify-content: center">
+                                @foreach (var actionGroup in BlazorState
+                                    .PlayerController
+                                    .AvailableActions
+                                    .GroupBy(x => x.Value.Ability.Id)
+                                    .ToDictionary(x => x.First().Value.Ability,
+                                        x => x.ToArray()))
                                 {
-                                    <RadzenButton Text="@actionKvp.Value.Ability.Name"
-                                                  Title="@($"Targeting: {string.Join(", ", actionKvp.Value.Targets.Select(x => x.Name))}")"
-                                                  Click="() => BlazorState.PlayerController.SubmitActionResponse(actionKvp.Key)"/>
+                                    if (actionGroup.Value.All(x => !x.Value.Available))
+                                    {
+                                        <!-- Action Unavailable -->
+                                        <RadzenButton Text="@actionGroup.Key.Name"
+                                                      Title="@GetAbilityTitle(actionGroup.Key)"
+                                                      Disabled="true">
+                                        </RadzenButton>
+                                    }
+                                    else if (actionGroup.Value.Length == 1)
+                                    {
+                                        <!-- Action Available, No Targeting Needed -->
+                                        <RadzenButton Text="@actionGroup.Key.Name"
+                                                      Title="@(GetAbilityTitle(actionGroup.Key) + "\n" + GetActionTargets(actionGroup.Value[0].Value))"
+                                                      Click="args => OnAbilitySelected(actionGroup.Value[0].Key)">
+                                        </RadzenButton>
+                                    }
+                                    else
+                                    {
+                                        <!-- Action Available, Target Selection Required -->
+                                        <RadzenSplitButton Text="@actionGroup.Key.Name"
+                                                           Title="@GetAbilityTitle(actionGroup.Key)"
+                                                           Click="item => OnAbilitySelected(item != null ? uint.Parse(item.Value) : 0u)">
+                                            @foreach (var actionKvp in actionGroup.Value)
+                                            {
+                                                <RadzenSplitButtonItem Text="@GetActionTargets(actionKvp.Value)"
+                                                                       Value="@actionKvp.Key.ToString()">
+                                                </RadzenSplitButtonItem>
+                                            }
+                                        </RadzenSplitButton>
+                                    }
                                 }
-                                else
-                                {
-                                    <RadzenButton Text="@actionKvp.Value.Ability.Name"
-                                                  Disabled="true"/>
-                                }
-                            }
-                        </div>
-                    }
+                            </div>
+                        }
+                    </div>
                 </div>
             }
         </div>
@@ -83,6 +113,24 @@
     public CombatRunState BlazorState { get; set; }
 
     private uint _unreadLogsCount = 0u;
+
+    private string GetAbilityTitle(IAbility ability)
+    {
+        StringBuilder sb = new StringBuilder(50);
+        if (!string.IsNullOrWhiteSpace(ability.Desc))
+            sb.Append("\"").Append(ability.Desc).AppendLine("\"");
+        sb.Append("Speed: ").AppendLine(ability.Speed.ToString());
+        sb.Append("Target: ").AppendLine(ability.Target.Description);
+        sb.Append("Effect: ").AppendLine(ability.Effect.Description);
+        if (!string.IsNullOrWhiteSpace(ability.Cost.Description()))
+            sb.Append("Cost: ").AppendLine(ability.Cost.Description());
+        return sb.ToString();
+    }
+
+    private string GetActionTargets(IAction action)
+    {
+        return $"Target(s): {string.Join(", ", action.Targets.Select(x => x.Name))}";
+    }
 
     protected override void OnInitialized()
     {
@@ -120,5 +168,10 @@
                 Width = "800px",
                 Height = "600px"
             });
+    }
+
+    private void OnAbilitySelected(uint actionId)
+    {
+        BlazorState.PlayerController.SubmitActionResponse(actionId);
     }
 }

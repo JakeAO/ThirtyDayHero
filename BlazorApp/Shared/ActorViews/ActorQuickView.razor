@@ -57,7 +57,7 @@
             <RadzenAccordionItem Text="Abilities">
                 @foreach (IAbility ability in Actor.Class.GetAllAbilities(Actor.Stats[StatType.LVL]))
                 {
-                    <p title="@ability.Desc">@ability.Name</p>
+                    <p title="@GetAbilityText(ability)">@ability.Name</p>
                 }
             </RadzenAccordionItem>
         </Items>
@@ -69,4 +69,14 @@
     [Parameter]
     public ICharacterActor Actor { get; set; }
 
+    public string GetAbilityText(IAbility ability)
+    {
+        return $"\"{ability.Desc}\"\nSpeed: {ability.Speed}\nTarget: {ability.Target.Description}\nEffect: {ability.Effect.Description}\nCost: {ability.Cost.Description()}";
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        ShouldRender();
+        return base.OnParametersSetAsync();
+    }
 }

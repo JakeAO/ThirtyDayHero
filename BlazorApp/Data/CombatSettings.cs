@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SadPumpkin.Games.ThirtyDayHero.Core;
 using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
-using SadPumpkin.Games.ThirtyDayHero.Core.Definitions;
 using SadPumpkin.Util.CombatEngine.Actor;
-using SadPumpkin.Util.CombatEngine.CharacterClasses;
 using SadPumpkin.Util.CombatEngine.CharacterControllers;
 using SadPumpkin.Util.CombatEngine.StatMap;
 
@@ -23,9 +22,18 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 
         public IReadOnlyCollection<ICharacterActor> Enemies { get; private set; }
         public ICharacterController AI { get; private set; }
-        public uint PartyId { get; private set; }
 
-        public static CombatSettings CreateFromEnemies(IReadOnlyCollection<EnemyDefinition> enemyTypes, CombatDifficulty difficulty, PartyDataWrapper playerParty)
+        public static CombatSettings CreateFromEnemies(IReadOnlyCollection<ICharacterActor> enemies)
+        {
+            // Build Settings
+            return new CombatSettings()
+            {
+                AI = new RandomCharacterController(),
+                Enemies = enemies
+            };
+        }
+
+        public static CombatSettings CreateFromEnemyTypes(IReadOnlyCollection<EnemyDefinition> enemyTypes, CombatDifficulty difficulty, PartyDataWrapper playerParty)
         {
             uint GetStatTotal(IReadOnlyCollection<ICharacterActor> actors)
             {
@@ -61,12 +69,12 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
             List<Character> enemies = new List<Character>(enemyTypes.Count);
             foreach (EnemyDefinition enemyDefinition in enemyTypes)
             {
-                enemies.Add(
-                    ClassUtil.CreateCharacter(
-                        ClassUtil.NextId,
-                        partyId,
-                        enemyDefinition.NameGenerator.GetName(),
-                        enemyDefinition.CharacterClass));
+                var newEnemy = ClassUtil.CreateCharacter(
+                    ClassUtil.NextId,
+                    partyId,
+                    enemyDefinition.NameGenerator.GetName(),
+                    enemyDefinition.CharacterClass);
+                enemies.Add(newEnemy);
             }
 
             // Scale Enemies for Difficulty
@@ -82,13 +90,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
                 totalEnemyStats = GetStatTotal(enemies);
             }
 
-            // Build Settings
-            return new CombatSettings()
-            {
-                PartyId = partyId,
-                AI = new RandomCharacterController(),
-                Enemies = enemies
-            };
+            return CreateFromEnemies(enemies);
         }
 
         public static CombatSettings CreateFromDifficulty(CombatDifficulty difficulty, PartyDataWrapper playerParty)
@@ -113,7 +115,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
                 enemyTypes.Add(HackUtil.GetRandomMonsterClass());
             }
 
-            return CreateFromEnemies(enemyTypes, difficulty, playerParty);
+            return CreateFromEnemyTypes(enemyTypes, difficulty, playerParty);
         }
     }
 }

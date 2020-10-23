@@ -6,13 +6,15 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Decorators
 {
     public class EnemyDefinition : IIdTracked
     {
+        public string ArtName { get; }
         public NameGenerator NameGenerator { get; }
         public ICharacterClass CharacterClass { get; }
 
         public uint Id { get; }
 
-        public EnemyDefinition(NameGenerator nameGenerator, ICharacterClass characterClass)
+        public EnemyDefinition(string artName, NameGenerator nameGenerator, ICharacterClass characterClass)
         {
+            ArtName = artName;
             NameGenerator = nameGenerator;
             CharacterClass = characterClass;
             Id = characterClass.Id;

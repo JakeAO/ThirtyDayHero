@@ -22,7 +22,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Normal,
-                source => source.Stats[StatType.STR]));
+                source => source.Stats[StatType.STR],
+                "1.0 x STR"));
 
         public static readonly IAbility Attack_DEX_Fixed = new Ability(
             IdTracker.Next,
@@ -33,7 +34,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Normal,
-                source => source.Stats[StatType.DEX]));
+                source => source.Stats[StatType.DEX],
+                "1.0 x DEX"));
 
         public static readonly IAbility Attack_MAG_Fixed = new Ability(
             IdTracker.Next,
@@ -44,6 +46,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Normal,
-                source => source.Stats[StatType.MAG]));
+                source => source.Stats[StatType.MAG],
+                "1.0 x MAG"));
     }
 }

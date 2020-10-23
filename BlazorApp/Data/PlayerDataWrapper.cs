@@ -7,8 +7,30 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
     {
         public static string DataPath(string userId) => $"players/{userId}.json";
 
-        public uint ActivePartyId;
-        public List<uint> PastPartyIds;
+        public event EventHandler Updated;
+
+        private uint _activePartyId;
+        private List<uint> _pastPartyIds;
+
+        public uint ActivePartyId
+        {
+            get => _activePartyId;
+            set
+            {
+                _activePartyId = value;
+                Updated?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public List<uint> PastPartyIds
+        {
+            get => _pastPartyIds;
+            set
+            {
+                _pastPartyIds = value;
+                Updated?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         public string GetDataPath(string userId) => DataPath(userId);
 
@@ -21,20 +43,22 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
             uint activePartyId,
             IReadOnlyCollection<uint> pastParties)
         {
-            ActivePartyId = activePartyId;
-            PastPartyIds = pastParties != null
+            _activePartyId = activePartyId;
+            _pastPartyIds = pastParties != null
                 ? new List<uint>(pastParties)
                 : new List<uint>();
         }
 
         public void SetActiveParty(uint partyId)
         {
-            if (ActivePartyId != 0u)
+            if (_activePartyId != 0u)
             {
-                PastPartyIds.Add(ActivePartyId);
+                _pastPartyIds.Add(_activePartyId);
             }
 
-            ActivePartyId = partyId;
+            _activePartyId = partyId;
+
+            Updated?.Invoke(this, EventArgs.Empty);
         }
     }
 }

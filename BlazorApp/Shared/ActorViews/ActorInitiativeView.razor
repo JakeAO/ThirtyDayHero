@@ -1,6 +1,6 @@
 ﻿@using SadPumpkin.Util.CombatEngine.Actor
 
-<div Style="width: 100%;border: 2px solid black;flex-direction: row;display: flex;justify-content: stretch;@(_style)">
+<div Style=@GetStyle()>
     <b>@InitPair.Entity.Name</b>
     <p>(@Math.Round(InitPair.Initiative))</p>
 </div>
@@ -15,8 +15,8 @@
 
     private string _style = string.Empty;
 
-    protected override void OnInitialized()
+    private string GetStyle()
     {
-        _style += IsPlayer ? "background-color: lightgreen" : "background-color: lightcoral";
+        return $"border: 2px solid black;flex-direction: row;{(IsPlayer ? "background-color: lightgreen" : "background-color: lightcoral")}";
     }
 }

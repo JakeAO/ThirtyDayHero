@@ -1,0 +1,45 @@
+﻿@using SadPumpkin.Util.CombatEngine.Actor
+@using SadPumpkin.Util.CombatEngine.StatMap
+@using SadPumpkin.Games.ThirtyDayHero.Core.Decorators
+
+<RadzenCard Style=@(Actor.IsAlive() ? "width: fit-content;min-width: 200px" : "width: fit-content;min-width: 200px;background-color: lightcoral")>
+    <div style="text-align: center;vertical-align: center;background-color: lightgray;width: 100%">
+        <h3>@Actor.Name</h3>
+        <p title="@Definition.CharacterClass.Desc">@Definition.CharacterClass.Name</p>
+    </div>
+    <div style="justify-content: center">
+        <img src=@Definition.ArtName style="max-width: 128px; max-height: 128px"/>
+    </div>
+    <div>
+        <b>Health:</b>
+        <RadzenProgressBar ShowValue="true" 
+                           Visible="true"
+                           Unit=" HP"
+                           Mode="ProgressBarMode.Determinate"
+                           Max="@Actor.Stats[StatType.HP_Max]"
+                           Value="@Actor.Stats[StatType.HP]">
+        </RadzenProgressBar>
+        <b>Stamina:</b>
+        <RadzenProgressBar ShowValue="true" 
+                           Visible="true"
+                           Unit=" STA"
+                           Mode="ProgressBarMode.Determinate"
+                           Max="@Actor.Stats[StatType.STA_Max]"
+                           Value="@Actor.Stats[StatType.STA]">
+        </RadzenProgressBar>
+    </div>
+</RadzenCard>
+
+@code 
+{
+    [Parameter]
+    public ICharacterActor Actor { get; set; }
+    [Parameter]
+    public EnemyDefinition Definition { get; set; }
+
+    protected override Task OnParametersSetAsync()
+    {
+        ShouldRender();
+        return base.OnParametersSetAsync();
+    }
+}

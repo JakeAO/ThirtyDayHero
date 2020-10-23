@@ -19,7 +19,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             NoRequirements.Instance,
             new DestroyThisItemCost("DrinkSmallHealingPotion"),
             SelfTargetCalculator.Instance,
-            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 0.25f)));
+            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 0.25f),
+                "[0.25x Max] HP Restore"));
 
         public static readonly IAbility DrinkMediumHealingPotion = new Ability(
             IdTracker.Next,
@@ -29,7 +30,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             NoRequirements.Instance,
             new DestroyThisItemCost("DrinkMediumHealingPotion"),
             SelfTargetCalculator.Instance,
-            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 0.50f)));
+            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 0.50f),
+                "[0.5x Max] HP Restore"));
 
         public static readonly IAbility DrinkLargeHealingPotion = new Ability(
             IdTracker.Next,
@@ -39,7 +41,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             NoRequirements.Instance,
             new DestroyThisItemCost("DrinkLargeHealingPotion"),
             SelfTargetCalculator.Instance,
-            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 0.75f)));
+            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 0.75f),
+                "[0.75x Max] HP Restore"));
 
         public static readonly IAbility DrinkFullHealingPotion = new Ability(
             IdTracker.Next,
@@ -49,6 +52,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             NoRequirements.Instance,
             new DestroyThisItemCost("DrinkFullHealingPotion"),
             SelfTargetCalculator.Instance,
-            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 1f)));
+            new HealingEffect(source => (uint) (source.Stats[StatType.HP_Max] * 1f),
+                "[Max] HP Restore"));
     }
 }

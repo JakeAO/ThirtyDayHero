@@ -153,11 +153,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
 
         private void OnCalamityEventSelected()
         {
-            _context.Set(
-                CombatSettings.CreateFromEnemies(
-                    new[] {HackUtil.GetDefinition<EnemyDefinition>(Party.CalamityId)},
-                    CombatDifficulty.Normal,
-                    Party));
+            _context.Set(CombatSettings.CreateFromEnemies(new[] {Party.Calamity}));
             _stateMachine.ChangeState<CombatRunState>();
         }
     }

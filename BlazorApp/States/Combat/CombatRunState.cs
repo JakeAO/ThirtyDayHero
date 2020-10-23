@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data;
 using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages.States;
+using SadPumpkin.Games.ThirtyDayHero.Core;
+using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Util.CombatEngine;
 using SadPumpkin.Util.CombatEngine.GameState;
 using SadPumpkin.Util.CombatEngine.Party;
@@ -22,6 +25,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
         public IGameState CurrentGameState { get; private set; }
         public PlayerCharacterController PlayerController { get; private set; }
         public CombatSettings CombatSettings { get; private set; }
+        public IReadOnlyDictionary<uint, EnemyDefinition> EnemyDefinitionsById { get; private set; }
         public IReadOnlyList<IStateChangeEvent> StateChangeRecord => _stateChangeRecord;
 
         private PartyDataWrapper _partyDataWrapper = null;
@@ -38,22 +42,31 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
 
             context.Clear<CombatSettings>();
 
+            EnemyDefinitionsById = CombatSettings.Enemies.ToDictionary(
+                x => x.Id,
+                x => HackUtil.GetDefinition<EnemyDefinition>(x.Class.Id));
+            
             PlayerController = new PlayerCharacterController(_partyDataWrapper);
             PlayerController.CombatCompleteSignal.Listen(OnCombatComplete);
             PlayerController.GameStateUpdatedSignal.Listen(OnGameStateUpdated);
             PlayerController.ActiveCharacterChanged += OnActiveCharacterChanged;
 
-            IParty playerParty = new Party(
+            List<IParty> partiesInCombat = new List<IParty>(2);
+            partiesInCombat.Add(new Party(
                 PlayerController.PartyId,
                 PlayerController,
-                _partyDataWrapper.Characters);
+                _partyDataWrapper.Characters));
 
-            IParty enemyParty = new Party(
-                CombatSettings.PartyId,
-                CombatSettings.AI,
-                CombatSettings.Enemies);
+            foreach (var partyGroup in CombatSettings.Enemies.GroupBy(x => x.Party))
+            {
+                partiesInCombat.Add(new Party(
+                    partyGroup.Key,
+                    CombatSettings.AI,
+                    partyGroup.ToArray()));
+            }
+
             _combatManager = new CombatManager(
-                new[] {playerParty, enemyParty},
+                partiesInCombat,
                 PlayerController.GameStateUpdatedSignal,
                 PlayerController.CombatCompleteSignal);
         }

@@ -4,6 +4,7 @@
 @using SadPumpkin.Util.CombatEngine.CharacterClasses
 @using SadPumpkin.Util.CombatEngine.EquipMap
 @using SadPumpkin.Util.CombatEngine.StatMap
+@using System.Linq
 
 @inject NotificationService NotificationManager;
 @inject IStateMachine StateMachine;
@@ -65,7 +66,7 @@ else
     private bool _isLoggingIn = false;
     private bool _synchingPlayerData = false;
     private bool _synchingPartyData = false;
-
+    
     protected override void OnInitialized()
     {
         Debug.Assert(BlazorState != null);
@@ -150,5 +151,4 @@ else
             StateMachine.ChangeState<LoginState>();
         }
     }
-
 }
