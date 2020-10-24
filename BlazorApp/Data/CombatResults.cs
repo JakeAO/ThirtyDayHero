@@ -12,7 +12,6 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
         public bool Success { get; private set; }
         public uint ExpReward { get; private set; }
         public uint GoldReward { get; private set; }
-        public IReadOnlyCollection<IItem> ItemReward { get; private set; } = new IItem[0];
 
         public static CombatResults CreateSuccess(IReadOnlyCollection<ICharacterActor> enemies, PartyDataWrapper party)
         {
@@ -39,21 +38,11 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 
             float goldReward = 250f * modifier;
 
-            Random random = new Random();
-            List<IItem> itemReward = new List<IItem>(1);
-            while (random.Next(10) < 5)
-            {
-                IItem item = HackUtil.GetRandomItem();
-                if (item != null)
-                    itemReward.Add(item);
-            }
-
             return new CombatResults()
             {
                 Success = true,
                 ExpReward = (uint) Math.Ceiling(expReward),
-                GoldReward = (uint) Math.Ceiling(goldReward),
-                ItemReward = itemReward
+                GoldReward = (uint) Math.Ceiling(goldReward)
             };
         }
 

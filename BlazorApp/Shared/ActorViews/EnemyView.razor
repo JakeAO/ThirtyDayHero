@@ -4,29 +4,33 @@
 
 <RadzenCard Style=@(Actor.IsAlive() ? "width: fit-content;min-width: 200px" : "width: fit-content;min-width: 200px;background-color: lightcoral")>
     <div style="text-align: center;vertical-align: center;background-color: lightgray;width: 100%">
-        <h3>@Actor.Name</h3>
-        <p title="@Definition.CharacterClass.Desc">@Definition.CharacterClass.Name</p>
+        <h3 style="padding-bottom: 0px;border-bottom: 0px;margin-bottom: 0px">@Actor.Name</h3>
+        <p><b>Lvl @Actor.Stats[StatType.LVL] <abbr title="@TooltipGenerator.GetTooltip(Actor.Class)">@Actor.Class.Name</abbr></b></p>
     </div>
     <div style="justify-content: center">
         <img src=@Definition.ArtName style="max-width: 128px; max-height: 128px"/>
     </div>
-    <div>
-        <b>Health:</b>
-        <RadzenProgressBar ShowValue="true" 
-                           Visible="true"
-                           Unit=" HP"
-                           Mode="ProgressBarMode.Determinate"
-                           Max="@Actor.Stats[StatType.HP_Max]"
-                           Value="@Actor.Stats[StatType.HP]">
-        </RadzenProgressBar>
-        <b>Stamina:</b>
-        <RadzenProgressBar ShowValue="true" 
-                           Visible="true"
-                           Unit=" STA"
-                           Mode="ProgressBarMode.Determinate"
-                           Max="@Actor.Stats[StatType.STA_Max]"
-                           Value="@Actor.Stats[StatType.STA]">
-        </RadzenProgressBar>
+    <div class="stat-bar">
+        <div class="health-bar">
+            <b>Health:</b>
+            <RadzenProgressBar ShowValue="true"
+                               Visible="true"
+                               Unit=" HP"
+                               Mode="ProgressBarMode.Determinate"
+                               Max="@Actor.Stats[StatType.HP_Max]"
+                               Value="@Actor.Stats[StatType.HP]">
+            </RadzenProgressBar>
+        </div>
+        <div class="stamina-bar">
+            <b>Stamina:</b>
+            <RadzenProgressBar ShowValue="true"
+                               Visible="true"
+                               Unit=" STA"
+                               Mode="ProgressBarMode.Determinate"
+                               Max="@Actor.Stats[StatType.STA_Max]"
+                               Value="@Actor.Stats[StatType.STA]">
+            </RadzenProgressBar>
+        </div>
     </div>
 </RadzenCard>
 

@@ -182,3 +182,19 @@ app {
         display: block;
     }
 }
+
+.stat-bar .ui-progressbar{
+    -webkit-appearance: none;
+    background: dimgrey;
+}
+.stat-bar .ui-progressbar-label{
+    font-weight: bold;
+}
+.health-bar .ui-progressbar-value{
+    -webkit-appearance: none;
+    background: indianred;
+}
+.stamina-bar .ui-progressbar-value{
+    -webkit-appearance: none;
+    background: mediumpurple;
+}

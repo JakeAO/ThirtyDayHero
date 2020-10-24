@@ -1,4 +1,5 @@
-﻿using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
+﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
+using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
@@ -7,11 +8,17 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
     {
         public static readonly TrackableIdGenerator IdTracker = new TrackableIdGenerator(ConstantIds.WEAPON_STAFF);
 
-        public static readonly IWeapon Quarterstaff = new Weapon(
+        public static readonly IWeapon ArcaneStaffItem = new Weapon(
             IdTracker.Next,
-            "Quarterstaff", "A simple wooden pole.",
+            "Arcane Staff", "A simple wooden staff that converts magical power into force.",
             WeaponType.Staff,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.Attack_MAG_Fixed,
             null);
+
+        public static readonly ItemDefinition ArcaneStaff = new ItemDefinition(
+            "assets/weapon/staff/staff_19.png",
+            150,
+            RarityCategory.Common,
+            ArcaneStaffItem);
     }
 }

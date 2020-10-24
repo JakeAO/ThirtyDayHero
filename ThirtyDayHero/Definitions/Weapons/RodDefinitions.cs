@@ -1,4 +1,5 @@
-﻿using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
+﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
+using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
@@ -7,7 +8,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
     {
         public static readonly TrackableIdGenerator IdTracker = new TrackableIdGenerator(ConstantIds.WEAPON_ROD);
 
-        public static readonly IWeapon FireWand = new Weapon(
+        public static readonly IWeapon FireWandItem = new Weapon(
             IdTracker.Next,
             "Fire Wand", "A wand enchanted with the power of elemental Fire.",
             WeaponType.Rod,
@@ -17,7 +18,13 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
                 SpellDefinitions.Spell_Ember
             });
 
-        public static readonly IWeapon IceWand = new Weapon(
+        public static readonly ItemDefinition FireWand = new ItemDefinition(
+            "assets/weapon/rod/staff_8.png",
+            150,
+            RarityCategory.Common,
+            FireWandItem);
+
+        public static readonly IWeapon IceWandItem = new Weapon(
             IdTracker.Next,
             "Frost Wand", "A wand enchanted with the power of elemental Ice.",
             WeaponType.Rod,
@@ -27,7 +34,13 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
                 SpellDefinitions.Spell_Snowball
             });
 
-        public static readonly IWeapon StoneWand = new Weapon(
+        public static readonly ItemDefinition IceWand = new ItemDefinition(
+            "assets/weapon/rod/staff_8.png",
+            150,
+            RarityCategory.Common,
+            IceWandItem);
+
+        public static readonly IWeapon StoneWandItem = new Weapon(
             IdTracker.Next,
             "Stone Wand", "A wand enchanted with the power of elemental Earth.",
             WeaponType.Rod,
@@ -37,7 +50,13 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
                 SpellDefinitions.Spell_Spike
             });
 
-        public static readonly IWeapon WindWand = new Weapon(
+        public static readonly ItemDefinition StoneWand = new ItemDefinition(
+            "assets/weapon/rod/staff_8.png",
+            150,
+            RarityCategory.Common,
+            StoneWandItem);
+
+        public static readonly IWeapon WindWandItem = new Weapon(
             IdTracker.Next,
             "Wind Wand", "A wand enchanted with the power of elemental Air.",
             WeaponType.Rod,
@@ -46,5 +65,11 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             {
                 SpellDefinitions.Spell_Gale
             });
+
+        public static readonly ItemDefinition WindWand = new ItemDefinition(
+            "assets/weapon/rod/staff_8.png",
+            150,
+            RarityCategory.Common,
+            WindWandItem);
     }
 }

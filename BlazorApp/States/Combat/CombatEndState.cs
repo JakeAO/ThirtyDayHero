@@ -42,7 +42,6 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
                 Random random = new Random();
 
                 Party.Gold += Results.GoldReward;
-                Party.Inventory.AddRange(Results.ItemReward);
                 Party.CalamityDefeated = Party.Day >= 30;
                 
                 fbWrapper.WriteData(Party.GetDataPath(fbWrapper.UserId), Party);

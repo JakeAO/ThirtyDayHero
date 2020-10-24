@@ -35,7 +35,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             });
 
         public static readonly EnemyDefinition DragonGod = new EnemyDefinition(
-            "assets/enemy/dragongod1.png",
+            "assets/enemy/dragongod_1.png",
+            RarityCategory.Special,
             new NameGenerator(new[]
             {
                 "Qondorth, The Firestarter",
@@ -75,7 +76,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             });
 
         public static readonly EnemyDefinition SludgeLord = new EnemyDefinition(
-            "assets/enemy/sludgelord1.png",
+            "assets/enemy/sludgelord_1.png",
+            RarityCategory.Special,
             new NameGenerator(new[]
             {
                 "Globbogool",

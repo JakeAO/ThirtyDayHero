@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Armors;
+using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons;
 using SadPumpkin.Util.CombatEngine;
 using SadPumpkin.Util.CombatEngine.Abilities;
@@ -33,15 +34,19 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             new EquipMapBuilder(
                 new Dictionary<IWeapon, RankPriority>()
                 {
-                    {SwordDefinitions.ShortSword, RankPriority.B},
-                    {SpearDefinitions.Spear, RankPriority.D},
-                    {BowDefinitions.ShortBow, RankPriority.F}
+                    {SwordDefinitions.ShortSwordItem, RankPriority.B},
+                    {SpearDefinitions.SpearItem, RankPriority.D},
+                    {BowDefinitions.ShortBowItem, RankPriority.F}
                 },
                 new Dictionary<IArmor, RankPriority>()
                 {
-                    {LightDefinitions.Leather, RankPriority.B}
+                    {LightDefinitions.TravelersTunicItem, RankPriority.B},
+                    {MediumDefinitions.LeatherArmorItem, RankPriority.F}
                 },
-                new Dictionary<IItem, RankPriority>(),
+                new Dictionary<IItem, RankPriority>()
+                {
+                    {ConsumableDefinitions.SmallHealingPotionItem, RankPriority.A}
+                },
                 new Dictionary<IItem, RankPriority>()));
 
         public static readonly PlayerClass Mage = new PlayerClass(
@@ -60,13 +65,16 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             new EquipMapBuilder(
                 new Dictionary<IWeapon, RankPriority>()
                 {
-                    {RodDefinitions.FireWand, RankPriority.A},
-                    {RodDefinitions.IceWand, RankPriority.A},
-                    {RodDefinitions.StoneWand, RankPriority.A},
-                    {RodDefinitions.WindWand, RankPriority.A}
+                    {RodDefinitions.FireWandItem, RankPriority.A},
+                    {RodDefinitions.IceWandItem, RankPriority.A},
+                    {RodDefinitions.StoneWandItem, RankPriority.A},
+                    {RodDefinitions.WindWandItem, RankPriority.A}
                 },
                 new Dictionary<IArmor, RankPriority>(),
-                new Dictionary<IItem, RankPriority>(),
+                new Dictionary<IItem, RankPriority>()
+                {
+                    {ConsumableDefinitions.SmallHealingPotionItem, RankPriority.A}
+                },
                 new Dictionary<IItem, RankPriority>()));
 
         public static readonly PlayerClass Ranger = new PlayerClass(
@@ -84,14 +92,17 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             new EquipMapBuilder(
                 new Dictionary<IWeapon, RankPriority>()
                 {
-                    {BowDefinitions.ShortBow, RankPriority.A},
-                    {AxeDefinitions.Hatchet, RankPriority.C}
+                    {BowDefinitions.ShortBowItem, RankPriority.A},
+                    {AxeDefinitions.HatchetItem, RankPriority.C}
                 },
                 new Dictionary<IArmor, RankPriority>()
                 {
-                    {LightDefinitions.Leather, RankPriority.B}
+                    {LightDefinitions.TravelersTunicItem, RankPriority.B}
                 },
-                new Dictionary<IItem, RankPriority>(),
+                new Dictionary<IItem, RankPriority>()
+                {
+                    {ConsumableDefinitions.SmallHealingPotionItem, RankPriority.A}
+                },
                 new Dictionary<IItem, RankPriority>()));
     }
 }

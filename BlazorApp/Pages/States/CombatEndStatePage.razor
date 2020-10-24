@@ -17,10 +17,6 @@
                 <h2>Results</h2>
                 <p><b>EXP: </b>@BlazorState.Results.ExpReward</p>
                 <p><img src="assets/gold.png" alt="Gold" style="max-height: 64px"/>: @BlazorState.Results.GoldReward</p>
-                @foreach (IItem gainedItem in BlazorState.Results.ItemReward)
-                {
-                    <p title="@gainedItem.Desc"><b>Item: </b>@gainedItem.Name</p>
-                }
             </div>
         </div>
         <div style="display: flex;flex-direction: row;justify-content: center">

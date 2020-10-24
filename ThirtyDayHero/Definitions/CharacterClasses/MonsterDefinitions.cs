@@ -31,10 +31,11 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             });
 
         public static readonly EnemyDefinition Ooze = new EnemyDefinition(
-            "assets/enemy/ooze1.png",
+            "assets/enemy/ooze_1.png",
+            RarityCategory.Common,
             NameGenerator.Monster,
             OozeClass);
-        
+
         public static readonly ICharacterClass BlobClass = new CharacterClass(
             IdTracker.Next,
             "Blob",
@@ -53,7 +54,8 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             });
 
         public static readonly EnemyDefinition Blob = new EnemyDefinition(
-            "assets/enemy/blob1.png",
+            "assets/enemy/blob_1.png",
+            RarityCategory.Common,
             NameGenerator.Monster,
             BlobClass);
     }

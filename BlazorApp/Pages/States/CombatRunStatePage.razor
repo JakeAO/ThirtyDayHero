@@ -5,7 +5,6 @@
 @using SadPumpkin.Util.CombatEngine.Abilities
 @using SadPumpkin.Util.CombatEngine.Action
 @using SadPumpkin.Util.CombatEngine.StateChangeEvents
-@using System.Text
 
 @inject DialogService DialogService
 @inject NotificationService NotificationService
@@ -52,7 +51,7 @@
                                     {
                                         <!-- Action Unavailable -->
                                         <RadzenButton Text="@actionGroup.Key.Name"
-                                                      Title="@GetAbilityTitle(actionGroup.Key)"
+                                                      Title="@TooltipGenerator.GetTooltip(actionGroup.Key)"
                                                       Disabled="true">
                                         </RadzenButton>
                                     }
@@ -60,7 +59,7 @@
                                     {
                                         <!-- Action Available, No Targeting Needed -->
                                         <RadzenButton Text="@actionGroup.Key.Name"
-                                                      Title="@(GetAbilityTitle(actionGroup.Key) + "\n" + GetActionTargets(actionGroup.Value[0].Value))"
+                                                      Title="@(TooltipGenerator.GetTooltip(actionGroup.Key) + "\n" + GetActionTargets(actionGroup.Value[0].Value))"
                                                       Click="args => OnAbilitySelected(actionGroup.Value[0].Key)">
                                         </RadzenButton>
                                     }
@@ -68,7 +67,8 @@
                                     {
                                         <!-- Action Available, Target Selection Required -->
                                         <RadzenSplitButton Text="@actionGroup.Key.Name"
-                                                           Title="@GetAbilityTitle(actionGroup.Key)"
+                                                           Icon="location_searching"
+                                                           Title="@TooltipGenerator.GetTooltip(actionGroup.Key)"
                                                            Click="item => OnAbilitySelected(item != null ? uint.Parse(item.Value) : 0u)">
                                             @foreach (var actionKvp in actionGroup.Value)
                                             {
@@ -113,19 +113,6 @@
     public CombatRunState BlazorState { get; set; }
 
     private uint _unreadLogsCount = 0u;
-
-    private string GetAbilityTitle(IAbility ability)
-    {
-        StringBuilder sb = new StringBuilder(50);
-        if (!string.IsNullOrWhiteSpace(ability.Desc))
-            sb.Append("\"").Append(ability.Desc).AppendLine("\"");
-        sb.Append("Speed: ").AppendLine(ability.Speed.ToString());
-        sb.Append("Target: ").AppendLine(ability.Target.Description);
-        sb.Append("Effect: ").AppendLine(ability.Effect.Description);
-        if (!string.IsNullOrWhiteSpace(ability.Cost.Description()))
-            sb.Append("Cost: ").AppendLine(ability.Cost.Description());
-        return sb.ToString();
-    }
 
     private string GetActionTargets(IAction action)
     {

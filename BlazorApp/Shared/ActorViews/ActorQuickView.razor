@@ -3,15 +3,35 @@
 @using SadPumpkin.Util.CombatEngine.Item
 @using SadPumpkin.Util.CombatEngine.StatMap
 @using SadPumpkin.Util.CombatEngine.Abilities
+@using SadPumpkin.Games.ThirtyDayHero.Core.Decorators
+@using System.Text
 
 <RadzenCard Style=@(Actor.IsAlive() ? "width: fit-content;min-width: 200px" : "width: fit-content;min-width: 200px;background-color: lightcoral")>
     <div style="text-align: center;vertical-align: center;background-color: lightgray;width: 100%">
         <h3>@Actor.Name</h3>
     </div>
-    <div>
-        <p><b>Lvl @Actor.Stats[StatType.LVL] <abbr title="@Actor.Class.Desc">@Actor.Class.Name</abbr></b></p>
-        <p><b>Health:</b>&nbsp;&nbsp; @Actor.Stats[StatType.HP]/@Actor.Stats[StatType.HP_Max]</p>
-        <p><b>Stamina:</b>&nbsp;&nbsp; @Actor.Stats[StatType.STA]/@Actor.Stats[StatType.STA_Max]</p>
+    <div class="stat-bar">
+        <p><b>Lvl @Actor.Stats[StatType.LVL] <abbr title="@TooltipGenerator.GetTooltip(Actor.Class)">@Actor.Class.Name</abbr></b></p>
+        <div class="health-bar">
+            <b>Health:</b>
+            <RadzenProgressBar ShowValue="true"
+                               Visible="true"
+                               Unit=" HP"
+                               Mode="ProgressBarMode.Determinate"
+                               Max="@Actor.Stats[StatType.HP_Max]"
+                               Value="@Actor.Stats[StatType.HP]">
+            </RadzenProgressBar>
+        </div>
+        <div class="stamina-bar">
+            <b>Stamina:</b>
+            <RadzenProgressBar ShowValue="true"
+                               Visible="true"
+                               Unit=" STA"
+                               Mode="ProgressBarMode.Determinate"
+                               Max="@Actor.Stats[StatType.STA_Max]"
+                               Value="@Actor.Stats[StatType.STA]">
+            </RadzenProgressBar>
+        </div>
     </div>
     <RadzenAccordion Multiple="true">
         <Items>
@@ -40,9 +60,13 @@
                             <tr>
                                 <th style="text-align: right">@equipSlot.ToString(): </th>
                                 <td style="text-align: left">
-                                    @if (playerCharacter.Equipment[equipSlot] is IItem equippedItem)
+                                    @if (playerCharacter.Equipment[equipSlot] is IItem equippedItem &&
+                                         GetDefinition(equippedItem.Id) is ItemDefinition itemDefinition)
                                     {
-                                        <span title="@equippedItem.Desc">@equippedItem.Name</span>
+                                        <span title="@TooltipGenerator.GetTooltip(itemDefinition)">@equippedItem.Name</span>
+                                        <img src="@itemDefinition.ArtName"
+                                             alt="[-]"
+                                             style="max-height: 32px;max-width: 32px"/>
                                     }
                                     else
                                     {
@@ -57,7 +81,7 @@
             <RadzenAccordionItem Text="Abilities">
                 @foreach (IAbility ability in Actor.Class.GetAllAbilities(Actor.Stats[StatType.LVL]))
                 {
-                    <p title="@GetAbilityText(ability)">@ability.Name</p>
+                    <p title="@TooltipGenerator.GetTooltip(ability)">@ability.Name</p>
                 }
             </RadzenAccordionItem>
         </Items>
@@ -68,10 +92,14 @@
 {
     [Parameter]
     public ICharacterActor Actor { get; set; }
-
-    public string GetAbilityText(IAbility ability)
+    
+    private readonly Dictionary<uint, ItemDefinition> _itemDefinitions = new Dictionary<uint, ItemDefinition>();
+    
+    public ItemDefinition GetDefinition(uint itemId)
     {
-        return $"\"{ability.Desc}\"\nSpeed: {ability.Speed}\nTarget: {ability.Target.Description}\nEffect: {ability.Effect.Description}\nCost: {ability.Cost.Description()}";
+        if (!_itemDefinitions.TryGetValue(itemId, out var itemDefinition))
+            _itemDefinitions[itemId] = itemDefinition = HackUtil.GetDefinition<ItemDefinition>(itemId);
+        return itemDefinition;
     }
 
     protected override Task OnParametersSetAsync()
