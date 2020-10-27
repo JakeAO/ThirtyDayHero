@@ -19,7 +19,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Armors
             },
             null);
 
-        public static readonly ItemDefinition LeatherArmor = new ItemDefinition(
+        public static readonly ItemDefinition<IArmor> LeatherArmor = new ItemDefinition<IArmor>(
             "assets/armor/medium/chest_22.png",
             300,
             RarityCategory.Common,

@@ -33,14 +33,16 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
 
         private readonly List<IStateChangeEvent> _stateChangeRecord = new List<IStateChangeEvent>(100);
 
+        public CombatRunState(CombatSettings combatSettings)
+        {
+            CombatSettings = combatSettings;
+        }
+        
         public override void PerformSetup(Context context, IState previousState)
         {
             base.PerformSetup(context, previousState);
 
             _partyDataWrapper = context.Get<PartyDataWrapper>();
-            CombatSettings = context.Get<CombatSettings>();
-
-            context.Clear<CombatSettings>();
 
             EnemyDefinitionsById = CombatSettings.Enemies.ToDictionary(
                 x => x.Id,
@@ -80,16 +82,18 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
         {
             NeedsToRender?.Invoke();
 
+            CombatResults results = null;
             if (_partyDataWrapper.PartyId == winningPartyId)
             {
-                _context.Set(CombatResults.CreateSuccess(CombatSettings.Enemies, _partyDataWrapper));
+                results = CombatResults.CreateSuccess(CombatSettings.Enemies, _partyDataWrapper);
             }
             else
             {
-                _context.Set(CombatResults.CreateFailure());
+                results = CombatResults.CreateFailure();
             }
 
-            _context.Get<IStateMachine>().ChangeState<CombatEndState>();
+            IState combatEndState = new CombatEndState(results);
+            _context.Get<IStateMachine>().ChangeState(combatEndState);
         }
 
         private void OnGameStateUpdated(IGameState newGameState, IReadOnlyList<IStateChangeEvent> changeEvents)

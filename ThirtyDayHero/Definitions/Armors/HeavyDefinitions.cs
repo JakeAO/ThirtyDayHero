@@ -19,7 +19,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Armors
             },
             null);
 
-        public static readonly ItemDefinition ChainJacket = new ItemDefinition(
+        public static readonly ItemDefinition<IArmor> ChainJacket = new ItemDefinition<IArmor>(
             "assets/armor/heavy/chest_64.png",
             400,
             RarityCategory.Common,

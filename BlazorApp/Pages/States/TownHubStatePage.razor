@@ -1,7 +1,5 @@
-﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared
-@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Town
 @using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.DialogViews
-@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
 @using SadPumpkin.Util.CombatEngine.Actor
 
 @inject DialogService DialogService
@@ -9,12 +7,11 @@
 <div class="main-window">
     <div class="main-column">
         <div class="prompt-section">
-            <h3 class="prompt-title">Overworld</h3>
+            <h3 class="prompt-title">Town Square</h3>
             <div class="prompt-content">
-                <p>It is @BlazorState.Party.Time, @(30-BlazorState.Party.Day) days remain.</p>
-                <p>The <b>Calamity</b> is fast approaching.</p>
+                <p>@BlazorState.PromptMessageText</p>
             </div>
-            <h4 class="prompt-footer">What will you do to prepare?</h4>
+            <p class="prompt-footer">How do you spend your time?</p>
         </div>
         <div class="character-section">
             @foreach (PlayerCharacter playerCharacter in BlazorState.Party.Characters)
@@ -24,7 +21,6 @@
                 </div>
             }
         </div>
-        <hr/>
         <div class="response-section">
             @foreach (IEventOption eventOption in BlazorState.EventOptions.OrderBy(x => x.Priority))
             {
@@ -69,10 +65,9 @@
     </div>
 </div>
 
-@code 
-{
+@code {
     [Parameter]
-    public GameplayState BlazorState { get; set; }
+    public TownHubState BlazorState { get; set; }
 
     private void OnInventoryPressed(MouseEventArgs args)
     {

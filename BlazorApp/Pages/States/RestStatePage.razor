@@ -1,0 +1,48 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
+@using SadPumpkin.Util.CombatEngine.Actor
+
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
+            <h3 class="prompt-title">Camp</h3>
+            <div class="prompt-content">
+                <p>The party settles down to camp for the @BlazorState.Party.Time</p>
+                @switch (BlazorState.RestInfo)
+                {
+                    case RestState.RestQuality.Bad:
+                        <p>The party is wracked with nightmares of the Calamity.</p>
+                        break;
+                    case RestState.RestQuality.Good:
+                        <p>The party sleeps well, at least for sleeping on the ground.</p>
+                        break;
+                    case RestState.RestQuality.Great:
+                        <p>The party gets a great rest.</p>
+                        break;
+                }
+            </div>
+            <p class="prompt-footer">
+                HP + @BlazorState.HpRestored, STA + @BlazorState.StaRestored
+            </p>
+        </div>
+        <div class="character-section">
+            @foreach (PlayerCharacter playerCharacter in BlazorState.Party.Characters)
+            {
+                <div style="float: left">
+                    <ActorQuickView Actor="@playerCharacter"/>
+                </div>
+            }
+        </div>
+        <div class="response-section">
+            <RadzenButton Text="Continue"
+                          Click="BlazorState.Continue"/>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public RestState BlazorState { get; set; }
+
+}

@@ -9,6 +9,7 @@ using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Armors;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons;
+using SadPumpkin.Games.ThirtyDayHero.Core.Utilities;
 using SadPumpkin.Util.CombatEngine;
 using SadPumpkin.Util.CombatEngine.CharacterClasses;
 using SadPumpkin.Util.CombatEngine.Item;
@@ -22,7 +23,6 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core
         private static readonly Random RANDOM = new Random();
         
         private static IReadOnlyCollection<JsonConverter> _allJsonConverters;
-
         public static IReadOnlyCollection<JsonConverter> GetAllJsonConverters()
         {
             if (_allJsonConverters == null)
@@ -44,7 +44,6 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core
         }
 
         private static IReadOnlyCollection<IIdTracked> _allDefinitions;
-        
         private static IReadOnlyCollection<IIdTracked> GetAllDefinitions()
         {
             if (_allDefinitions == null)
@@ -79,104 +78,265 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core
 
             return default;
         }
-        
-        public static IPlayerClass GetRandomPlayerClass()
+
+        private static IReadOnlyDictionary<PlayerClassDefinition, double> _allPlayerClasses;
+        public static PlayerClassDefinition GetRandomPlayerClass()
         {
-            uint randId = (uint) RANDOM.Next((int) CharacterDefinitions.IdTracker.Min, (int) CharacterDefinitions.IdTracker.Current);
-            return GetDefinition<IPlayerClass>(randId);
+            if (_allPlayerClasses == null)
+            {
+                int classCount = (int) (CharacterDefinitions.IdTracker.Current - CharacterDefinitions.IdTracker.Min);
+                Dictionary<PlayerClassDefinition, double> allPlayerClasses = new Dictionary<PlayerClassDefinition, double>(classCount);
+                for (uint i = CharacterDefinitions.IdTracker.Min; i < CharacterDefinitions.IdTracker.Current; i++)
+                {
+                    PlayerClassDefinition playerClass = GetDefinition<PlayerClassDefinition>(i);
+                    if (playerClass != null)
+                    {
+                        allPlayerClasses[playerClass] = (double) playerClass.Rarity;
+                    }
+                }
+
+                _allPlayerClasses = allPlayerClasses;
+            }
+
+            return RandomResultGenerator.Get(_allPlayerClasses);
         }
 
+        private static IReadOnlyDictionary<EnemyDefinition, double> _allCalamityClasses;
         public static EnemyDefinition GetRandomCalamityClass()
         {
-            uint randId = (uint) RANDOM.Next((int) CalamityDefinitions.IdTracker.Min, (int) CalamityDefinitions.IdTracker.Current);
-            return GetDefinition<EnemyDefinition>(randId);
+            if (_allCalamityClasses == null)
+            {
+                int classCount = (int) (CalamityDefinitions.IdTracker.Current - CalamityDefinitions.IdTracker.Min);
+                Dictionary<EnemyDefinition, double> allCalamityClasses = new Dictionary<EnemyDefinition, double>(classCount);
+                for (uint i = CalamityDefinitions.IdTracker.Min; i < CalamityDefinitions.IdTracker.Current; i++)
+                {
+                    EnemyDefinition calamityClass = GetDefinition<EnemyDefinition>(i);
+                    if (calamityClass != null)
+                    {
+                        allCalamityClasses[calamityClass] = (double) calamityClass.Rarity;
+                    }
+                }
+
+                _allCalamityClasses = allCalamityClasses;
+            }
+
+            return RandomResultGenerator.Get(_allCalamityClasses);
         }
 
+        private static IReadOnlyDictionary<EnemyDefinition, double> _allEnemyClasses;
         public static EnemyDefinition GetRandomMonsterClass()
         {
-            uint randId = (uint) RANDOM.Next((int) MonsterDefinitions.IdTracker.Min, (int) MonsterDefinitions.IdTracker.Current);
-            return GetDefinition<EnemyDefinition>(randId);
-        }
-
-        public static IWeapon GetRandomWeapon()
-        {
-            uint randId = 0u;
-            WeaponType[] types = Enum.GetValues(typeof(WeaponType)).Cast<WeaponType>().Except(new[] {WeaponType.Invalid}).ToArray();
-            WeaponType randType = types[RANDOM.Next(0, types.Length)];
-            switch (randType)
+            if (_allEnemyClasses == null)
             {
-                case WeaponType.Sword:
-                    randId = (uint) RANDOM.Next((int) SwordDefinitions.IdTracker.Min, (int) SwordDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.GreatSword:
-                    randId = (uint) RANDOM.Next((int) GreatSwordDefinitions.IdTracker.Min, (int) GreatSwordDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.Axe:
-                    randId = (uint) RANDOM.Next((int) AxeDefinitions.IdTracker.Min, (int) AxeDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.GreatAxe:
-                    randId = (uint) RANDOM.Next((int) GreatAxeDefinitions.IdTracker.Min, (int) GreatAxeDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.Spear:
-                    randId = (uint) RANDOM.Next((int) SpearDefinitions.IdTracker.Min, (int) SpearDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.Staff:
-                    randId = (uint) RANDOM.Next((int) StaffDefinitions.IdTracker.Min, (int) StaffDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.Rod:
-                    randId = (uint) RANDOM.Next((int) RodDefinitions.IdTracker.Min, (int) RodDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.Bow:
-                    randId = (uint) RANDOM.Next((int) BowDefinitions.IdTracker.Min, (int) BowDefinitions.IdTracker.Current);
-                    break;
-                case WeaponType.Fist:
-                    randId = (uint) RANDOM.Next((int) FistDefinitions.IdTracker.Min, (int) FistDefinitions.IdTracker.Current);
-                    break;
+                int classCount = (int) (MonsterDefinitions.IdTracker.Current - MonsterDefinitions.IdTracker.Min);
+                Dictionary<EnemyDefinition, double> allEnemyClasses = new Dictionary<EnemyDefinition, double>(classCount);
+                for (uint i = MonsterDefinitions.IdTracker.Min; i < MonsterDefinitions.IdTracker.Current; i++)
+                {
+                    EnemyDefinition enemyClass = GetDefinition<EnemyDefinition>(i);
+                    if (enemyClass != null)
+                    {
+                        allEnemyClasses[enemyClass] = (double) enemyClass.Rarity;
+                    }
+                }
+
+                _allEnemyClasses = allEnemyClasses;
             }
 
-            return GetDefinition<IWeapon>(randId);
+            return RandomResultGenerator.Get(_allEnemyClasses);
         }
 
-        public static IArmor GetRandomArmor()
+        private static IReadOnlyDictionary<EnemyGroup, double> _allEnemyGroups;
+        
+        public static EnemyGroup GetRandomEnemyGroup()
         {
-            uint randId = 0u;
-            ArmorType[] types = Enum.GetValues(typeof(ArmorType)).Cast<ArmorType>().Except(new[] {ArmorType.Invalid}).ToArray();
-            ArmorType randType = types[RANDOM.Next(0, types.Length)];
-            switch (randType)
+            if (_allEnemyGroups == null)
             {
-                case ArmorType.Light:
-                    randId = (uint) RANDOM.Next((int) LightDefinitions.IdTracker.Min, (int) LightDefinitions.IdTracker.Current);
-                    break;
-                case ArmorType.Medium:
-                    randId = (uint) RANDOM.Next((int) MediumDefinitions.IdTracker.Min, (int) MediumDefinitions.IdTracker.Current);
-                    break;
-                case ArmorType.Heavy:
-                    randId = (uint) RANDOM.Next((int) HeavyDefinitions.IdTracker.Min, (int) HeavyDefinitions.IdTracker.Current);
-                    break;
+                int classCount = (int) (EnemyGroupDefinitions.IdTracker.Current - EnemyGroupDefinitions.IdTracker.Min);
+                Dictionary<EnemyGroup, double> allEnemyGroups = new Dictionary<EnemyGroup, double>(classCount);
+                for (uint i = EnemyGroupDefinitions.IdTracker.Min; i < EnemyGroupDefinitions.IdTracker.Current; i++)
+                {
+                    EnemyGroup enemyGroup = GetDefinition<EnemyGroup>(i);
+                    if (enemyGroup != null)
+                    {
+                        allEnemyGroups[enemyGroup] = (double) enemyGroup.Rarity;
+                    }
+                }
+
+                _allEnemyGroups = allEnemyGroups;
             }
 
-            return GetDefinition<IArmor>(randId);
+            return RandomResultGenerator.Get(_allEnemyGroups);
         }
 
-        public static IItem GetRandomItem()
+        private static IReadOnlyDictionary<ItemDefinition<IWeapon>, double> _allWeaponDefinitions;
+        public static ItemDefinition<IWeapon> GetRandomWeapon()
         {
-            uint randId = 0u;
-            ItemType[] types = Enum.GetValues(typeof(ItemType)).Cast<ItemType>().Except(new[] {ItemType.Invalid, ItemType.Weapon, ItemType.Armor}).ToArray();
-            ItemType type = types[RANDOM.Next(0, types.Length)];
-            switch (type)
+            bool GetMinMaxIds(WeaponType weaponType, out uint min, out uint current)
             {
-                case ItemType.Trinket:
-                    randId = (uint) RANDOM.Next((int) TrinketDefinitions.IdTracker.Min, (int) TrinketDefinitions.IdTracker.Current);
-                    break;
-                case ItemType.Loot:
-                    randId = (uint) RANDOM.Next((int) LootDefinitions.IdTracker.Min, (int) LootDefinitions.IdTracker.Current);
-                    break;
-                case ItemType.Consumable:
-                    randId = (uint) RANDOM.Next((int) ConsumableDefinitions.IdTracker.Min, (int) ConsumableDefinitions.IdTracker.Current);
-                    break;
+                min = current = 0u;
+                switch (weaponType)
+                {
+                    case WeaponType.Sword:
+                        min = SwordDefinitions.IdTracker.Min;
+                        current = SwordDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.GreatSword:
+                        min = GreatSwordDefinitions.IdTracker.Min;
+                        current = GreatSwordDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.Axe:
+                        min = AxeDefinitions.IdTracker.Min;
+                        current = AxeDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.GreatAxe:
+                        min = GreatAxeDefinitions.IdTracker.Min;
+                        current = GreatAxeDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.Spear:
+                        min = SpearDefinitions.IdTracker.Min;
+                        current = SpearDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.Staff:
+                        min = StaffDefinitions.IdTracker.Min;
+                        current = StaffDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.Rod:
+                        min = RodDefinitions.IdTracker.Min;
+                        current = RodDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.Bow:
+                        min = BowDefinitions.IdTracker.Min;
+                        current = BowDefinitions.IdTracker.Max;
+                        break;
+                    case WeaponType.Fist:
+                        min = FistDefinitions.IdTracker.Min;
+                        current = FistDefinitions.IdTracker.Max;
+                        break;
+                }
+
+                return min != 0u && current != 0u;
             }
 
-            return GetDefinition<IItem>(randId);
+            if (_allWeaponDefinitions == null)
+            {
+                Dictionary<ItemDefinition<IWeapon>, double> allWeaponDefinitions = new Dictionary<ItemDefinition<IWeapon>, double>(50);
+                foreach (WeaponType weaponType in Enum.GetValues(typeof(WeaponType)))
+                {
+                    if (GetMinMaxIds(weaponType, out uint min, out uint current))
+                    {
+                        for (uint i = min; i < current; i++)
+                        {
+                            ItemDefinition<IWeapon> itemDefinition = GetDefinition<ItemDefinition<IWeapon>>(i);
+                            if (itemDefinition != null)
+                            {
+                                allWeaponDefinitions[itemDefinition] = (double) itemDefinition.Rarity;
+                            }
+                        }
+                    }
+                }
+
+                _allWeaponDefinitions = allWeaponDefinitions;
+            }
+
+            return RandomResultGenerator.Get(_allWeaponDefinitions);
+        }
+
+        private static IReadOnlyDictionary<ItemDefinition<IArmor>, double> _allArmorDefinitions;
+        public static ItemDefinition<IArmor> GetRandomArmor()
+        {
+            bool GetMinMaxIds(ArmorType armorType, out uint min, out uint current)
+            {
+                min = current = 0u;
+                switch (armorType)
+                {
+                    case ArmorType.Light:
+                        min = LightDefinitions.IdTracker.Min;
+                        current = LightDefinitions.IdTracker.Current;
+                        break;
+                    case ArmorType.Medium:
+                        min = MediumDefinitions.IdTracker.Min;
+                        current = MediumDefinitions.IdTracker.Current;
+                        break;
+                    case ArmorType.Heavy:
+                        min = HeavyDefinitions.IdTracker.Min;
+                        current = HeavyDefinitions.IdTracker.Current;
+                        break;
+                }
+
+                return min != 0u && current != 0u;
+            }
+
+            if (_allArmorDefinitions == null)
+            {
+                Dictionary<ItemDefinition<IArmor>, double> allArmorDefinitions = new Dictionary<ItemDefinition<IArmor>, double>(50);
+                foreach (ArmorType armorType in Enum.GetValues(typeof(ArmorType)))
+                {
+                    if (GetMinMaxIds(armorType, out uint min, out uint current))
+                    {
+                        for (uint i = min; i < current; i++)
+                        {
+                            ItemDefinition<IArmor> itemDefinition = GetDefinition<ItemDefinition<IArmor>>(i);
+                            if (itemDefinition != null)
+                            {
+                                allArmorDefinitions[itemDefinition] = (double) itemDefinition.Rarity;
+                            }
+                        }
+                    }
+                }
+
+                _allArmorDefinitions = allArmorDefinitions;
+            }
+
+            return RandomResultGenerator.Get(_allArmorDefinitions);
+        }
+
+        private static IReadOnlyDictionary<ItemDefinition<IItem>, double> _allItemDefinitions;
+        public static ItemDefinition<IItem> GetRandomItem()
+        {
+            bool GetMinMaxIds(ItemType itemType, out uint min, out uint current)
+            {
+                min = current = 0u;
+                switch (itemType)
+                {
+                    case ItemType.Trinket:
+                        min = TrinketDefinitions.IdTracker.Min;
+                        current = TrinketDefinitions.IdTracker.Current;
+                        break;
+                    case ItemType.Loot:
+                        min = LootDefinitions.IdTracker.Min;
+                        current = LootDefinitions.IdTracker.Current;
+                        break;
+                    case ItemType.Consumable:
+                        min = ConsumableDefinitions.IdTracker.Min;
+                        current = ConsumableDefinitions.IdTracker.Current;
+                        break;
+                }
+
+                return min != 0u && current != 0u;
+            }
+
+            if (_allItemDefinitions == null)
+            {
+                Dictionary<ItemDefinition<IItem>, double> allItemDefinitions = new Dictionary<ItemDefinition<IItem>, double>(50);
+                foreach (ItemType itemType in Enum.GetValues(typeof(ItemType)))
+                {
+                    if (GetMinMaxIds(itemType, out uint min, out uint current))
+                    {
+                        for (uint i = min; i < current; i++)
+                        {
+                            ItemDefinition<IItem> itemDefinition = GetDefinition<ItemDefinition<IItem>>(i);
+                            if (itemDefinition != null)
+                            {
+                                allItemDefinitions[itemDefinition] = (double) itemDefinition.Rarity;
+                            }
+                        }
+                    }
+                }
+
+                _allItemDefinitions = allItemDefinitions;
+            }
+
+            return RandomResultGenerator.Get(_allItemDefinitions);
         }
 
         public class ItemJsonConverter : JsonConverter<IItem>

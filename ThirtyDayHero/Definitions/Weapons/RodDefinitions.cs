@@ -18,7 +18,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
                 SpellDefinitions.Spell_Ember
             });
 
-        public static readonly ItemDefinition FireWand = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> FireWand = new ItemDefinition<IWeapon>(
             "assets/weapon/rod/staff_8.png",
             150,
             RarityCategory.Common,
@@ -34,7 +34,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
                 SpellDefinitions.Spell_Snowball
             });
 
-        public static readonly ItemDefinition IceWand = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> IceWand = new ItemDefinition<IWeapon>(
             "assets/weapon/rod/staff_8.png",
             150,
             RarityCategory.Common,
@@ -50,7 +50,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
                 SpellDefinitions.Spell_Spike
             });
 
-        public static readonly ItemDefinition StoneWand = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> StoneWand = new ItemDefinition<IWeapon>(
             "assets/weapon/rod/staff_8.png",
             150,
             RarityCategory.Common,
@@ -66,7 +66,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
                 SpellDefinitions.Spell_Gale
             });
 
-        public static readonly ItemDefinition WindWand = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> WindWand = new ItemDefinition<IWeapon>(
             "assets/weapon/rod/staff_8.png",
             150,
             RarityCategory.Common,

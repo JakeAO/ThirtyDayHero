@@ -34,7 +34,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
             FallenCharacters = party.Characters.FindAll(x => !x.IsAlive());
         }
 
-        public void OnContinue()
+        public void Continue()
         {
             IStateMachine stateMachine = _context.Get<IStateMachine>();
             stateMachine.ChangeState<CreatePartyState>();

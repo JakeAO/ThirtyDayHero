@@ -1,0 +1,58 @@
+﻿@using Radzen;
+@using Radzen.Blazor;
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
+            <h3 class="prompt-title">Encounter</h3>
+            <div class="prompt-content" style="text-wrap: normal;max-width: 300px">
+                @if (BlazorState.SneakResult == null)
+                {
+                    <p>@BlazorState.EncounterText</p>
+                    <em>@BlazorState.DifficultyText</em>
+                }
+                else if (BlazorState.SneakResult.Value)
+                {
+                    <h3>Success</h3>
+                    <p>You manage to evade the enemies without them noticing you.</p>
+                }
+                else
+                {
+                    <h3>Failure</h3>
+                    <p>The enemies spotted you, prepare for combat.</p>
+                }
+            </div>
+        </div>
+        <div class="response-section">
+            @if (BlazorState.SneakResult.HasValue == false ||
+                 BlazorState.SneakResult.Value == false)
+            {
+                <RadzenButton Text="Prepare for Battle"
+                              Click="BlazorState.EnterCombat"
+                              ButtonStyle="ButtonStyle.Primary"/>
+            }
+            else
+            {
+                <RadzenButton Text="Continue"
+                              Click="BlazorState.Continue"
+                              ButtonStyle="ButtonStyle.Primary"/>
+            }
+            
+            @if (BlazorState.SneakResult.HasValue == false)
+            {
+                <RadzenButton Text="@($"Sneak Away ({BlazorState.SneakChanceText})")"
+                              Title="@BlazorState.SneakChanceTooltip"
+                              Click="BlazorState.SneakAway"
+                              ButtonStyle="ButtonStyle.Secondary"/>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public PatrolState BlazorState { get; set; }
+
+}

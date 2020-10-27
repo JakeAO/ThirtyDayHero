@@ -10,14 +10,9 @@
 @inject NotificationService NotificationService
 @inject ContextMenuService ContextMenuService
 
-<div style="display: flex;justify-content: space-between">
-    <div style="flex: max-content">
-        <RadzenButton
-            Text="@(_unreadLogsCount > 0 ? $"Logs ({_unreadLogsCount})" : "Logs")"
-            Click="@OnLogPressed"/>
-    </div>
-    <div style="flex: available;display: flex;flex-direction: column;justify-content: stretch;">
-        <div style="text-align: center;min-width: 400px;min-height: 300px;border: 2px solid black;justify-content: center">
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
             <h3 style="width: 100%;background-color: dimgrey;text-align: center">Battle</h3>
             <div style="display: flex;flex-direction: row;justify-content: center">
                 @foreach (ICharacterActor character in BlazorState.CombatSettings.Enemies)
@@ -29,17 +24,17 @@
                 }
             </div>
         </div>
-        <div style="display: flex;flex-direction: row;justify-content: center">
+        <div class="character-section">
             @foreach (IPlayerCharacterActor character in BlazorState.PlayerController.Characters)
             {
-                <div style="@(character.Id == BlazorState.CurrentGameState?.ActiveActor?.Id ? "border: 3px solid green" : "")">
-                    <ActorQuickView Actor="@character"/>
+                <div style="float: left">
+                    <div style="@(character.Id == BlazorState.CurrentGameState?.ActiveActor?.Id ? "border: 3px solid green;" : "")">
+                        <ActorQuickView Actor="@character"/>
 
-                    <div style="display: flex;flex-direction: row;justify-content: stretch">
                         @if (BlazorState.PlayerController.ActiveCharacter != null &&
                              character.Id == BlazorState.PlayerController.ActiveCharacter.Id)
                         {
-                            <div style="display: flex;flex-direction: column;width: content-box;justify-content: center">
+                            <div class="response-section">
                                 @foreach (var actionGroup in BlazorState
                                     .PlayerController
                                     .AvailableActions
@@ -86,7 +81,11 @@
             }
         </div>
     </div>
-    <div style="display: flex;flex: max-content;flex-direction: column;justify-content: right">
+    <div class="side-column">
+        <RadzenButton
+            Text="@(_unreadLogsCount > 0 ? $"Logs ({_unreadLogsCount})" : "Logs")"
+            Click="@OnLogPressed"/>
+        <h3>Turn Order</h3>
         @if (BlazorState.CurrentGameState != null)
         {
             <div style="width: 200px">

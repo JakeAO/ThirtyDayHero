@@ -15,7 +15,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             AttackDefinitions.Attack_DEX_Fixed,
             null);
 
-        public static readonly ItemDefinition ShortBow = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> ShortBow = new ItemDefinition<IWeapon>(
             "assets/weapon/bow/bow_02.png",
             150,
             RarityCategory.Common,

@@ -3,26 +3,25 @@
 @inject IStateMachine StateMachine;
 @inject IContext Context;
 
-<style>
-    p {text-align: center}
-</style>
-
-<div style="width: fit-content;align-content: center;text-align: center;align-self: center;float: top">
-    <p>Sages warn of the portents of the death of our kingdom.</p>
-    <p>A great calamity rises, a dark force bent on the destruction of all we hold dear.</p>
-    <p>They call this calamity <b>@_partyData.Calamity.Name</b>.</p>
-    <p>We know little of this entity's nature, aside from this:</p>
-    <div style="background-color: lightgrey">
-        <b>@_partyData.Calamity.Class.Name</b>
-        <p>@_partyData.Calamity.Class.Desc</p>
+<div class="main-window">
+    <div class="main-column" style="text-align: center">
+        <p>Sages warn of the portents of the death of our kingdom.</p>
+        <p>A great calamity rises, a dark force bent on the destruction of all we hold dear.</p>
+        <p>They call this calamity <b>@_partyData.Calamity.Name</b>.</p>
+        <p>We know little of this entity's nature, aside from this:</p>
+        <div style="background-color: lightgrey">
+            <b>@_partyData.Calamity.Class.Name</b>
+            <p>@_partyData.Calamity.Class.Desc</p>
+        </div>
+        <p>You may be our best hope at survival.</p>
+        <p>There are @(30 - _partyData.Day) day@(_partyData.Day < 29 ? "s" : "") left to prepare.</p>
+        <div class="response-section">
+            <RadzenButton
+                Text="Let's Go"
+                Click="@OnButtonPressed"
+                Style="align-self: center"/>
+        </div>
     </div>
-    <p>You may be our best hope at survival.</p>
-    <p>There are @(30 - _partyData.Day) day@(_partyData.Day < 29 ? "s" : "") left to prepare.</p>
-    
-    <RadzenButton
-        Text="Let's Go"
-        Click="@OnButtonPressed"
-        Style="align-self: center"/>
 </div>
 
 @code {

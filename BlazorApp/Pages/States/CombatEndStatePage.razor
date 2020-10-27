@@ -7,91 +7,93 @@
 
 @inject IStateMachine StateMachine;
 
-<div style="display: flex;flex-direction: column;justify-content: center">
-    @if (BlazorState.Results.Success)
-    {
-        <div style="display: flex;flex-direction: row;justify-content: center">
-            <div style="display: flex;flex-direction: column">
-                <h1>Victory</h1>
-                <hr/>
-                <h2>Results</h2>
-                <p><b>EXP: </b>@BlazorState.Results.ExpReward</p>
-                <p><img src="assets/gold.png" alt="Gold" style="max-height: 64px"/>: @BlazorState.Results.GoldReward</p>
-            </div>
-        </div>
-        <div style="display: flex;flex-direction: row;justify-content: center">
-            @foreach (PlayerCharacter character in BlazorState.Party.Characters)
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
+            @if (BlazorState.Results.Success)
             {
-                @if (BlazorState.OldStatMapsByCharacter.TryGetValue(character.Id, out IStatMap oldStatMap) &&
-                     BlazorState.StatChangesByCharacter.TryGetValue(character.Id, out uint[] statChanges) &&
-                     BlazorState.GainedAbilitiesByCharacter.TryGetValue(character.Id, out IAbility[] gainedAbilities))
+                <h3 class="prompt-title">Victory</h3>
+                <div class="prompt-content">
+                    <h4>Results</h4>
+                    <p><b>EXP: </b>@BlazorState.Results.ExpReward</p>
+                    <p><img src="assets/gold.png" alt="Gold" style="max-height: 32px;max-width: 32px"/>: @BlazorState.Results.GoldReward</p>
+                </div>
+            }
+            else
+            {
+                <h3 class="prompt-title">Defeated</h3>
+                <div class="prompt-content">
+                    <p>The heroes have died, all is lost.</p>
+                    <p>Nothing stands between the kingdom and the oncoming Calamity.</p>
+                </div>
+            }
+        </div>
+        <div class="character-section">
+            @if (BlazorState.Results.Success)
+            {
+                @foreach (PlayerCharacter character in BlazorState.Party.Characters)
                 {
-                    <RadzenCard>
-                        <h3>@character.Name</h3>
-                        <table style="text-align: center;padding: 2px;border: 1px solid grey">
-                            <tr>
-                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
+                    @if (BlazorState.OldStatMapsByCharacter.TryGetValue(character.Id, out IStatMap oldStatMap) &&
+                         BlazorState.StatChangesByCharacter.TryGetValue(character.Id, out uint[] statChanges) &&
+                         BlazorState.GainedAbilitiesByCharacter.TryGetValue(character.Id, out IAbility[] gainedAbilities))
+                    {
+                        <div style="float: left">
+                            <RadzenCard>
+                                <h3>@character.Name</h3>
+                                <table style="text-align: center;padding: 2px;border: 1px solid grey">
+                                    <tr>
+                                        @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
+                                        {
+                                            <th>@statType.ToString()</th>
+                                        }
+                                    </tr>
+                                    <tr>
+                                        @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
+                                        {
+                                            <td>@oldStatMap[statType]</td>
+                                        }
+                                    </tr>
+                                    <tr>
+                                        @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
+                                        {
+                                            @if (statChanges[(int) statType] > 0)
+                                            {
+                                                <th style="color: forestgreen">+@statChanges[(int) statType]</th>
+                                            }
+                                            else
+                                            {
+                                                <td> </td>
+                                            }
+                                        }
+                                    </tr>
+                                    <tr>
+                                        @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
+                                        {
+                                            <td>@character.Stats[statType]</td>
+                                        }
+                                    </tr>
+                                </table>
+                                @if (gainedAbilities.Length > 0)
                                 {
-                                    <th>@statType.ToString()</th>
+                                    <h4>Gained Abilities</h4>
+                                    <div style="display: flex;flex-direction: column;justify-content: center">
+                                        @foreach (IAbility ability in gainedAbilities)
+                                        {
+                                            <p title="@ability.Desc">@ability.Name</p>
+                                        }
+                                    </div>
                                 }
-                            </tr>
-                            <tr>
-                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
-                                {
-                                    <td>@oldStatMap[statType]</td>
-                                }
-                            </tr>
-                            <tr>
-                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
-                                {
-                                    @if (statChanges[(int) statType] > 0)
-                                    {
-                                        <th style="color: forestgreen">+@statChanges[(int) statType]</th>
-                                    }
-                                    else
-                                    {
-                                        <td> </td>
-                                    }
-                                }
-                            </tr>
-                            <tr>
-                                @foreach (StatType statType in StatTypesToShow(statChanges[(int) StatType.LVL] > 0))
-                                {
-                                    <td>@character.Stats[statType]</td>
-                                }
-                            </tr>
-                        </table>
-                        @if (gainedAbilities.Length > 0)
-                        {
-                            <h4>Gained Abilities</h4>
-                            <div style="display: flex;flex-direction: column;justify-content: center">
-                                @foreach (IAbility ability in gainedAbilities)
-                                {
-                                    <p title="@ability.Desc">@ability.Name</p>
-                                }
-                            </div>
-                        }
-                    </RadzenCard>
-                }
-                else
-                {
-                    <h3 style="color: red">ERROR</h3>
+                            </RadzenCard>
+                        </div>
+                    }
                 }
             }
         </div>
-    }
-    else
-    {
-        <div>
-            <h2>Defeated</h2>
-            <p>The heroes have died, all is lost.</p>
-            <p>Nothing stands between the kingdom and the oncoming Calamity.</p>
+        <div class="response-section">
+            <RadzenButton Text="Continue"
+                          Click="@BlazorState.Continue"
+                          Style="width: fit-content"/>
         </div>
-    }
-    <div style="display: flex;flex-direction: row;justify-content: center">
-        <RadzenButton Text="Continue"
-                      Click="@BlazorState.Continue"
-                      Style="width: fit-content"/>
     </div>
 </div>
 

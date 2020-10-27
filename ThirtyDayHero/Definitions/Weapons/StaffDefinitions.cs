@@ -15,7 +15,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             AttackDefinitions.Attack_MAG_Fixed,
             null);
 
-        public static readonly ItemDefinition ArcaneStaff = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> ArcaneStaff = new ItemDefinition<IWeapon>(
             "assets/weapon/staff/staff_19.png",
             150,
             RarityCategory.Common,

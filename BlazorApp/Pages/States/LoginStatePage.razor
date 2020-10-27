@@ -13,7 +13,6 @@
 
 @namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Pages
 
-<h2>Login or Create an Account to Play</h2>
 @if (_isLoggingIn)
 {
     <h4>Logging In</h4>
@@ -40,21 +39,29 @@ else if (_synchingPartyData)
 }
 else
 {
-    <!-- Login -->
-    <div Style="float: left;min-width: 450px">
-        <LoginCard 
-            LoggingInStatus="@OnLoggingInStatus"
-            LoggedInSuccessfully ="@OnLoggedInSuccessfully"/>
-    </div>
+    <div class="main-window">
+        <div class="main-column">
+            <div class="response-section">
+                <h3>Login or Create an Account to Play</h3>
+                
+                <!-- Login -->
+                <div Style="float: left;min-width: 450px">
+                    <LoginCard
+                        LoggingInStatus="@OnLoggingInStatus"
+                        LoggedInSuccessfully="@OnLoggedInSuccessfully"/>
+                </div>
 
-    <!-- Register -->
-    <div Style="float: left;min-width: 450px">
-        <RegisterCard 
-            LoggingInStatus="@OnLoggingInStatus"
-            LoggedInSuccessfully ="@OnLoggedInSuccessfully"/>
-        <TempRegisterCard 
-            LoggingInStatus="@OnLoggingInStatus"
-            LoggedInSuccessfully ="@OnLoggedInSuccessfully"/>
+                <!-- Register -->
+                <div Style="float: left;min-width: 450px">
+                    <RegisterCard
+                        LoggingInStatus="@OnLoggingInStatus"
+                        LoggedInSuccessfully="@OnLoggedInSuccessfully"/>
+                    <TempRegisterCard
+                        LoggingInStatus="@OnLoggingInStatus"
+                        LoggedInSuccessfully="@OnLoggedInSuccessfully"/>
+                </div>
+            </div>
+        </div>
     </div>
 }
 

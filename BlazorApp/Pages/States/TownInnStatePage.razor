@@ -1,0 +1,42 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Town
+
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
+            <h3 class="prompt-title">Inn</h3>
+            <div class="prompt-content">
+                <p>The kindly hostess greets you with a smile.</p>
+                @if (BlazorState.HasRested)
+                {
+                    <p>"Hope you enjoyed your stay!"</p>
+                    <em>The party has been fully healed.</em>
+                }
+                else
+                {
+                    <p>"Care to take a rest?"</p>
+                }
+                <p>"You can rent a room for @BlazorState.Cost gold."</p>
+            </div>
+            <p class="prompt-footer">
+                <img src="assets/gold.png" alt="Gold:" style="max-width: 32px;max-height: 32px"/> @BlazorState.Party.Gold
+            </p>
+        </div>
+        <div class="character-section">
+            <!-- [Optional] Character Goes Here -->
+        </div>
+        <div class="response-section">
+            <RadzenButton Text="Stay at Inn"
+                          Disabled="@(!BlazorState.CanStayAtInn())"
+                          Click="BlazorState.StayAtInn"/>
+            <RadzenButton Text="Leave Inn"
+                          Click="BlazorState.LeaveInn"/>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public TownInnState BlazorState { get; set; }
+
+}

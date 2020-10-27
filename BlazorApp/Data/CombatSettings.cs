@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SadPumpkin.Games.ThirtyDayHero.Core;
 using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
+using SadPumpkin.Games.ThirtyDayHero.Core.Utilities;
 using SadPumpkin.Util.CombatEngine.Actor;
 using SadPumpkin.Util.CombatEngine.CharacterControllers;
 using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
 {
-    public enum CombatDifficulty
-    {
-        Easy = 0,
-        Normal = 1,
-        Hard = 2
-    }
-
     public class CombatSettings
     {
         private static readonly Random RANDOM = new Random();
@@ -93,7 +86,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
             return CreateFromEnemies(enemies);
         }
 
-        public static CombatSettings CreateFromDifficulty(CombatDifficulty difficulty, PartyDataWrapper playerParty)
+        public static CombatSettings CreateFromEnemyGroup(EnemyGroup enemyGroup, CombatDifficulty difficulty, PartyDataWrapper playerParty)
         {
             int enemyCount = 1;
             switch (difficulty)
@@ -112,10 +105,15 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
             List<EnemyDefinition> enemyTypes = new List<EnemyDefinition>(enemyCount);
             for (int i = 0; i < enemyCount; i++)
             {
-                enemyTypes.Add(HackUtil.GetRandomMonsterClass());
+                enemyTypes.Add(RandomResultGenerator.Get(enemyGroup.EnemyTypesByRarity));
             }
 
             return CreateFromEnemyTypes(enemyTypes, difficulty, playerParty);
+        }
+
+        public static CombatSettings CreateFromDifficulty(CombatDifficulty difficulty, PartyDataWrapper playerParty)
+        {
+            return CreateFromEnemyGroup(HackUtil.GetRandomEnemyGroup(), difficulty, playerParty);
         }
     }
 }

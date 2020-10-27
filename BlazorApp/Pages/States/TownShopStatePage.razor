@@ -1,0 +1,211 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Town
+@using SadPumpkin.Games.ThirtyDayHero.Core.Decorators
+@using Radzen.Blazor
+@using SadPumpkin.Util.CombatEngine.Item.Armors
+@using SadPumpkin.Util.CombatEngine.Item.Weapons
+
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
+            <h3 class="prompt-title">@BlazorState.ShopName</h3>
+            <div class="prompt-content">
+                <p>The old shopkeeper greets you with a warm smile.</p>
+                <p>"What are ya buyin?"</p>
+            </div>
+            <p class="prompt-footer">
+                <img src="assets/gold.png" alt="Gold:" style="max-width: 32px;max-height: 32px"/> @BlazorState.Party.Gold
+            </p>
+        </div>
+        <div class="response-section">
+            <RadzenTabs>
+                <Tabs>
+                    <RadzenTabsItem Text="Buy" 
+                                    Selected="true">
+                        <RadzenGrid Data="@BlazorState.BuyList"
+                                    TItem="(ItemDefinition, uint)"
+                                    AllowFiltering="true"
+                                    AllowPaging="true"
+                                    Count="@BlazorState.BuyList.Count"
+                                    PageSize="5"
+                                    EmptyText="All Sold Out"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive">
+                            <Columns>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.ArtName"
+                                                  Title=""
+                                                  Filterable="false"
+                                                  Width="40">
+                                    <Template Context="data">
+                                        <img src="@data.Item1.ArtName"
+                                             alt="[-]"
+                                             style="max-height: 32px;max-width: 32px"/>
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item2"
+                                                  Title="Price"
+                                                  Filterable="false"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        @data.Item2
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.Rarity"
+                                                  Title="Rarity"
+                                                  Filterable="true"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        @data.Item1.Rarity
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.Item.ItemType"
+                                                  Title="Type"
+                                                  Filterable="true"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        @switch (data.Item1.Item)
+                                        {
+                                            case IWeapon weapon:
+                                                <p>Weapon (@weapon.WeaponType)</p>
+                                                break;
+                                            case IArmor armor:
+                                                <p>Armor (@armor.ArmorType)</p>
+                                                break;
+                                            default:
+                                                @data.Item1.Item.ItemType
+                                                break;
+                                        }
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.Item.Name"
+                                                  Title="Name"
+                                                  Filterable="true"
+                                                  Width="100">
+                                    <Template Context="data">
+                                        <abbr title="@TooltipGenerator.GetTooltip((ItemDefinition)data.Item1)">
+                                            <b>@data.Item1.Item.Name</b>
+                                        </abbr>
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Filterable="false"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        <RadzenButton Text="Buy"
+                                                      Disabled="@(!BlazorState.CanBuy(data))"
+                                                      Click="() => BlazorState.BuyItem(data)" />
+                                    </Template>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="Sell">
+                        <RadzenGrid Data="@BlazorState.SellList"
+                                    TItem="(ItemDefinition, uint)"
+                                    AllowFiltering="true"
+                                    AllowPaging="true"
+                                    Count="@BlazorState.SellList.Count"
+                                    PageSize="5"
+                                    EmptyText="No Items to Sell"
+                                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                    Responsive="true">
+                            <Columns>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.ArtName"
+                                                  Title=""
+                                                  Filterable="false"
+                                                  Width="40">
+                                    <Template Context="data">
+                                        <img src="@data.Item1.ArtName"
+                                             alt="[-]"
+                                             style="max-height: 32px;max-width: 32px"/>
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item2"
+                                                  Title="Offer"
+                                                  Filterable="false"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        @data.Item2
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.Rarity"
+                                                  Title="Rarity"
+                                                  Filterable="true"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        @data.Item1.Rarity
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.Item.ItemType"
+                                                  Title="Type"
+                                                  Filterable="true"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        @switch (data.Item1.Item)
+                                        {
+                                            case IWeapon weapon:
+                                                <p>Weapon (@weapon.WeaponType)</p>
+                                                break;
+                                            case IArmor armor:
+                                                <p>Armor (@armor.ArmorType)</p>
+                                                break;
+                                            default:
+                                                @data.Item1.Item.ItemType
+                                                break;
+                                        }
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Property="Item1.Item.Name"
+                                                  Title="Name"
+                                                  Filterable="true"
+                                                  Width="100">
+                                    <Template Context="data">
+                                        <abbr title="@TooltipGenerator.GetTooltip((ItemDefinition)data.Item1)">
+                                            <b>@data.Item1.Item.Name</b>
+                                        </abbr>
+                                    </Template>
+                                </RadzenGridColumn>
+                                <RadzenGridColumn TItem="(ItemDefinition, uint)"
+                                                  Filterable="false"
+                                                  Width="60">
+                                    <Template Context="data">
+                                        <RadzenButton Text="Sell"
+                                                      Disabled="@(!BlazorState.CanSell(data))"
+                                                      Click="() => BlazorState.SellItem(data)" />
+                                    </Template>
+                                </RadzenGridColumn>
+                            </Columns>
+                        </RadzenGrid>
+                    </RadzenTabsItem>
+                </Tabs>
+            </RadzenTabs>
+            <RadzenButton Text="Leave Shop"
+                          Click="BlazorState.LeaveShop"/>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public TownShopState BlazorState { get; set; }
+
+    protected override void OnInitialized()
+    {
+        BlazorState.ShopUpdated += OnShopUpdated;
+    }
+
+    private void OnShopUpdated(object sender, EventArgs e)
+    {
+        StateHasChanged();
+    }
+
+}

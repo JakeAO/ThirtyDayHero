@@ -15,7 +15,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             AttackDefinitions.Attack_STR_Fixed,
             null);
 
-        public static readonly ItemDefinition LeatherGloves = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> LeatherGloves = new ItemDefinition<IWeapon>(
             "assets/weapon/fist/gloves_25.png",
             150,
             RarityCategory.Common,

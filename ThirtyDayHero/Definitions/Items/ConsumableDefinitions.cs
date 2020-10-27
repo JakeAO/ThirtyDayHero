@@ -17,7 +17,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items
             "Magical potion that restores a small amount of HP.",
             new[] {ItemAbilityDefinitions.DrinkSmallHealingPotion});
 
-        public static readonly ItemDefinition SmallHealingPotion = new ItemDefinition(
+        public static readonly ItemDefinition<IItem> SmallHealingPotion = new ItemDefinition<IItem>(
             "assets/item/consumable/consumable_40.png",
             50,
             RarityCategory.Common,
@@ -30,7 +30,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items
             "Magical potion that restores a medium amount of HP.",
             new[] {ItemAbilityDefinitions.DrinkMediumHealingPotion});
 
-        public static readonly ItemDefinition MediumHealingPotion = new ItemDefinition(
+        public static readonly ItemDefinition<IItem> MediumHealingPotion = new ItemDefinition<IItem>(
             "assets/item/consumable/consumable_48.png",
             100,
             RarityCategory.Uncommon,
@@ -43,7 +43,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items
             "Magical potion that restores a large amount of HP.",
             new[] {ItemAbilityDefinitions.DrinkLargeHealingPotion});
 
-        public static readonly ItemDefinition LargeHealingPotion = new ItemDefinition(
+        public static readonly ItemDefinition<IItem> LargeHealingPotion = new ItemDefinition<IItem>(
             "assets/item/consumable/consumable_98.png",
             200,
             RarityCategory.Uncommon,
@@ -60,7 +60,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items
             "Magical potion that restores a small amount of STA.",
             new[] {ItemAbilityDefinitions.DrinkSmallStaminaPotion});
 
-        public static readonly ItemDefinition SmallStaminaPotion = new ItemDefinition(
+        public static readonly ItemDefinition<IItem> SmallStaminaPotion = new ItemDefinition<IItem>(
             "assets/item/consumable/consumable_41.png",
             50,
             RarityCategory.Common,
@@ -73,7 +73,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items
             "Magical potion that restores a medium amount of STA.",
             new[] {ItemAbilityDefinitions.DrinkMediumStaminaPotion});
 
-        public static readonly ItemDefinition MediumStaminaPotion = new ItemDefinition(
+        public static readonly ItemDefinition<IItem> MediumStaminaPotion = new ItemDefinition<IItem>(
             "assets/item/consumable/consumable_47.png",
             100,
             RarityCategory.Uncommon,
@@ -86,7 +86,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items
             "Magical potion that restores a large amount of STA.",
             new[] {ItemAbilityDefinitions.DrinkLargeStaminaPotion});
 
-        public static readonly ItemDefinition LargeStaminaPotion = new ItemDefinition(
+        public static readonly ItemDefinition<IItem> LargeStaminaPotion = new ItemDefinition<IItem>(
             "assets/item/consumable/consumable_99.png",
             200,
             RarityCategory.Uncommon,

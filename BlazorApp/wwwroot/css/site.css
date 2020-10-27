@@ -198,3 +198,79 @@ app {
     -webkit-appearance: none;
     background: mediumpurple;
 }
+
+div.main-window {
+    display: flex;
+    justify-content: center;
+}
+
+div.main-window div.main-column {
+    display: flex;
+    flex: available;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.main-window div.main-column div.prompt-section {
+    display: table;
+    flex: available;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    min-width: 300px;
+    min-height: 200px;
+    border: 2px solid black;
+}
+
+div.main-window div.main-column div.prompt-section .prompt-title {
+    width: 100%;
+    height: fit-content;
+    display: table-row;
+    background-color: lightgrey;
+    text-align: center;
+    vertical-align: top;
+    font-weight: bold;
+}
+
+div.main-window div.main-column div.prompt-section .prompt-content {
+    width: 100%;
+    display: table-row;
+    text-align: center;
+    vertical-align: middle;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.main-window div.main-column div.prompt-section .prompt-footer {
+    width: 100%;
+    height: fit-content;
+    display: table-row;
+    background-color: lightyellow;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+div.main-window div.main-column div.character-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center
+}
+
+div.main-window div.main-column div.response-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    align-self: center;
+    vertical-align: top;
+}
+
+div.main-window div.side-column {
+    display: flex;
+    flex:max-content;
+    flex-direction: column;
+    vertical-align: top;
+}

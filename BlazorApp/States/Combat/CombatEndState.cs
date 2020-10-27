@@ -27,16 +27,18 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Combat
         private readonly Dictionary<uint, uint[]> _statChanges = new Dictionary<uint, uint[]>();
         private readonly Dictionary<uint, IAbility[]> _gainedAbilities = new Dictionary<uint, IAbility[]>();
 
+        public CombatEndState(CombatResults combatResults)
+        {
+            Results = combatResults;
+        }
+        
         public override void PerformSetup(Context context, IState previousState)
         {
             base.PerformSetup(context, previousState);
 
-            Results = context.Get<CombatResults>();
             Party = context.Get<PartyDataWrapper>();
             FirebaseWrapper fbWrapper = context.Get<FirebaseWrapper>();
 
-            context.Clear<CombatResults>();
-            
             if (Results.Success)
             {
                 Random random = new Random();

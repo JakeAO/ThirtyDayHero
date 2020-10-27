@@ -24,6 +24,8 @@
         public const uint CLASS_CALAMITY = 91000;
         public const uint CLASS_MONSTER = 92000;
 
+        public const uint ENEMY_GROUP = 95000;
+
         public const uint ABILITY_ATTACK = 100000;
         public const uint ABILITY_SKILL = 101000;
         public const uint ABILITY_SPELL = 102000;

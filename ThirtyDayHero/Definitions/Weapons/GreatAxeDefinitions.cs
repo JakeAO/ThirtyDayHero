@@ -15,7 +15,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             AttackDefinitions.Attack_STR_Fixed,
             null);
 
-        public static readonly ItemDefinition Halberd = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> Halberd = new ItemDefinition<IWeapon>(
             "assets/weapon/greataxe/axe_23.png",
             150,
             RarityCategory.Common,

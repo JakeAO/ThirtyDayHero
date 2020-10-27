@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SadPumpkin.Games.ThirtyDayHero.Core;
 using SadPumpkin.Util.CombatEngine.Actor;
-using SadPumpkin.Util.CombatEngine.Item;
 using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data

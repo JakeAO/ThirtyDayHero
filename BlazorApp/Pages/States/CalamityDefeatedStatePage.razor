@@ -1,8 +1,48 @@
 ﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States
+@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.Shared.ActorViews
+@using SadPumpkin.Util.CombatEngine.Actor
 
-<h3><b>@BlazorState.Calamity</b> has been defeated.</h3>
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
+            <h3 class="prompt-title">Victory</h3>
+            <div class="prompt-content">
+                <h3><b>@BlazorState.Calamity.Name</b> has been defeated.</h3>
+                <p>A new day's sun rises on a safe kingdom thanks to you.</p>
+            </div>
+        </div>
+        @if (BlazorState.SurvivingCharacters.Count > 0)
+        {
+            <h3>The surviving heroes are celebrated for their deeds.</h3>
+            <div class="character-section">
+                @foreach (PlayerCharacter character in BlazorState.SurvivingCharacters)
+                {
+                    <ActorQuickView Actor="character"/>
+                }
+            </div>
+        }
+        @if (BlazorState.FallenCharacters.Count > 0)
+        {
+            <h3>The fallen are mourned and remembered for their efforts.</h3>
+            <div class="character-section">
+                @foreach (PlayerCharacter character in BlazorState.FallenCharacters)
+                {
+                    <ActorQuickView Actor="character"/>
+                }
+            </div>
+        }
+        <div class="response-section">
+            <RadzenButton Text="Rejoice!"
+                          ButtonStyle="ButtonStyle.Success"
+                          Click="@BlazorState.Continue"
+                          Style="width: fit-content"/>
+        </div>
+    </div>
+</div>
 
 @code {
+
     [Parameter]
     public CalamityDefeatedState BlazorState { get; set; }
+
 }

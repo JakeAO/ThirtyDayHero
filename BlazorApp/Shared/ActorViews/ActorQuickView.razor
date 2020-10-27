@@ -97,7 +97,7 @@
     
     public ItemDefinition GetDefinition(uint itemId)
     {
-        if (!_itemDefinitions.TryGetValue(itemId, out var itemDefinition))
+        if (!_itemDefinitions.TryGetValue(itemId, out var itemDefinition) || itemDefinition == null)
             _itemDefinitions[itemId] = itemDefinition = HackUtil.GetDefinition<ItemDefinition>(itemId);
         return itemDefinition;
     }

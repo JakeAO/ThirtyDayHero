@@ -1,6 +1,10 @@
 ﻿@using SadPumpkin.Util.CombatEngine.Item
 @using SadPumpkin.Util.CombatEngine.Item.Armors
 @using SadPumpkin.Util.CombatEngine.Item.Weapons
+@using SadPumpkin.Util.CombatEngine.EquipMap
+@using SadPumpkin.Util.CombatEngine.Actor
+@using SadPumpkin.Games.ThirtyDayHero.Core.Decorators
+@using SadPumpkin.Util.CombatEngine.CharacterClasses
 
 <RadzenTabs>
     <Tabs>
@@ -9,55 +13,86 @@
             @if (itemType != ItemType.Invalid)
             {
                 <RadzenTabsItem Text="@itemType.ToString()">
-                    @switch (itemType)
-                    {
-                        case ItemType.Weapon:
-                        {
-                            <RadzenGrid AllowFiltering="true" 
-                                        AllowPaging="true" 
-                                        AllowSorting="true" 
-                                        Data="@(_inventoryByType.TryGetValue(itemType, out var itemList) ? itemList.Cast<IWeapon>() : null)" 
-                                        TItem="IWeapon">
-                                <Columns>
-                                    <RadzenGridColumn TItem="IWeapon" Property="WeaponType" Title="Type"/>
-                                    <RadzenGridColumn TItem="IWeapon" Property="Name" Title="Name"/>
-                                    <RadzenGridColumn TItem="IWeapon" Property="Desc" Title="Description"/>
-                                </Columns>
-                            </RadzenGrid>
-                            break;
-                        }
-                        case ItemType.Armor:
-                        {
-                            <RadzenGrid AllowFiltering="true" 
-                                        AllowPaging="true" 
-                                        AllowSorting="true" 
-                                        Data="@(_inventoryByType.TryGetValue(itemType, out var itemList) ? itemList.Cast<IArmor>() : null)" 
-                                        TItem="IArmor">
-                                <Columns>
-                                    <RadzenGridColumn TItem="IArmor" Property="ArmorType" Title="Type"/>
-                                    <RadzenGridColumn TItem="IArmor" Property="Name" Title="Name"/>
-                                    <RadzenGridColumn TItem="IArmor" Property="Desc" Title="Description"/>
-                                </Columns>
-                            </RadzenGrid>
-                            break;
-                        }
-                        case ItemType.Consumable:
-                        case ItemType.Trinket:
-                        case ItemType.Loot:
-                        {
-                            <RadzenGrid AllowFiltering="true" 
-                                        AllowPaging="true" 
-                                        AllowSorting="true" 
-                                        Data="@(_inventoryByType.TryGetValue(itemType, out var itemList) ? itemList : null)" 
-                                        TItem="IItem">
-                                <Columns>
-                                    <RadzenGridColumn TItem="IItem" Property="Name" Title="Name"/>
-                                    <RadzenGridColumn TItem="IItem" Property="Desc" Title="Description"/>
-                                </Columns>
-                            </RadzenGrid>
-                            break;
-                        }
-                    }
+                    <RadzenGrid AllowFiltering="false"
+                                AllowPaging="true"
+                                AllowSorting="false"
+                                PageSize="10"
+                                EmptyText="No items of type."
+                                Data="@(_inventoryByType.TryGetValue(itemType, out var itemList) ? itemList : null)"
+                                TItem="IItem">
+                        <Columns>
+                            <RadzenGridColumn TItem="IItem"
+                                              Property="Item1.ArtName"
+                                              Title=""
+                                              Width="40">
+                                <Template Context="data">
+                                    <img src="@_itemDefinitions[data].ArtName"
+                                         alt="[-]"
+                                         style="max-height: 32px;max-width: 32px"/>
+                                </Template>
+                            </RadzenGridColumn>
+                            <RadzenGridColumn TItem="IItem"
+                                              Property="Item1.Rarity"
+                                              Title="Rarity"
+                                              Width="60">
+                                <Template Context="data">
+                                    @_itemDefinitions[data].Rarity
+                                </Template>
+                            </RadzenGridColumn>
+                            <RadzenGridColumn TItem="IItem"
+                                              Property="ItemType"
+                                              Title="Type"
+                                              Width="60">
+                                <Template Context="data">
+                                    @switch (data)
+                                    {
+                                        case IWeapon weapon:
+                                            <p>Weapon (@weapon.WeaponType)</p>
+                                            break;
+                                        case IArmor armor:
+                                            <p>Armor (@armor.ArmorType)</p>
+                                            break;
+                                        default:
+                                            @data.ItemType
+                                            break;
+                                    }
+                                </Template>
+                            </RadzenGridColumn>
+                            <RadzenGridColumn TItem="IItem"
+                                              Property="Name"
+                                              Title="Name"
+                                              Width="100">
+                                <Template Context="data">
+                                    <abbr title="@TooltipGenerator.GetTooltip(_itemDefinitions[data])">
+                                        <b>@data.Name</b>
+                                    </abbr>
+                                </Template>
+                            </RadzenGridColumn>
+                            @foreach (PlayerCharacter playerCharacter in Party.Characters)
+                            {
+                                <RadzenGridColumn TItem="IItem"
+                                                  Title="@playerCharacter.Name">
+                                    <Template Context="data">
+                                        <RadzenSplitButton Text="Equip"
+                                                           Click="item => EquipItem(item.Value, (IItem) data, playerCharacter)">
+                                            <RadzenSplitButtonItem Text="Weapon"
+                                                                   Value="Weapon"
+                                                                   Visible="CanEquipWeapon(EquipmentSlot.Weapon, (IItem) data, playerCharacter)"/>
+                                            <RadzenSplitButtonItem Text="Armor"
+                                                                   Value="Armor"
+                                                                   Visible="CanEquipWeapon(EquipmentSlot.Armor, (IItem) data, playerCharacter)"/>
+                                            <RadzenSplitButtonItem Text="Item A"
+                                                                   Value="ItemA"
+                                                                   Visible="CanEquipWeapon(EquipmentSlot.ItemA, (IItem) data, playerCharacter)"/>
+                                            <RadzenSplitButtonItem Text="Item B"
+                                                                   Value="ItemB"
+                                                                   Visible="CanEquipWeapon(EquipmentSlot.ItemB, (IItem) data, playerCharacter)"/>
+                                        </RadzenSplitButton>
+                                    </Template>
+                                </RadzenGridColumn>
+                            }
+                        </Columns>
+                    </RadzenGrid>
                 </RadzenTabsItem>
             }
         }
@@ -67,20 +102,121 @@
 @code 
 {
     [Parameter]
-    public IReadOnlyCollection<IItem> Inventory { get; set; }
-
-    private IReadOnlyDictionary<ItemType, IReadOnlyList<IItem>> _inventoryByType = null;
+    public PartyDataWrapper Party { get; set; }
+    
+    private Dictionary<ItemType, List<IItem>> _inventoryByType = null;
+    private IReadOnlyDictionary<IItem, ItemDefinition> _itemDefinitions = null;
 
     protected override void OnInitialized()
     {
-        _inventoryByType = Inventory
+        _inventoryByType = Party.Inventory
             .Where(x => x != null)
-            .OrderBy(x => x.Id)
+            .OrderBy(x => x.ItemType)
+            .ThenBy(x =>
+            {
+                switch (x)
+                {
+                    case IWeapon weapon:
+                        return (int) weapon.WeaponType;
+                    case IArmor armor:
+                        return (int) armor.ArmorType;
+                    default:
+                        return 0;
+                }
+            })
             .GroupBy(x => x.ItemType)
             .ToDictionary(
                 x => x.Key,
-                x => (IReadOnlyList<IItem>) x.ToList());
+                x => x.ToList());
+        _itemDefinitions = Party.Inventory
+            .Distinct()
+            .ToDictionary(
+                x => x,
+                x => HackUtil.GetDefinition<ItemDefinition>(x.Id));
 
         base.OnInitialized();
+    }
+
+    private bool CanEquipWeapon(EquipmentSlot slot, IItem item, PlayerCharacter character)
+    {
+        IPlayerClass playerClass = character.Class as IPlayerClass;
+        if (playerClass == null)
+            return false;
+        switch (slot)
+        {
+            case EquipmentSlot.Weapon:
+                if (!(item is IWeapon weapon))
+                    return false;
+                if (!playerClass.WeaponProficiency.HasFlag(weapon.WeaponType))
+                    return false;
+                break;
+            case EquipmentSlot.Armor:
+                if (!(item is IArmor armor))
+                    return false;
+                if (!playerClass.ArmorProficiency.HasFlag(armor.ArmorType))
+                    return false;
+                break;
+        }
+
+        return true;
+    }
+
+    private void EquipItem(string slot, IItem item, PlayerCharacter character)
+    {
+        if (Enum.TryParse(slot, out EquipmentSlot equipmentSlot))
+        {
+            EquipItem(equipmentSlot, item, character);
+        }
+    }
+
+    private void EquipItem(EquipmentSlot slot, IItem item, PlayerCharacter character)
+    {
+        if (!Party.Inventory.Remove(item))
+            return;
+
+        EquipMap rawMap = (EquipMap) character.Equipment;
+        IWeapon asWeapon = item as IWeapon;
+        IArmor asArmor = item as IArmor;
+
+        // Confirm Type
+        switch (slot)
+        {
+            case EquipmentSlot.Weapon:
+                if (asWeapon == null)
+                    return;
+                break;
+            case EquipmentSlot.Armor:
+                if (asArmor == null)
+                    return;
+                break;
+        }
+
+        // Unequip Current
+        if (rawMap[slot] != null)
+        {
+            _inventoryByType[item.ItemType].Add(rawMap[slot]);
+            Party.Inventory.Add(rawMap[slot]);
+        }
+
+        _inventoryByType[item.ItemType].Remove(item);
+        
+        // Set Equipment
+        switch (slot)
+        {
+            case EquipmentSlot.Weapon:
+                rawMap.Weapon = asWeapon;
+                break;
+            case EquipmentSlot.Armor:
+                rawMap.Armor = asArmor;
+                break;
+            case EquipmentSlot.ItemA:
+                rawMap.ItemA = item;
+                break;
+            case EquipmentSlot.ItemB:
+                rawMap.ItemB = item;
+                break;
+        }
+
+        StateHasChanged();
     }
 }

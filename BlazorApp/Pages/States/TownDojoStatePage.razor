@@ -1,0 +1,39 @@
+﻿@using SadPumpkin.Games.ThirtyDayHero.BlazorApp.States.Town
+
+<div class="main-window">
+    <div class="main-column">
+        <div class="prompt-section">
+            <h3 class="prompt-title">Dojo</h3>
+            <div class="prompt-content">
+                <p>The wise mentor looks on coldly.</p>
+                @if (BlazorState.ExpGained.HasValue)
+                {
+                    <p>"You've done well, but you have a long way to go."</p>
+                    <em>Each party member has gained <b>@BlazorState.ExpGained.Value</b> EXP.</em>
+                }
+                else
+                {
+                    <p>"You have much to learn."</p>
+                }
+                <p>"I will teach you my ways for @BlazorState.Cost gold."</p>
+            </div>
+            <p class="prompt-footer">
+                <img src="assets/gold.png" alt="Gold:" style="max-width: 32px;max-height: 32px"/> @BlazorState.Party.Gold
+            </p>
+        </div>
+        <div class="response-section">
+            <RadzenButton Text="Train with Mentor"
+                          Disabled="@(!BlazorState.CanTrainAtDojo())"
+                          Click="BlazorState.TrainAtDojo"/>
+            <RadzenButton Text="Leave Dojo"
+                          Click="BlazorState.LeaveDojo"/>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public TownDojoState BlazorState { get; set; }
+
+}

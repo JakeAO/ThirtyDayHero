@@ -15,7 +15,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             AttackDefinitions.Attack_STR_Fixed,
             null);
 
-        public static readonly ItemDefinition Spear = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> Spear = new ItemDefinition<IWeapon>(
             "assets/weapon/spear/spear_10.png",
             150,
             RarityCategory.Common,

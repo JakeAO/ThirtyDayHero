@@ -125,5 +125,18 @@ namespace SadPumpkin.Games.ThirtyDayHero.BlazorApp.Data
                 : new List<IItem>();
             _calamity = calamity;
         }
+
+        public void IncrementTime()
+        {
+            if (Time == TimeOfDay.Night)
+            {
+                Time = TimeOfDay.Morning;
+                Day++;
+            }
+            else
+            {
+                Time++;
+            }
+        }
     }
 }

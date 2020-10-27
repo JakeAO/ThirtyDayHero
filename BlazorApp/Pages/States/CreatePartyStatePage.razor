@@ -6,41 +6,42 @@
 @inject IContext Context;
 @inject IStateMachine StateMachine;
 
-<table style="width: 100%">
-    <tr>
-        <h2 style="float: left" title="@($"{_calamity.Class.Name}: {_calamity.Class.Desc}")">Calamity: @_calamity.Name</h2>
+<div class="main-window">
+    <div class="main-column">
+        <h1 title="@($"{_calamity.Class.Name}: {_calamity.Class.Desc}")">Calamity: @_calamity.Name</h1>
         <RadzenButton
-            Style="float: right"
             Text="Begin Adventure"
             Click="@OnButtonPressed"
             Disabled="@(_activeParty.Count == 0)"/>
-    </tr>
-    <tr>
-        <h2>Active Party</h2>
-        @foreach (PlayerCharacter character in _activeParty)
-        {
-            <RadzenCard Style="flex: min-content;float: left">
-                <ActorQuickView Actor="@character"/>
-                <RadzenButton
-                    Text="Deselect"
-                    Click="@(() => MoveToAvailable(character))"/>
-            </RadzenCard>
-        }
-    </tr>
-    <tr>
-        <h2>Available Heroes</h2>
-        @foreach (PlayerCharacter character in _availableHeroes)
-        {
-            <RadzenCard Style="flex: min-content;float: left">
-                <ActorQuickView Actor="@character"/>
-                <RadzenButton
-                    Text="Select"
-                    Click="@(() => MoveToActive(character))"
-                    Disabled="@(_activeParty.Count == 3)"/>
-            </RadzenCard>
-        }
-    </tr>
-</table>
+        <hr/>
+        <h2>Active Party (@_activeParty.Count/3)</h2>
+        <div class="character-section">
+            @foreach (PlayerCharacter character in _activeParty)
+            {
+                <RadzenCard Style="float: left">
+                    <ActorQuickView Actor="@character"/>
+                    <RadzenButton
+                        Text="Deselect"
+                        Click="@(() => MoveToAvailable(character))"/>
+                </RadzenCard>
+            }
+        </div>
+        <hr/>
+        <h2>Available Recruits</h2>
+        <div class="character-section">
+            @foreach (PlayerCharacter character in _availableHeroes)
+            {
+                <RadzenCard Style="float: left">
+                    <ActorQuickView Actor="@character"/>
+                    <RadzenButton
+                        Text="Select"
+                        Click="@(() => MoveToActive(character))"
+                        Disabled="@(_activeParty.Count == 3)"/>
+                </RadzenCard>
+            }
+        </div>
+    </div>
+</div>
 
 @code 
 {

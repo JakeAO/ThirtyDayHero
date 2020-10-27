@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Armors;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Items;
@@ -18,7 +19,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
     {
         public static readonly TrackableIdGenerator IdTracker = new TrackableIdGenerator(ConstantIds.CLASS_PLAYER);
 
-        public static readonly PlayerClass Soldier = new PlayerClass(
+        public static readonly IPlayerClass SoldierClass = new PlayerClass(
             IdTracker.Next,
             "Soldier", "A former military recruit trained in basic martial weaponry.",
             new Dictionary<DamageType, float>(),
@@ -49,7 +50,12 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                 },
                 new Dictionary<IItem, RankPriority>()));
 
-        public static readonly PlayerClass Mage = new PlayerClass(
+        public static readonly PlayerClassDefinition Soldier = new PlayerClassDefinition(
+            RarityCategory.Common,
+            NameGenerator.Player,
+            SoldierClass);
+        
+        public static readonly IPlayerClass MageClass = new PlayerClass(
             IdTracker.Next,
             "Mage", "An apprentice mage from the royal academy.",
             new Dictionary<DamageType, float>(),
@@ -77,7 +83,12 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                 },
                 new Dictionary<IItem, RankPriority>()));
 
-        public static readonly PlayerClass Ranger = new PlayerClass(
+        public static readonly PlayerClassDefinition Mage = new PlayerClassDefinition(
+            RarityCategory.Common,
+            NameGenerator.Player,
+            MageClass);
+
+        public static readonly PlayerClass RangerClass = new PlayerClass(
             IdTracker.Next,
             "Ranger", "A survivalist from the wilds.",
             new Dictionary<DamageType, float>(),
@@ -104,5 +115,10 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                     {ConsumableDefinitions.SmallHealingPotionItem, RankPriority.A}
                 },
                 new Dictionary<IItem, RankPriority>()));
+
+        public static readonly PlayerClassDefinition Ranger = new PlayerClassDefinition(
+            RarityCategory.Common,
+            NameGenerator.Player,
+            RangerClass);
     }
 }

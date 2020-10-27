@@ -15,7 +15,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             AttackDefinitions.Attack_STR_Fixed,
             null);
 
-        public static readonly ItemDefinition Claymore = new ItemDefinition(
+        public static readonly ItemDefinition<IWeapon> Claymore = new ItemDefinition<IWeapon>(
             "assets/weapon/greatsword/sword_03.png",
             150,
             RarityCategory.Common,

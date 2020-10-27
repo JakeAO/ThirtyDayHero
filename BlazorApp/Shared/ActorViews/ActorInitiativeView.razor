@@ -1,8 +1,8 @@
 ﻿@using SadPumpkin.Util.CombatEngine.Actor
 
 <div Style=@GetStyle()>
-    <b>@InitPair.Entity.Name</b> - @Math.Round(InitPair.Initiative)
-    <p>Speed: @Math.Round(InitPair.Entity.GetInitiative())</p>
+    <b>@InitPair.Entity.Name</b> - @InitPair.Initiative
+    <p>Speed: @InitPair.Entity.GetInitiative()</p>
 </div>
 
 @code

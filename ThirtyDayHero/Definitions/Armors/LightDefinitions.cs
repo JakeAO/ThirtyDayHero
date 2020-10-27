@@ -19,7 +19,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Armors
             },
             null);
 
-        public static readonly ItemDefinition TravelersTunic = new ItemDefinition(
+        public static readonly ItemDefinition<IArmor> TravelersTunic = new ItemDefinition<IArmor>(
             "assets/armor/light/chest_03.png",
             200,
             RarityCategory.Common,
