@@ -1,6 +1,7 @@
 ﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
+using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
 {
@@ -12,7 +13,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Leather Gloves", "Simple, reliable gloves.",
             WeaponType.Fist,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.NewAttack(90, DamageType.Normal, StatType.STR, 0.5f, 0.5f),
             null);
 
         public static readonly ItemDefinition<IWeapon> LeatherGloves = new ItemDefinition<IWeapon>(

@@ -23,8 +23,9 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             new StatCost(StatType.STA, 15),
             SingleAllyTargetCalculator.Instance,
             new HealingEffect(
-                source => source.Stats[StatType.INT],
-                "[INT] HP Restore"));
+                source => (uint) Math.Round(source.Stats[StatType.INT] * 0.5),
+                source => (uint) Math.Round(source.Stats[StatType.INT] * 1.5),
+                "[0.5-1.5] x INT HP Restore"));
 
         public static readonly IAbility Skill_Cleave = new Ability(
             IdTracker.Next,
@@ -37,7 +38,20 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
                 DamageType.Normal,
                 source => (uint) Math.Ceiling(source.Stats[StatType.STR] * 0.50f),
                 source => (uint) Math.Ceiling(source.Stats[StatType.STR] * 0.75f),
-                "[0.5x STR]-[0.75x STR] Normal Damage"));
-        
+                "[0.5-0.75] x STR Damage"));
+
+        public static readonly IAbility Skill_Cripple = new Ability(
+            IdTracker.Next,
+            "Cripple",
+            "Cripple an enemy, reducing their DEX.",
+            100,
+            new NoRequirements(),
+            new StatCost(StatType.STA, 25),
+            SingleEnemyTargetCalculator.Instance,
+            new StatEffect(
+                StatType.DEX,
+                source => 0,
+                source => (uint) Math.Round(source.Stats[StatType.INT] / 5f),
+                "[0-INT/5] DEX Reduction"));
     }
 }

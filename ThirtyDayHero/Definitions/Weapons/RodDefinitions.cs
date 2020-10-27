@@ -1,6 +1,7 @@
 ﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
+using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
 {
@@ -12,7 +13,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Fire Wand", "A wand enchanted with the power of elemental Fire.",
             WeaponType.Rod,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.NewAttack(90, DamageType.Normal, StatType.STR, 0.2f, 0.2f),
             new[]
             {
                 SpellDefinitions.Spell_Ember
@@ -28,7 +29,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Frost Wand", "A wand enchanted with the power of elemental Ice.",
             WeaponType.Rod,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.NewAttack(90, DamageType.Normal, StatType.STR, 0.2f, 0.2f),
             new[]
             {
                 SpellDefinitions.Spell_Snowball
@@ -44,7 +45,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Stone Wand", "A wand enchanted with the power of elemental Earth.",
             WeaponType.Rod,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.NewAttack(90, DamageType.Normal, StatType.STR, 0.2f, 0.2f),
             new[]
             {
                 SpellDefinitions.Spell_Spike
@@ -60,7 +61,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Wind Wand", "A wand enchanted with the power of elemental Air.",
             WeaponType.Rod,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.NewAttack(90, DamageType.Normal, StatType.STR, 0.2f, 0.2f),
             new[]
             {
                 SpellDefinitions.Spell_Gale

@@ -1,6 +1,7 @@
 ﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
+using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
 {
@@ -12,7 +13,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Claymore", "A heavy sword wielded with two hands.",
             WeaponType.GreatSword,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.DEX, 0.25f, 0.75f),
             null);
 
         public static readonly ItemDefinition<IWeapon> Claymore = new ItemDefinition<IWeapon>(

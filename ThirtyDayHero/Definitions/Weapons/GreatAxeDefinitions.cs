@@ -1,6 +1,7 @@
 ﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
+using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
 {
@@ -12,7 +13,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Halberd", "A polearm with an axe on the end.",
             WeaponType.GreatAxe,
-            AttackDefinitions.Attack_STR_Fixed,
+            AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.STR, 0.2f, 0.8f),
             null);
 
         public static readonly ItemDefinition<IWeapon> Halberd = new ItemDefinition<IWeapon>(

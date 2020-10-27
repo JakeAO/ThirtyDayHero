@@ -20,12 +20,12 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             string.Empty,
             100u,
             NoRequirements.Instance,
-            new StatCost(StatType.STA, 5),
+            new StatCost(StatType.STA, 25),
             SingleEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Normal,
                 source => (uint) Math.Ceiling(source.Stats[StatType.STR] * 1.5f),
-                "[1.5x STR] Normal Damage"));
+                "[1.5] x STR Damage"));
 
         public static readonly IAbility MonsterSkill_FlameBreath = new Ability(
             IdTracker.Next,
@@ -33,11 +33,11 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
             string.Empty,
             120u,
             NoRequirements.Instance,
-            NoCost.Instance,
+            new StatCost(StatType.STA, 25),
             AllEnemyTargetCalculator.Instance,
             new DamageEffect(
                 DamageType.Fire,
                 source => (uint) (source.Stats[StatType.MAG] * 0.33f),
-                "[0.33x MAG] Fire Damage"));
+                "[0.33] x MAG Fire Damage"));
     }
 }

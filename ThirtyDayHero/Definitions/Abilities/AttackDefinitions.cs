@@ -1,4 +1,5 @@
-﻿using SadPumpkin.Util.CombatEngine.Abilities;
+﻿using System;
+using SadPumpkin.Util.CombatEngine.Abilities;
 using SadPumpkin.Util.CombatEngine.CostCalculators;
 using SadPumpkin.Util.CombatEngine.EffectCalculators;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
@@ -13,40 +14,23 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities
     {
         public static readonly TrackableIdGenerator IdTracker = new TrackableIdGenerator(ConstantIds.ABILITY_ATTACK);
 
-        public static readonly IAbility Attack_STR_Fixed = new Ability(
-            IdTracker.Next,
-            "Attack", "Attack with your weapon.",
-            100,
-            NoRequirements.Instance,
-            NoCost.Instance,
-            SingleEnemyTargetCalculator.Instance,
-            new DamageEffect(
-                DamageType.Normal,
-                source => source.Stats[StatType.STR],
-                "1.0 x STR"));
-
-        public static readonly IAbility Attack_DEX_Fixed = new Ability(
-            IdTracker.Next,
-            "Attack", "Attack with your weapon.",
-            100,
-            NoRequirements.Instance,
-            NoCost.Instance,
-            SingleEnemyTargetCalculator.Instance,
-            new DamageEffect(
-                DamageType.Normal,
-                source => source.Stats[StatType.DEX],
-                "1.0 x DEX"));
-
-        public static readonly IAbility Attack_MAG_Fixed = new Ability(
-            IdTracker.Next,
-            "Attack", "Attack with your weapon.",
-            100,
-            NoRequirements.Instance,
-            NoCost.Instance,
-            SingleEnemyTargetCalculator.Instance,
-            new DamageEffect(
-                DamageType.Normal,
-                source => source.Stats[StatType.MAG],
-                "1.0 x MAG"));
+        public static IAbility NewAttack(uint speed, DamageType damageType, StatType statType, float minMultiplier, float maxMultiplier) =>
+            new Ability(
+                IdTracker.Next,
+                "Attack", "Attack with the equipped weapon.",
+                speed,
+                NoRequirements.Instance,
+                NoCost.Instance,
+                SingleEnemyTargetCalculator.Instance,
+                Math.Abs(minMultiplier - maxMultiplier) < 0.01f
+                    ? new DamageEffect(
+                        damageType,
+                        source => (uint) Math.Round(source.Stats[statType] * minMultiplier),
+                        $"[{minMultiplier}] x {statType} Damage")
+                    : new DamageEffect(
+                        damageType,
+                        source => (uint) Math.Round(source.Stats[statType] * minMultiplier),
+                        source => (uint) Math.Round(source.Stats[statType] * maxMultiplier),
+                        $"[{minMultiplier}-{maxMultiplier}] x {statType} Damage"));
     }
 }

@@ -1,6 +1,7 @@
 ﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
+using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
 {
@@ -12,7 +13,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Arcane Staff", "A simple wooden staff that converts magical power into force.",
             WeaponType.Staff,
-            AttackDefinitions.Attack_MAG_Fixed,
+            AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.MAG, 0.2f, 0.4f),
             null);
 
         public static readonly ItemDefinition<IWeapon> ArcaneStaff = new ItemDefinition<IWeapon>(

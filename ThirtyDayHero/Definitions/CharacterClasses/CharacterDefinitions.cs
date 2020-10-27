@@ -30,7 +30,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                 {1, new[] {SkillDefinitions.Skill_FirstAid}},
                 {3, new[] {SkillDefinitions.Skill_Cleave}}
             },
-            WeaponType.Sword | WeaponType.Spear | WeaponType.Bow,
+            WeaponType.Sword | WeaponType.Spear,
             ArmorType.Light | ArmorType.Medium,
             new EquipMapBuilder(
                 new Dictionary<IWeapon, RankPriority>()
@@ -54,7 +54,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             RarityCategory.Common,
             NameGenerator.Player,
             SoldierClass);
-        
+
         public static readonly IPlayerClass MageClass = new PlayerClass(
             IdTracker.Next,
             "Mage", "An apprentice mage from the royal academy.",
@@ -97,6 +97,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             new Dictionary<uint, IReadOnlyCollection<IAbility>>()
             {
                 {1, new[] {SkillDefinitions.Skill_FirstAid}},
+                {3, new[] {SkillDefinitions.Skill_Cripple}}
             },
             WeaponType.Axe | WeaponType.Bow,
             ArmorType.Light,

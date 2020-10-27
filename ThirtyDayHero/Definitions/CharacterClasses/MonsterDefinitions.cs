@@ -23,7 +23,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             new Dictionary<uint, IReadOnlyCollection<IAbility>>()
             {
                 {
-                    1, new[] {AttackDefinitions.Attack_STR_Fixed}
+                    1, new[] {AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.STR, 0.3f, 0.7f)}
                 },
                 {
                     3, new[] {MonsterSkillDefinitions.MonsterSkill_Flop}
@@ -46,7 +46,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
             new Dictionary<uint, IReadOnlyCollection<IAbility>>()
             {
                 {
-                    1, new[] {AttackDefinitions.Attack_STR_Fixed}
+                    1, new[] {AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.STR, 0.3f, 0.7f)}
                 },
                 {
                     3, new[] {MonsterSkillDefinitions.MonsterSkill_Flop}

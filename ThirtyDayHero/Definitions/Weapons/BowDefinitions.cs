@@ -1,6 +1,7 @@
 ﻿using SadPumpkin.Games.ThirtyDayHero.Core.Decorators;
 using SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Abilities;
 using SadPumpkin.Util.CombatEngine.Item.Weapons;
+using SadPumpkin.Util.CombatEngine.StatMap;
 
 namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
 {
@@ -12,7 +13,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.Weapons
             IdTracker.Next,
             "Shortbow", "A simple bow with low draw weight.",
             WeaponType.Bow,
-            AttackDefinitions.Attack_DEX_Fixed,
+            AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.DEX, 0.4f, 0.5f),
             null);
 
         public static readonly ItemDefinition<IWeapon> ShortBow = new ItemDefinition<IWeapon>(

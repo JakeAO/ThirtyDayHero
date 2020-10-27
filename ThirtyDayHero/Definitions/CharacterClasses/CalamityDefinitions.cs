@@ -28,7 +28,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                 {
                     1, new[]
                     {
-                        AttackDefinitions.Attack_STR_Fixed,
+                        AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.STR, 0.3f, 0.7f),
                         MonsterSkillDefinitions.MonsterSkill_FlameBreath
                     }
                 }
@@ -69,7 +69,7 @@ namespace SadPumpkin.Games.ThirtyDayHero.Core.Definitions.CharacterClasses
                 {
                     1, new[]
                     {
-                        AttackDefinitions.Attack_STR_Fixed,
+                        AttackDefinitions.NewAttack(100, DamageType.Normal, StatType.STR, 0.3f, 0.7f),
                         MonsterSkillDefinitions.MonsterSkill_Flop
                     }
                 }
